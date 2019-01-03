@@ -111,7 +111,7 @@ void SmartBlinker::init() {
 
 
 void SmartBlinker::onAlarm() {
-    // Schedule ready task
+    // Execute the ready task
     TaskScheduler::onAlarm();
 }
 
@@ -135,9 +135,5 @@ EpochTime SmartBlinker::timeOfMorningBlinkPeriodStart() {
 
 
 bool SmartBlinker::isNight() {
-#ifdef INTEGRATION_TESTING
-    return true;
-#else
     return LightSensor::isDark();
-#endif
 }

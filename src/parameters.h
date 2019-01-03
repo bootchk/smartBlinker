@@ -10,7 +10,9 @@
  * Two sets:
  * - normal
  * - for testing in compressed time
+ *
  */
+#include "config.h"   // chooses
 
 
 
@@ -21,7 +23,7 @@ public:
     static const Duration TwentyFourHours = 86400;
 
 
-#ifdef TEST_PARAMETERS
+#ifdef COMPRESSED_TIME_PARAMETERS
     // Most durations very short so time compressed
 
     static const Duration BetweenBlinks = 3;
@@ -93,24 +95,3 @@ static const unsigned int MinVccForBlinking = 280; // 2.8V
 //static const unsigned int MinVccForStarting = 190; // centiVolts 1.9V
 };
 
-
-
-
-
-#ifdef SOLAR_CELL4_2V
-// solar cell KXOB22-01x8
-// 2V light, .6V dark
-static const unsigned int MaxVccForDark = 80;  // centiVolts, 0.8V
-
-// (128/256)*1.5 => .75V
-static const unsigned int MaxVscProportionTo1_5ForDark = 128;  // centiVolts, 0.3V128
-#elif defined SOLAR_CELL2V
-// solar cell KXOB22-04x3
-// .5V light, .2V dark
-
-// NOT USED static const unsigned int MaxVccForDark = 30;  // centiVolts, 0.3V
-
-// (50/256)*1.5 => .3V
-static const unsigned int MaxVscProportionTo1_5ForDark = 30;  // centiVolts, 0.3V
-
-#endif
