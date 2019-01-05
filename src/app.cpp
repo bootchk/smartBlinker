@@ -3,12 +3,9 @@
 #include <app/app.h>
 
 
-
+// Somewhat similar API behind facade.
+// I.E. the real app that we delegate to.
 #include "smartBlinker.h"
-
-
-// Test
-///#include <src/debug/test.h>
 
 
 
@@ -18,9 +15,7 @@ void App::onPowerOnReset() {
 	// assert app's pins (LED) configured
 
 	// initialize state
-
 	SmartBlinker::init();
-
 }
 
 
@@ -60,8 +55,3 @@ EpochTime App::timeToWake() {
 }
 
 
-
-void App::configureSleepingGPIO() {
-	// App uses an LED during sleep
-	SmartBlinker::configureGPIO();
-}

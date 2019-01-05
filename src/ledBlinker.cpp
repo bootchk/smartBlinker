@@ -1,11 +1,21 @@
 
+
+#include "ledBlinker.h"
+
+// msp430Drivers
 #include <LEDAndLightSensor/ledAndLightSensor.h>
-#include <src/blinker.h>
-// Use low power timer
 #include <timer/timer.h>
 
 
-void Blinker::blink()
+
+
+/*
+ * Implementation uses:
+ * - combination LED and light sensor
+ * - timer for blink duration
+ */
+
+void LEDBlinker::blink()
 {
     // Same LED as used to measure light, now used to generate light
     LEDAndLightSensor::toOnFromOff();
@@ -13,4 +23,9 @@ void Blinker::blink()
     LowPowerTimer::delayTwentyMilliSeconds();
 
     LEDAndLightSensor::toOffFromOn();
+}
+
+
+void LEDBlinker::configureGPIO() {
+    LEDAndLightSensor::toOffFromUnconfigured();
 }

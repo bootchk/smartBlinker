@@ -18,20 +18,8 @@
  */
 
 
-/*  depends on board design:
- * - PROTO_BOARD: prototype on launchpad  with GPIO configured different from MYPCB (obsolete
- *
- * - MYPCB_BOARD: custom PCB
- *
- * - FULL_PROTO_LAUNCHPAD  launchpad connected with proto boards full emulation of MYPCB (RTC breakout and LED breakout)
- * !!! but with slightly different connections since Launchpad does not bring out P3.0
- *
- * !!! There are multiple revisions of the PCB
- */
-/// Choose one
-///#define PROTO_BOARD
-// #define MYPCB_BOARD_R3
-#define FULL_PROTO_LAUNCHPAD
+// Depends on configuration of app
+#include "../src/config.h"
 
 
 
@@ -101,7 +89,6 @@
 
 
 
-// TODO these do not match the board
 #ifdef MYPCB_BOARD_R3
 
 // Configuration of PCB
@@ -124,24 +111,25 @@
 #define SPI_CLK_PIN   GPIO_PIN4
 
 
-// P1.3
-#define AlarmSignalPort GPIO_PORT_P1
-#define AlarmSignalPin  GPIO_PIN3
+// P3.0
+#define AlarmSignalPort GPIO_PORT_P3
+#define AlarmSignalPin  GPIO_PIN0
 
-// P1.2
-#define RTCSelectPort GPIO_PORT_P1
+// P2.2
+#define RTCSelectPort GPIO_PORT_P2
 #define RTCSelectPin  GPIO_PIN2
 
 
-
+// P1.7
 #define NSideLEDPort GPIO_PORT_P1
-#define NSideLEDPin  GPIO_PIN0
+#define NSideLEDPin  GPIO_PIN7
 
 // P1.1 is green led on launchpad
 
 // P side high to light LED
+// P1.5
 #define PSideLEDPort GPIO_PORT_P1
-#define PSideLEDPin  GPIO_PIN1
+#define PSideLEDPin  GPIO_PIN5
 #endif
 
 

@@ -1,8 +1,16 @@
 
+
+#include "smartBlinker.h"
+
+#include "blinkPeriod.h"
+#include "ledBlinker.h"
+
+
+// msp430Drivers
 #include <assert/myAssert.h>
-#include <src/blinker.h>
-#include <src/blinkPeriod.h>
-#include <src/smartBlinker.h>
+
+
+
 
 
 /*
@@ -32,7 +40,7 @@ void SmartBlinker::checkSunsetTask() {
 
 
 void SmartBlinker::blinkTask() {
-    Blinker::blink();
+    LEDBlinker::blink();
 
     ///TestMain::blinkForcedGreenLED(5);
 

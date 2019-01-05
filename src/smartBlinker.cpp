@@ -1,5 +1,4 @@
 
-
 #include "day.h"
 #include "parameters.h"
 #include "powerMgr.h"
@@ -15,23 +14,6 @@
 #include <assert/myAssert.h>
 
 
-
-//#include "../debug/test.h"
-
-// Configures code by ifdef
-
-
-
-
-
-void SmartBlinker::configureGPIO() {
-    /*
-     * Since now we are using an LED also light sensor
-     * already configured, do nothing here.
-     */
-    // TODO, move configuration here, to make the framework whole
-    //LED::configureLED1();
-}
 
 
 
