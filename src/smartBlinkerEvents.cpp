@@ -11,8 +11,13 @@
  * Events
  */
 
+
+
+
 void SmartBlinker::onSunriseDetected() {
     Day::setSunriseTime();
+
+    indicateEvent();
 
     scheduleCheckSunsetTask();
     /// Optional optimization of power:
@@ -24,6 +29,8 @@ void SmartBlinker::onSunriseDetected() {
 
 void SmartBlinker::onSunsetDetected() {
     // We don't record sunset
+
+    indicateEvent();
 
     if (PowerMgr::isPowerForBlinking()) {
         onPowerForBlinking();
@@ -45,6 +52,9 @@ void SmartBlinker::onSunsetDetected() {
 
 
 void SmartBlinker::onPowerForBlinking() {
+    /*
+     * Indicate
+     */
     BlinkPeriod::initForEveningBlinking();
     scheduleFirstEveningBlinkTask();
 }

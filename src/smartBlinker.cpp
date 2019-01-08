@@ -76,11 +76,13 @@ void SmartBlinker::scheduleInitialTask() {
     myAssert(TaskScheduler::isTaskScheduled());
 }
 
-
+/*
+ * Power on reset.
+ */
 void SmartBlinker::init() {
-    /*
-     * Power on reset.
-     */
+
+    // Show we booted
+    indicateEvent();
 
     // Show ignorance of actual day.
     Day::init();

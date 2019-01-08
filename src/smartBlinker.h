@@ -68,4 +68,5 @@ public:
      */
     static EpochTime timeOfMorningBlinkPeriodStart();
     static bool isNight();
+    static void indicateEvent();
 };

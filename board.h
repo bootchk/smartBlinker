@@ -5,6 +5,10 @@
 // Some right hand sides from gpio.h in DriverLib
 #include <gpio.h>
 
+// Depends on configuration of app
+#include "../src/config.h"
+
+
 
 
 /*
@@ -18,8 +22,9 @@
  */
 
 
-// Depends on configuration of app
-#include "../src/config.h"
+/*
+ * !!! If you change this, be sure to also change App::configureUnusedPins()
+ */
 
 
 
@@ -111,9 +116,9 @@
 #define SPI_CLK_PIN   GPIO_PIN4
 
 
-// P3.0
-#define AlarmSignalPort GPIO_PORT_P3
-#define AlarmSignalPin  GPIO_PIN0
+// P2.3
+#define AlarmSignalPort GPIO_PORT_P2
+#define AlarmSignalPin  GPIO_PIN3
 
 // P2.2
 #define RTCSelectPort GPIO_PORT_P2

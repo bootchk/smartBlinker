@@ -67,3 +67,10 @@ void SmartBlinker::blinkTask() {
     // or (blinkPerio::isOver and no blinking related task is scheduled)
 }
 
+
+
+
+void SmartBlinker::indicateEvent() {
+    LEDBlinker::blink();
+}
+

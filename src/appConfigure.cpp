@@ -102,17 +102,17 @@ void App::configureUnusedPinsLowPower() {
     GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN1);
     // Framework use P2.2 SPI Slave select (out)
     //GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN2);
-    GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN3);
+    // Framework use P2.3 Alarm pin
+    // GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN3);
     // Framework Use SPI data pins
     //GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN4);
     //GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN5);
     //GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN6);
     GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN7);
 
-    // Only 5 pins on port 3
-
-    // Framework use P3.0 Alarm pin
-    // GPIO_setAsOutputPin(GPIO_PORT_P3, GPIO_PIN0);
+    // Only 5 pins on port 3.
+    // Datasheet says only 3 pins??
+    GPIO_setAsOutputPin(GPIO_PORT_P3, GPIO_PIN0);
     GPIO_setAsOutputPin(GPIO_PORT_P3, GPIO_PIN1);
     GPIO_setAsOutputPin(GPIO_PORT_P3, GPIO_PIN2);
     GPIO_setAsOutputPin(GPIO_PORT_P3, GPIO_PIN3);
