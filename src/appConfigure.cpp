@@ -36,14 +36,14 @@ void App::configureUnusedPinsLowPower() {
      * Do not leave as input without pull: floats and wastes power.
      */
 
-    // TODO optimize: configure entire register at once
+    // FUTURE optimize: configure entire register at once
 
     // P1.0 red LED on Launchpad
     GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
     GPIO_setAsOutputPin(GPIO_PORT_P1, GPIO_PIN0);
 
     // P1.1 not used or green LED or LEDPWM
-    // hack, if it is launchpad, dark the sourced green led
+    // if launchpad, dark the sourced green led
     GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN1);
     GPIO_setAsOutputPin(GPIO_PORT_P1, GPIO_PIN1);
 

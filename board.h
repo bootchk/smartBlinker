@@ -100,7 +100,6 @@
 // And also configuration of one prototype on launchpad
 
 #define SPIInstanceAddress      EUSCI_A1_BASE
-#define I2CInstanceAddress      EUSCI_B0_BASE
 
 // msp430fr2433 and Launchpad MSP-EXP430FR2433, using instance UCA1:
 // MOSI 2.6
@@ -144,7 +143,6 @@
 #ifdef FULL_PROTO_LAUNCHPAD
 
 #define SPIInstanceAddress      EUSCI_A1_BASE
-#define I2CInstanceAddress      EUSCI_B0_BASE
 
 // msp430fr2433 and Launchpad MSP-EXP430FR2433, using instance UCA1:
 // MOSI 2.6
@@ -186,8 +184,10 @@
 
 
 /*
- * Unused.  For compass using I2C
+ * I2C
  */
+#define I2CInstanceAddress      EUSCI_B0_BASE
+
 // msp430fr2433 and Launchpad MSP-EXP430FR2433, using instance UCB0:
 // data P1.2
 // clock P1.3
@@ -204,6 +204,21 @@
  * Pololu breakout board pullups SDO pin high by default.
  */
 #define LIS3MDLAddress 0x1e
+
+
+/*
+ * Abracon says 7-bit address is 0b1101001 (0x69)
+ * But they say "0xD2/3", which includes the R/W bit which is transmitted AFTER the seven bit address
+ */
+#define AB0805BusAddress 0x69
+
+/*
+ * Aliases
+ */
+#define RTCBusAddress AB0805BusAddress
+
+
+
 
 
 /*

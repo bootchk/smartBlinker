@@ -19,7 +19,7 @@
 
 
 /*
- * Hacks for integration testing.
+ * Config for integration testing.
  *
  * BLINK_ONLY:  exercise task scheduling but only one task, the blinkTask.
  *
@@ -36,7 +36,7 @@
 void SmartBlinker::scheduleInitialTask() {
 
 #ifdef BLINK_ONLY
-    // Hack: start a blink period without waiting for sunset
+    // Start a blink period without waiting for sunset
     BlinkPeriod::initForEveningBlinking();
 
     /*
@@ -48,7 +48,7 @@ void SmartBlinker::scheduleInitialTask() {
 #if defined(NIGHT_ONLY)
     // Force sunrise.
     // !!! Not onSunriseDetected(), it will schedule sunset detect for 15 minutes later
-    // but onSunsetDetected would attempt to schedule task of same kind, and fail
+    // but onSunsetDetected would try schedule task of same kind, and fail
     Day::setSunriseTime();
 
     // Sunset detect will artificially detect sunset and schedule nightime blinking
@@ -81,8 +81,9 @@ void SmartBlinker::scheduleInitialTask() {
  */
 void SmartBlinker::init() {
 
-    // Show we booted
-    indicateEvent();
+    // Show we booted.
+    // This power spike obscures EnergyTrace low power, so remove it.
+    // indicateEvent();
 
     // Show ignorance of actual day.
     Day::init();

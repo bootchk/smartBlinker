@@ -5,7 +5,7 @@
  */
 
 
-// See other hacks in smartBlinker.cpp, for testing
+// See other config in smartBlinker.cpp, for testing
 
 
 
@@ -32,5 +32,6 @@
 
 /// Choose one
 ///#define PROTO_BOARD
-#define MYPCB_BOARD_R3
 //#define FULL_PROTO_LAUNCHPAD
+#define MYPCB_BOARD_R3
+
