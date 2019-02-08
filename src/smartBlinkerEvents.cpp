@@ -33,7 +33,7 @@ void SmartBlinker::onSunsetDetected() {
     indicateEvent();
 
     if (PowerMgr::isPowerForBlinking()) {
-        onPowerForBlinking();
+        onPowerForEveningBlinking();
         // check sunrise much later tonight
         // scheduleLaggedCheckSunriseTask();
         // OR after morning blink period
@@ -50,14 +50,26 @@ void SmartBlinker::onSunsetDetected() {
 
 
 
+/*
+ * We determined there is enough power for a blink period.
+ */
 
-void SmartBlinker::onPowerForBlinking() {
-    /*
-     * Indicate
-     */
+void SmartBlinker::onPowerForEveningBlinking() {
     BlinkPeriod::initForEveningBlinking();
     scheduleFirstEveningBlinkTask();
 }
+
+void SmartBlinker::onPowerForNightBlinking() {
+    BlinkPeriod::initForNightBlinking();
+    scheduleFirstNightBlinkTask();
+}
+
+void SmartBlinker::onPowerForMorningBlinking() {
+    BlinkPeriod::initForMorningBlinking();
+    scheduleFirstMorningBlinkTask();
+}
+
+
 
 /*
  * We schedule evening blinking from a detected sunset.
@@ -66,9 +78,34 @@ void SmartBlinker::onPowerForBlinking() {
  */
 
 void SmartBlinker::onEveningBlinkPeriodOver() {
+    /*
+     * Schedule night blinking if power.
+     */
+
+    if (PowerMgr::isPowerForBlinking()) {
+            onPowerForNightBlinking();
+    }
+    else {
+        /*
+         * No more power tonight.
+         * But we must schedule same tasks as if we had done morning blinking,
+         * i.e. checkSunrise
+         */
+        scheduleCheckSunriseTask();
+    }
+}
+
+
+void SmartBlinker::onNightBlinkPeriodOver() {
+    /*
+     * Schedule morning blinking if possible.
+     *
+     * If we cold started recently, we have not detected a sunrise yet
+     */
     if (Day::isSunriseTimeValid()) {
-        BlinkPeriod::initForMorningBlinking();
-        scheduleFirstMorningBlinkTask();
+        if (PowerMgr::isPowerForBlinking()) {
+            onPowerForMorningBlinking();
+        }
     }
     else {
         /*

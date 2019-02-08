@@ -10,7 +10,7 @@
 
 
 // For testing
-#define COMPRESSED_TIME_PARAMETERS
+// #define COMPRESSED_TIME_PARAMETERS
 
 
 
@@ -33,5 +33,6 @@
 /// Choose one
 ///#define PROTO_BOARD
 //#define FULL_PROTO_LAUNCHPAD
-#define MYPCB_BOARD_R3
+//#define MYPCB_BOARD_R3
+#define MYPCB_BOARD_R5
 

@@ -36,6 +36,14 @@ void SmartBlinker::scheduleFirstEveningBlinkTask() {
             EpochClock::timeDurationFromNow(
                     Parameters::BetweenSunsetAndBlinking));
 }
+void SmartBlinker::scheduleFirstNightBlinkTask() {
+    // 1 minute from now (from end of evening.)
+    TaskScheduler::scheduleTask(
+            0,
+            blinkTask,
+            EpochClock::timeDurationFromNow(
+                    Parameters::BetweenEveningAndNightBlinking));
+}
 
 void SmartBlinker::scheduleFirstMorningBlinkTask() {
     TaskScheduler::scheduleTask(

@@ -19,6 +19,8 @@ int counter = 0;
 // State variable, evening and morning blink subperiods
 #pragma PERSISTENT
 bool _isEvening = false;
+#pragma PERSISTENT
+bool _isNight = false;
 
 #pragma PERSISTENT
 bool _isActive = false;
@@ -40,6 +42,15 @@ void BlinkPeriod::initForMorningBlinking()
 
     counter = Parameters::BlinksMorning;
     _isEvening = false;
+    _isNight = false;
+    _isActive = true;
+}
+
+void BlinkPeriod::initForNightBlinking()
+{
+    counter = Parameters::BlinksNight;
+    _isEvening = false;
+    _isNight = true;
     _isActive = true;
 }
 
@@ -63,10 +74,8 @@ bool BlinkPeriod::isOver()
 }
 
 
-bool BlinkPeriod::isEvening()
-{
-    return _isEvening;
-}
+bool BlinkPeriod::isEvening() { return _isEvening; }
+bool BlinkPeriod::isNight() { return _isNight; }
 
 
 void BlinkPeriod::advance()

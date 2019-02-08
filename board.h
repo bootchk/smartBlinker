@@ -99,6 +99,7 @@
 // Configuration of PCB
 // And also configuration of one prototype on launchpad
 
+#ifdef USE_SPI
 #define SPIInstanceAddress      EUSCI_A1_BASE
 
 // msp430fr2433 and Launchpad MSP-EXP430FR2433, using instance UCA1:
@@ -114,29 +115,82 @@
 #define SPI_CLK_PORT  GPIO_PORT_P2
 #define SPI_CLK_PIN   GPIO_PIN4
 
-
-// P2.3
-#define AlarmSignalPort GPIO_PORT_P2
-#define AlarmSignalPin  GPIO_PIN3
-
-// P2.2
 #define RTCSelectPort GPIO_PORT_P2
 #define RTCSelectPin  GPIO_PIN2
 
+#else
 
-// P1.7
+/*
+ * I2C
+ */
+#define I2CInstanceAddress      EUSCI_B0_BASE
+
+// msp430fr2433 and Launchpad MSP-EXP430FR2433, using instance UCB0:
+// data P1.2
+// clock P1.3
+#define I2C_SDA_PORT  GPIO_PORT_P1
+#define I2C_SDA_PIN   GPIO_PIN2
+
+#define I2C_SCL_PORT  GPIO_PORT_P1
+#define I2C_SCL_PIN   GPIO_PIN3
+#endif
+
+
+
+#define AlarmSignalPort GPIO_PORT_P1
+#define AlarmSignalPin  GPIO_PIN1
+
+
+
+
+
+
+
+
 #define NSideLEDPort GPIO_PORT_P1
 #define NSideLEDPin  GPIO_PIN7
 
 // P1.1 is green led on launchpad
 
 // P side high to light LED
-// P1.5
 #define PSideLEDPort GPIO_PORT_P1
 #define PSideLEDPin  GPIO_PIN5
 #endif
 
 
+
+#ifdef MYPCB_BOARD_R5
+
+/*
+ * I2C
+ */
+#define I2CInstanceAddress      EUSCI_B0_BASE
+
+// msp430fr2433 and Launchpad MSP-EXP430FR2433, using instance UCB0:
+// data P1.2
+// clock P1.3
+#define I2C_SDA_PORT  GPIO_PORT_P1
+#define I2C_SDA_PIN   GPIO_PIN2
+
+#define I2C_SCL_PORT  GPIO_PORT_P1
+#define I2C_SCL_PIN   GPIO_PIN3
+
+
+
+
+#define AlarmSignalPort GPIO_PORT_P1
+#define AlarmSignalPin  GPIO_PIN1
+
+
+
+// P side high to light LED
+#define NSideLEDPort GPIO_PORT_P1
+#define NSideLEDPin  GPIO_PIN7
+
+#define PSideLEDPort GPIO_PORT_P1
+#define PSideLEDPin  GPIO_PIN5
+
+#endif
 
 
 // !!! slight difference from PCB: alarm pin not 3.0, chip select not 2.2
@@ -183,19 +237,7 @@
 
 
 
-/*
- * I2C
- */
-#define I2CInstanceAddress      EUSCI_B0_BASE
 
-// msp430fr2433 and Launchpad MSP-EXP430FR2433, using instance UCB0:
-// data P1.2
-// clock P1.3
-#define I2C_SDA_PORT  GPIO_PORT_P1
-#define I2C_SDA_PIN   GPIO_PIN2
-
-#define I2C_SCL_PORT  GPIO_PORT_P1
-#define I2C_SCL_PIN   GPIO_PIN3
 
 /*
  * 7-bit address

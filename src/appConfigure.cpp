@@ -123,6 +123,45 @@ void App::configureUnusedPinsLowPower() {
 #endif
 
 
+#ifdef MYPCB_BOARD_R5
+void App::configureUnusedPinsLowPower() {
+
+    GPIO_setAsOutputPin(GPIO_PORT_P1, GPIO_PIN0);
+    // Alarm
+    //GPIO_setAsOutputPin(GPIO_PORT_P1, GPIO_PIN1);
+    // SDA
+    //GPIO_setAsOutputPin(GPIO_PORT_P1, GPIO_PIN2);
+    // SCL
+    //GPIO_setAsOutputPin(GPIO_PORT_P1, GPIO_PIN3);
+    GPIO_setAsOutputPin(GPIO_PORT_P1, GPIO_PIN4);
+    // App Use LEDP
+    // GPIO_setAsOutputPin(GPIO_PORT_P1, GPIO_PIN5);
+    GPIO_setAsOutputPin(GPIO_PORT_P1, GPIO_PIN6);
+    // App Use LEDN
+    // GPIO_setAsOutputPin(GPIO_PORT_P1, GPIO_PIN7);
+
+    GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN0);
+    GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN1);
+    GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN2);
+    GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN3);
+    GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN4);
+    GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN5);
+    GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN6);
+    GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN7);
+
+    // Only 5 pins on port 3.
+    // Datasheet says only 3 pins??
+    GPIO_setAsOutputPin(GPIO_PORT_P3, GPIO_PIN0);
+    GPIO_setAsOutputPin(GPIO_PORT_P3, GPIO_PIN1);
+    GPIO_setAsOutputPin(GPIO_PORT_P3, GPIO_PIN2);
+    GPIO_setAsOutputPin(GPIO_PORT_P3, GPIO_PIN3);
+    GPIO_setAsOutputPin(GPIO_PORT_P3, GPIO_PIN4);
+
+    // Not ensure configuration is effective, since LPM5 might be locked
+}
+#endif
+
+
 
 void App::configureUsedPins() {
     // App retains LED state during sleep (but usually off.)

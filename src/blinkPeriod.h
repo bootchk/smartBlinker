@@ -33,7 +33,7 @@ class BlinkPeriod {
 
 public:
     static void initForEveningBlinking();
-
+    static void initForNightBlinking();
     static void initForMorningBlinking();
 
     static bool isActive();
@@ -44,6 +44,8 @@ public:
     static bool isOver();
 
     static bool isEvening();
+    static bool isNight();
+    // else isMorning()
 
     static void advance();
 };

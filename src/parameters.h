@@ -51,6 +51,7 @@ public:
 #else
     static const Duration BetweenBlinks = 10;
     static const Duration BetweenSunsetAndBlinking = 1800;  // Thirty minutes
+    static const Duration BetweenEveningAndNightBlinking = 60; // One minute
 
     // Check sun every 3 minutes
     ///static const Duration BetweenSunChecks = 120;
@@ -58,9 +59,14 @@ public:
 
     static const Duration BetweenMorningBlinkStartAndSunrise = 7200;    // Two hours
 
-    // Evening blink for 4 hours every 10 seconds
+    /*
+     * Counts of blinks.
+     */
+    // Evening blink for 2 hours every 10 seconds
     // 6 ticks/minute * 60 minutes/hour * 4 hours
-    static const unsigned int BlinksEvening = 6 * 60 * 4;
+    static const unsigned int BlinksEvening = 6 * 60 * 2;
+
+    static const unsigned int BlinksNight = 6 * 60 * 2;
 
     // Morning blink for 2 hours every 10 seconds
     static const unsigned int BlinksMorning = 6 * 60 * 2;

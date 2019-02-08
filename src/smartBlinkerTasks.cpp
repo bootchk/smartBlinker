@@ -52,7 +52,10 @@ void SmartBlinker::blinkTask() {
     if (BlinkPeriod::isOver()) {
         if (BlinkPeriod::isEvening()) {
             onEveningBlinkPeriodOver();
-            // first blink task of morning is scheduled
+            // first blink task of next period (if any) is scheduled
+        }
+        else if (BlinkPeriod::isNight()) {
+            onNightBlinkPeriodOver();
         }
         else {
             // else morning blink subperiod over,  blink period over, no blinkTask scheduled

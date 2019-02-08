@@ -44,9 +44,12 @@ public:
     static void onSunriseDetected();
     static void onSunsetDetected();
 
-    static void onPowerForBlinking();
+    static void onPowerForEveningBlinking();
+    static void onPowerForNightBlinking();
+    static void onPowerForMorningBlinking();
 
     static void onEveningBlinkPeriodOver();
+    static void onNightBlinkPeriodOver();
     static void onMorningBlinkPeriodOver();
 
 
@@ -58,6 +61,7 @@ public:
     static void scheduleCheckSunsetTask();
 
     static void scheduleFirstEveningBlinkTask();
+    static void scheduleFirstNightBlinkTask();
     static void scheduleFirstMorningBlinkTask();
 
     ///static void scheduleLaggedCheckSunsetTask();
