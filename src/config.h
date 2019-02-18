@@ -10,7 +10,19 @@
 
 
 // For testing
-// #define COMPRESSED_TIME_PARAMETERS
+/*
+ * Normal, production parameters
+ */
+//#define PRODUCTION_PARAMETERS
+/*
+ * Normal operation, but compressed.  For bench testing using hand and Launchpad power.
+ */
+//#define COMPRESSED_TIME_PARAMETERS
+/*
+ * Quasi normal operation, also compressed. For stand-alone testing in sun.
+ * Capacitor is smaller to accelerate events.
+ */
+#define ACCELERATED_TIME_PARAMETERS
 
 
 

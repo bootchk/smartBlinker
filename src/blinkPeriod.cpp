@@ -14,7 +14,7 @@ namespace {
  * Blink period must persist through low power sleep
  */
 #pragma PERSISTENT
-int counter = 0;
+int blinkCounter = 0;
 
 // State variable, evening and morning blink subperiods
 #pragma PERSISTENT
@@ -31,7 +31,7 @@ bool _isActive = false;
 
 void BlinkPeriod::initForEveningBlinking()
 {
-    counter = Parameters::BlinksEvening;
+    blinkCounter = Parameters::BlinksEvening;
     _isEvening = true;
     _isActive = true;
 }
@@ -40,7 +40,7 @@ void BlinkPeriod::initForEveningBlinking()
 void BlinkPeriod::initForMorningBlinking()
 {
 
-    counter = Parameters::BlinksMorning;
+    blinkCounter = Parameters::BlinksMorning;
     _isEvening = false;
     _isNight = false;
     _isActive = true;
@@ -48,7 +48,7 @@ void BlinkPeriod::initForMorningBlinking()
 
 void BlinkPeriod::initForNightBlinking()
 {
-    counter = Parameters::BlinksNight;
+    blinkCounter = Parameters::BlinksNight;
     _isEvening = false;
     _isNight = true;
     _isActive = true;
@@ -67,9 +67,24 @@ bool BlinkPeriod::isActive()
 bool BlinkPeriod::isOver()
 {
     bool result;
-    result = (counter <= 0);
-    // active if not over
-    _isActive = not result;
+
+    // if terminated prematurely
+    if (not _isActive) {
+        result = true;
+    }
+    else {
+        // if all blinks completed
+        if (blinkCounter <= 0) {
+            _isActive = false;
+            result = true;
+        }
+        else {
+            // still active and blinks not complete
+            result = false;
+        }
+    }
+
+    // assert not _isActive or blinkCounter > 0
     return result;
 }
 
@@ -80,7 +95,10 @@ bool BlinkPeriod::isNight() { return _isNight; }
 
 void BlinkPeriod::advance()
 {
-    counter--;
+    blinkCounter--;
 }
 
 
+void BlinkPeriod::terminatePrematurely() {
+    _isActive = false;
+}

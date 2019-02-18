@@ -48,4 +48,10 @@ public:
     // else isMorning()
 
     static void advance();
+
+    /*
+     * Terminate before blink count exceeded.
+     * Ensures isOver()=>true
+     */
+    static void terminatePrematurely();
 };

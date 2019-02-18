@@ -16,6 +16,12 @@ class SmartBlinker {
 private:
     static void scheduleInitialTask();
 
+    static void everySunCheck();
+
+    static void checkBlinkPeriodOver();
+
+    static void checkBlinkingPowerExhausted();
+
 public:
     /*
      * API of generic app

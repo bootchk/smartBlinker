@@ -20,7 +20,9 @@ void LEDBlinker::blink()
     // Same LED as used to measure light, now used to generate light
     LEDAndLightSensor::toOnFromOff();
 
-    LowPowerTimer::delayTwentyMilliSeconds();
+    // Budget calcs used 12 mS
+    LowPowerTimer::delayTenMilliSeconds();
+    //LowPowerTimer::delayTwentyMilliSeconds();
 
     LEDAndLightSensor::toOffFromOn();
 }
