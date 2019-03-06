@@ -39,19 +39,9 @@ void App::onWakeForAlarm() {
 
 
 
-Duration App::constantDurationOfSleep() {
-	return 10;
-}
+Duration App::constantDurationOfSleep() { return {10}; }
 
+Duration App::durationOfSleep() { return SmartBlinker::durationUntilWake(); }
 
-
-
-EpochTime App::timeToWake() {
-    /*
-     * A general design:
-     * set alarm with a time from scheduler
-     */
-    return SmartBlinker::timeToWake();
-}
 
 

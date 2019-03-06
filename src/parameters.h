@@ -20,16 +20,16 @@
 class Parameters {
 public:
 
-    static const Duration TwentyFourHours = 86400;
+    static constexpr Duration TwentyFourHours = {86400};
 
 
 #ifdef COMPRESSED_TIME_PARAMETERS
     // Most durations very short so time compressed
 
-    static const Duration BetweenBlinks = 1;
+    static constexpr Duration BetweenBlinks = 1;
 
-    static const Duration BetweenSunsetAndBlinking = 5;
-    static const Duration BetweenEveningAndNightBlinking = 5;
+    static constexpr Duration BetweenSunsetAndBlinking = 5;
+    static constexpr Duration BetweenEveningAndNightBlinking = 5;
     // Between sunset and evening: 5
     // Evening blinking lasts 3 seconds (3 blinks every 1 seconds)
     // 5 seconds between
@@ -43,10 +43,10 @@ public:
      * Next sunrise is 24 hours from fake sunrise.
      * So 24 hours - 30 seconds is a large duration from next sunrise, only 30 seconds from previou
      */
-    static const Duration BetweenMorningBlinkStartAndSunrise = TwentyFourHours - 30;
+    static constexpr Duration BetweenMorningBlinkStartAndSunrise = TwentyFourHours - 30;
 
     // Check sun every 15-30 seconds
-    static const Duration BetweenSunChecks = 10;
+    static constexpr Duration BetweenSunChecks = 10;
 
 
     // counts for periods
@@ -60,14 +60,14 @@ public:
     // See also
 
     // All duration units: seconds
-    static const Duration BetweenBlinks = 1;
-    static const Duration BetweenSunsetAndBlinking = 30;
+    static constexpr Duration BetweenBlinks = {1};
+    static constexpr Duration BetweenSunsetAndBlinking = {30};
     // Not expected to reach night blinking, should exhaust power first
-    static const Duration BetweenEveningAndNightBlinking = 60;// One minute
+    static constexpr Duration BetweenEveningAndNightBlinking = {60};// One minute
 
-    static const Duration BetweenSunChecks = 10;
+    static constexpr Duration BetweenSunChecks = {10};
 
-    static const Duration BetweenMorningBlinkStartAndSunrise = 7200;// Two hours
+    static constexpr Duration BetweenMorningBlinkStartAndSunrise = {7200};// Two hours
 
     /*
      * Counts of blinks.
@@ -80,15 +80,15 @@ public:
 
 #elif defined( PRODUCTION_PARAMETERS)
     // Normal, production parameters
-    static const Duration BetweenBlinks = 10;
-    static const Duration BetweenSunsetAndBlinking = 1800;  // Thirty minutes
-    static const Duration BetweenEveningAndNightBlinking = 60; // One minute
+    static constexpr Duration BetweenBlinks = 10};
+    static constexpr Duration BetweenSunsetAndBlinking = 1800};  // Thirty minutes
+    static constexpr Duration BetweenEveningAndNightBlinking = 60}; // One minute
 
     // Check sun every 3 minutes
-    ///static const Duration BetweenSunChecks = 120;
-    static const Duration BetweenSunChecks = 900;  // Fifteen minutes
+    ///static constexpr Duration BetweenSunChecks = 120};
+    static constexpr Duration BetweenSunChecks = 900};  // Fifteen minutes
 
-    static const Duration BetweenMorningBlinkStartAndSunrise = 7200;    // Two hours
+    static constexpr Duration BetweenMorningBlinkStartAndSunrise = 7200};    // Two hours
 
     /*
      * Counts of blinks.

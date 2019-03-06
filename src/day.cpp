@@ -39,12 +39,30 @@ void Day::setSunriseTime() {
 bool Day::isSunriseTimeValid() { return _isSunriseTimeValid; }
 
 
+/*
+ * Next sunrise is previous + 24 hours.
+ *
+ * If called more than 24 hours after previous sunrise, the result time may be in the past.
+ */
+EpochTime Day::timeOfNextSunrise() { return previousSunrise + Parameters::TwentyFourHours.seconds; }
 
 
-EpochTime Day::timeBeforeNextSunriseBySeconds(Duration duration) {
+Duration Day::durationUntilNextSunriseLessSeconds(Duration lessDuration){
+    // TODO
     /*
-     * Next sunrise is previous + 24 hours.
+     * Effectively:  nextSunriseTime - nowTime - lessDuration
+     * But we don't want to access nowTime unless epochClock is running.
      */
+}
+
+
+
+
+#ifdef OLD
+broken.  Need timeDurationBeforeTime(timeOfNextSunrise(), duration);
+EpochTime Day::timeBeforeNextSunriseBySeconds(Duration duration) {
+
     myAssert(isSunriseTimeValid());
     return EpochClock::timeDurationFromTime(previousSunrise, Parameters::TwentyFourHours - duration);
 }
+#endif

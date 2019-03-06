@@ -29,7 +29,10 @@ public:
     static void init();
     static void onAlarm(void);
     static void configureGPIO();
+
+
     static EpochTime timeToWake();
+    static Duration durationUntilWake();
 
     /*
      * Scheduled tasks
@@ -77,6 +80,9 @@ public:
      * Timing etc
      */
     static EpochTime timeOfMorningBlinkPeriodStart();
+    static Duration durationUntilMorningBlinkPeriodStart();
+
+
     static bool isNight();
     static void indicateEvent();
 };

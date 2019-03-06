@@ -52,6 +52,7 @@
 									<listOptionValue builtIn="false" value="${CG_TOOL_ROOT}/include"/>
 									<listOptionValue builtIn="false" value="/home/bootch/git/embeddedDutyCycle/src/"/>
 									<listOptionValue builtIn="false" value="/home/bootch/git/msp430Drivers/src"/>
+									<listOptionValue builtIn="false" value="/home/bootch/msp430ware_3_80_04_05/driverlib/driverlib/MSP430FR2xx_4xx"/>
 								</option>
 								<option id="com.ti.ccstudio.buildDefinitions.MSP430_18.1.compilerID.ADVICE__POWER.2044644816" name="Enable checking of ULP power rules (--advice:power)" superClass="com.ti.ccstudio.buildDefinitions.MSP430_18.1.compilerID.ADVICE__POWER" useByScannerDiscovery="false" value="all" valueType="string"/>
 								<inputType id="com.ti.ccstudio.buildDefinitions.MSP430_18.1.compiler.inputType__C_SRCS.1963250300" name="C Sources" superClass="com.ti.ccstudio.buildDefinitions.MSP430_18.1.compiler.inputType__C_SRCS"/>

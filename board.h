@@ -6,7 +6,7 @@
 #include <gpio.h>
 
 // Depends on configuration of app
-#include "../src/config.h"
+#include "config.h"
 
 
 

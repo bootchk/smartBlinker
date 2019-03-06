@@ -21,9 +21,15 @@ public:
 
     static void setSunriseTime();
     static bool isSunriseTimeValid();
+    static EpochTime timeOfNextSunrise();
 
     /*
-     * Time before sunrise by given seconds
+     * Time ahead of next sunrise by given seconds
      */
     static EpochTime timeBeforeNextSunriseBySeconds(Duration);
+    /*
+     * Duration from now til next sunrise less given seconds.
+     */
+    static Duration durationUntilNextSunriseLessSeconds(Duration);
+
 };

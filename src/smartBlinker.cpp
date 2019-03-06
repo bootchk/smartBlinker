@@ -1,8 +1,10 @@
 
+#include "smartBlinker.h"
+
 #include "day.h"
 #include "parameters.h"
 #include "powerMgr.h"
-#include "smartBlinker.h"
+
 
 
 // embeddedDutyCycle
@@ -100,9 +102,15 @@ void SmartBlinker::onAlarm() {
     TaskScheduler::onAlarm();
 }
 
+#ifdef OLD
+Old: scheduler knows time instead of duration
 EpochTime SmartBlinker::timeToWake() {
     return TaskScheduler::timeOfNextTask();
 }
+#endif
+
+
+Duration SmartBlinker::durationUntilWake() { return TaskScheduler::durationUntilNextTask(); }
 
 
 
@@ -113,9 +121,6 @@ void SmartBlinker::testTasks() {
 }
 
 
-EpochTime SmartBlinker::timeOfMorningBlinkPeriodStart() {
-    return Day::timeBeforeNextSunriseBySeconds(Parameters::BetweenMorningBlinkStartAndSunrise);
-}
 
 
 
