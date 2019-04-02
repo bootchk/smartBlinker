@@ -7,15 +7,17 @@
 #include "powerMgr.h"
 
 
+
 // msp430Drivers
 #include <assert/myAssert.h>
+#include <logger/logger.h>
 
 
 
 
 
 
-void SmartBlinker::checkBlinkPeriodOver() {
+void SmartBlinker::checkBlinkPeriodOverAndScheduleNextTask() {
 
     if (BlinkPeriod::isOver()) {
         if (BlinkPeriod::isEvening()) {
@@ -47,7 +49,7 @@ void SmartBlinker::checkBlinkPeriodOver() {
 /*
  * Check power and terminate blink period prematurely.
  */
-void SmartBlinker::checkBlinkingPowerExhausted() {
+void SmartBlinker::checkBlinkingPowerExhaustedAndTerminateBlinkPeriod() {
     if (not PowerMgr::isPowerForBlinking()) {
         BlinkPeriod::terminatePrematurely();
         // assert BlinkPeriod::isOver()
@@ -66,33 +68,50 @@ void SmartBlinker::checkBlinkingPowerExhausted() {
  */
 
 void SmartBlinker::checkSunriseTask() {
-    everySunCheck();
+    if (PowerMgr::isNearBrownOut()) {
+        Logger::log(4);
+        scheduleKeepAliveTask();
+    }
+    else{
 
-    if ( not isNight() ) {
-        onSunriseDetected();
+#ifdef SUN_CHECK_BLINK_LIVENESS
+    LEDBlinker::blink();
+#endif
+
+        if (not isNight()) {
+            onSunriseDetected();
+        }
+        else {
+            // still dark, schedule self again short time later
+            scheduleCheckSunriseTask();
+        }
     }
-    else {
-        // still dark, schedule self again short time later
-        scheduleCheckSunriseTask();
-    }
+    // assert some task scheduled
 }
 
 
 void SmartBlinker::checkSunsetTask() {
-    everySunCheck();
-
-    if ( isNight() ) {
-        onSunsetDetected();
+    if (PowerMgr::isNearBrownOut()) {
+        Logger::log(4);
+        scheduleKeepAliveTask();
     }
     else {
-        // still dark, schedule self again short time later
-        scheduleCheckSunsetTask();
+
+        if (isNight()) {
+            onSunsetDetected();
+        }
+        else {
+            // still dark, schedule self again short time later
+            scheduleCheckSunsetTask();
+        }
     }
 }
 
 
 
 void SmartBlinker::blinkTask() {
+
+    // main task: blink
     LEDBlinker::blink();
 
     ///TestMain::blinkForcedGreenLED(5);
@@ -101,12 +120,13 @@ void SmartBlinker::blinkTask() {
 
     BlinkPeriod::advance();
 
-#ifdef ACCELERATED_TIME_PARAMETERS
-    checkBlinkingPowerExhausted();
+    /*
+     * Try hard not to exhaust power, cold start is perilous.
+     */
+    checkBlinkingPowerExhaustedAndTerminateBlinkPeriod();
     // blinkPeriod might be over
-#endif
 
-    checkBlinkPeriodOver();
+    checkBlinkPeriodOverAndScheduleNextTask();
 
     // assert (blinkTask scheduled and not blinkperiod::isOver())
     // or (blinkPeriod::isOver and no blinking related task is scheduled but a checkSunrise task is scheduled)

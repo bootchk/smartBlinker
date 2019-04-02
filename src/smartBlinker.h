@@ -16,11 +16,9 @@ class SmartBlinker {
 private:
     static void scheduleInitialTask();
 
-    static void everySunCheck();
+    static void checkBlinkPeriodOverAndScheduleNextTask();
 
-    static void checkBlinkPeriodOver();
-
-    static void checkBlinkingPowerExhausted();
+    static void checkBlinkingPowerExhaustedAndTerminateBlinkPeriod();
 
 public:
     /*
@@ -40,6 +38,7 @@ public:
     static void checkSunriseTask();
     static void checkSunsetTask();
     static void blinkTask();
+    static void keepAliveTask();
 
     /*
      * Test harness to call all tasks to find unresolved symbols.
@@ -68,6 +67,7 @@ public:
     static void scheduleBlinkTask();
     static void scheduleCheckSunriseTask();
     static void scheduleCheckSunsetTask();
+    static void scheduleKeepAliveTask();
 
     static void scheduleFirstEveningBlinkTask();
     static void scheduleFirstNightBlinkTask();

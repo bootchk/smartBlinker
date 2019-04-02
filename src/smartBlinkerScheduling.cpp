@@ -87,6 +87,15 @@ void SmartBlinker::scheduleCheckSunsetTask()
             Parameters::BetweenSunChecks);
 }
 
+// TODO Scheduled with different frequency as sun checks
+void SmartBlinker::scheduleKeepAliveTask()
+{
+    TaskScheduler::scheduleTask(
+            1,
+            keepAliveTask,
+            Parameters::BetweenSunChecks);
+}
+
 
 
 #ifdef FUTURE
