@@ -7,6 +7,7 @@
 // I.E. the real app that we delegate to.
 #include "smartBlinker.h"
 
+#include <assert/myAssert.h>
 
 
 
@@ -16,7 +17,16 @@ void App::onPowerOnReset() {
 
 	// initialize state
 	SmartBlinker::init();
+
+	/*
+	 * Power on MUST be in light conditions, since we are solar powered.
+	 * Test that LEDAndLightSensor detects light.
+	 * If not, it is miscalibrated (LED out of spec, or SW parameters are wrong.)
+	 */
+	myAssert(not SmartBlinker::isNight() );
 }
+
+
 
 
 void App::onWakeForAlarm() {

@@ -122,7 +122,7 @@ void App::configureUnusedPinsLowPower() {
 }
 #endif
 
-
+#ifdef NOT_USED
 #ifdef MYPCB_BOARD_R5
 void App::configureUnusedPinsLowPower() {
 
@@ -160,7 +160,7 @@ void App::configureUnusedPinsLowPower() {
     // Not ensure configuration is effective, since LPM5 might be locked
 }
 #endif
-
+#endif
 
 
 void App::configureUsedPins() {

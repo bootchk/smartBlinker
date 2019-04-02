@@ -122,8 +122,12 @@ void SmartBlinker::testTasks() {
 
 
 
-
-
+// TEMP
+//#define OMIT_LIGHT_SENSOR
 bool SmartBlinker::isNight() {
+#ifdef OMIT_LIGHT_SENSOR
+    return false;
+#else
     return LightSensor::isDark();
+#endif
 }

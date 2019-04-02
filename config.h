@@ -48,3 +48,10 @@
 //#define MYPCB_BOARD_R3
 #define MYPCB_BOARD_R5
 
+
+
+/*
+ * Whether to blink LED every check sun to indicate liveness
+ */
+
+#define SUN_CHECK_BLINK_LIVENESS

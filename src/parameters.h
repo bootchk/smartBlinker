@@ -61,21 +61,22 @@ public:
 
     // All duration units: seconds
     static constexpr Duration BetweenBlinks = {1};
-    static constexpr Duration BetweenSunsetAndBlinking = {30};
+    static constexpr Duration BetweenSunsetAndBlinking = {10};  // 30
     // Not expected to reach night blinking, should exhaust power first
-    static constexpr Duration BetweenEveningAndNightBlinking = {60};// One minute
+    static constexpr Duration BetweenEveningAndNightBlinking = {10};  // 60
 
-    static constexpr Duration BetweenSunChecks = {10};
+    static constexpr Duration BetweenSunChecks = {3};
 
+    // For accelerated testing, this doesn't matter since we will force sunrise early
     static constexpr Duration BetweenMorningBlinkStartAndSunrise = {7200};// Two hours
 
     /*
      * Counts of blinks.
      */
     // Expect only about 10 to exhaust power
-    static const unsigned int BlinksEvening = 100;
-    static const unsigned int BlinksNight = 100;
-    static const unsigned int BlinksMorning = 100;
+    static const unsigned int BlinksEvening = 20;
+    static const unsigned int BlinksNight = 20;
+    static const unsigned int BlinksMorning = 20;
 
 
 #elif defined( PRODUCTION_PARAMETERS)
@@ -126,10 +127,10 @@ public:
 // Vmon causes actual brownout at 1.7 plus BAT43 diode drop of 0.1 volt
 
 // Vcc which indicates enough charge on storage for LED blinking function.
-static const unsigned int MinVccForBlinking = 185; // 1.85V
+static const unsigned int MinVccForBlinking = 200; //185; // 1.85V
 
 // Vcc at which brownout might be imminent.
-static const unsigned int MinVccForBrownout = 180; // 1.8V
+static const unsigned int MinVccForBrownout = 190; // 180 // 1.8V
 
 #elif defined(PRODUCTION_PARAMETERS) or defined(COMPRESSED_TIME_PARAMETERS)
 
