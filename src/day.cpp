@@ -11,13 +11,12 @@
 namespace {
 /*
  * In persistent memory, to survive low power mode.
- * They must be initialized on cold restart by a call to init.
+ * This MUST be initialized on cold restart by a call to init, since it is in FRAM.
+ *
+ * Note that EpochClock starts at zero and is not zero for a long time after that (practically never rolls over.)
  */
 #pragma PERSISTENT
 EpochTime previousSunrise = 0;
-
-#pragma PERSISTENT
-bool _isSunriseTimeValid = false;
 
 }
 
@@ -25,41 +24,81 @@ bool _isSunriseTimeValid = false;
 
 
 void Day::init() {
-    _isSunriseTimeValid = false;
+    previousSunrise = 0;
 }
 
 
 
 void Day::setSunriseTime() {
     previousSunrise = EpochClock::timeNow();
-    _isSunriseTimeValid = true;
 }
 
+bool Day::isSunriseTimeValid() { return previousSunrise != 0; }
 
-bool Day::isSunriseTimeValid() { return _isSunriseTimeValid; }
+
+
+
+
+
 
 
 /*
  * Next sunrise is previous + 24 hours.
- *
- * If called more than 24 hours after previous sunrise, the result time may be in the past.
+ * If called more than 24 hours after previous sunrise, must keep adding 24 .
  */
-EpochTime Day::timeOfNextSunrise() { return previousSunrise + Parameters::TwentyFourHours.seconds; }
+EpochTime Day::timeOfNextSunriseAfterTime(EpochTime& now) {
+
+    EpochTime nextSunrise = now;
+    while (nextSunrise < now) {
+        nextSunrise += Parameters::TwentyFourHours.seconds;
+    }
+    // assert nextSunrise > now ( is after the present moment )
+    // assert nextSunrise < (now + 24hours)
+    return nextSunrise;
+}
+
 
 
 Duration Day::durationUntilNextSunriseLessSeconds(Duration lessDuration){
-    // TODO
     /*
      * Effectively:  nextSunriseTime - nowTime - lessDuration
-     * But we don't want to access nowTime unless epochClock is running.
+     *
+     * Complications:
+     * - should not access nowTime unless epochClock is running: assertions in nowTime()
+     * - should not call nowTime() more than once (and setAlarm() will also call it?):  FUTURE memoize it
      */
+    EpochTime now = EpochClock::timeNow();
+
+    EpochTime nextSunrise = timeOfNextSunriseAfterTime(now);
+
+
+    Duration durationToNextSunrise;
+    durationToNextSunrise.seconds = nextSunrise - now;
+
+    /*
+     * Unsigned arithmetic.  Avoid overflow on subtraction, which yields a very large unsigned int.
+     * Method must not be called within lessDuration seconds of nextSunrise
+     */
+    myAssert( durationToNextSunrise.seconds > lessDuration.seconds);
+
+    Duration result;
+    result.seconds = durationToNextSunrise.seconds - lessDuration.seconds;
+    return result;
 }
 
 
 
 
 #ifdef OLD
-broken.  Need timeDurationBeforeTime(timeOfNextSunrise(), duration);
+// Now we schedule by duration, not time
+
+/*
+ * Time ahead of next sunrise by given seconds.
+ *
+ * Must not be called if now is less than duration from next sunrise.
+ */
+static EpochTime timeBeforeNextSunriseBySeconds(Duration);
+
 EpochTime Day::timeBeforeNextSunriseBySeconds(Duration duration) {
 
     myAssert(isSunriseTimeValid());

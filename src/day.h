@@ -20,15 +20,25 @@ public:
     static void init();
 
     static void setSunriseTime();
-    static bool isSunriseTimeValid();
-    static EpochTime timeOfNextSunrise();
 
     /*
-     * Time ahead of next sunrise by given seconds
+     * Has setSunriseTime() been called at least once in the past.
+     * Does not guarantee that sunrise time is within 24 hours of now, i.e. not far in the past.
      */
-    static EpochTime timeBeforeNextSunriseBySeconds(Duration);
+    static bool isSunriseTimeValid();
+
+    /*
+     * Guarantees that returned time is past the given time
+     * (in the future if given time is now) and within the next 24 hours.
+     */
+    static EpochTime timeOfNextSunriseAfterTime(EpochTime& time);
+
+
+
     /*
      * Duration from now til next sunrise less given seconds.
+     *
+     * Must not be called if now is less than duration from next sunrise.
      */
     static Duration durationUntilNextSunriseLessSeconds(Duration);
 

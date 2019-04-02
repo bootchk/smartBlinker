@@ -97,6 +97,10 @@ void SmartBlinker::checkSunsetTask() {
     }
     else {
 
+#ifdef SUN_CHECK_BLINK_LIVENESS
+        LEDBlinker::blink();
+#endif
+
         if (isNight()) {
             onSunsetDetected();
         }

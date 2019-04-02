@@ -17,10 +17,13 @@
 
 
 #ifdef OLD
+//Now we schedule by duration, not time.
 EpochTime SmartBlinker::timeOfMorningBlinkPeriodStart() {
     return Day::timeBeforeNextSunriseBySeconds(Parameters::BetweenMorningBlinkStartAndSunrise);
 }
 #endif
+
+
 
 Duration SmartBlinker::durationUntilMorningBlinkPeriodStart() {
     return Day::durationUntilNextSunriseLessSeconds(Parameters::BetweenMorningBlinkStartAndSunrise);
@@ -87,7 +90,7 @@ void SmartBlinker::scheduleCheckSunsetTask()
             Parameters::BetweenSunChecks);
 }
 
-// TODO Scheduled with different frequency as sun checks
+// FUTURE Scheduled with different frequency as sun checks
 void SmartBlinker::scheduleKeepAliveTask()
 {
     TaskScheduler::scheduleTask(
