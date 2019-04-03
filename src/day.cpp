@@ -30,7 +30,7 @@ void Day::init() {
 
 
 void Day::setSunriseTime() {
-    previousSunrise = EpochClock::timeNow();
+    previousSunrise = EpochClock::timeNowOrReset();
 }
 
 bool Day::isSunriseTimeValid() { return previousSunrise != 0; }
@@ -67,7 +67,7 @@ Duration Day::durationUntilNextSunriseLessSeconds(Duration lessDuration){
      * - should not access nowTime unless epochClock is running: assertions in nowTime()
      * - should not call nowTime() more than once (and setAlarm() will also call it?):  FUTURE memoize it
      */
-    EpochTime now = EpochClock::timeNow();
+    EpochTime now = EpochClock::timeNowOrReset();
 
     EpochTime nextSunrise = timeOfNextSunriseAfterTime(now);
 
@@ -79,6 +79,8 @@ Duration Day::durationUntilNextSunriseLessSeconds(Duration lessDuration){
      * Unsigned arithmetic.  Avoid overflow on subtraction, which yields a very large unsigned int.
      * Method must not be called within lessDuration seconds of nextSunrise
      */
+    // TODO this should be an operator on Duration, safe
+    // Really don't want to assert, want to proceed with a small result
     myAssert( durationToNextSunrise.seconds > lessDuration.seconds);
 
     Duration result;

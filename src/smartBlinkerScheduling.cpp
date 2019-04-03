@@ -26,7 +26,11 @@ EpochTime SmartBlinker::timeOfMorningBlinkPeriodStart() {
 
 
 Duration SmartBlinker::durationUntilMorningBlinkPeriodStart() {
+#ifdef ACCELERATED_TIME_PARAMETERS
+    return Parameters::BetweenEveningAndNightBlinking;
+#else
     return Day::durationUntilNextSunriseLessSeconds(Parameters::BetweenMorningBlinkStartAndSunrise);
+#endif
 }
 
 /*
@@ -44,13 +48,16 @@ void SmartBlinker::scheduleBlinkTask() {
 
 
 
-
+// A fixed duration (typically 30 minutes) after now, which is sunset
 void SmartBlinker::scheduleFirstEveningBlinkTask() {
-    // 30 minutes after sunset
+
     TaskScheduler::scheduleTask(
             0,
-            blinkTask,Parameters::BetweenSunsetAndBlinking);
+            blinkTask,
+            Parameters::BetweenSunsetAndBlinking);
 }
+
+// A fixed duration (typically 1 minute) after now, which is end of evening blinking
 void SmartBlinker::scheduleFirstNightBlinkTask() {
     // 1 minute from now (from end of evening.)
     TaskScheduler::scheduleTask(
@@ -59,6 +66,7 @@ void SmartBlinker::scheduleFirstNightBlinkTask() {
             Parameters::BetweenEveningAndNightBlinking);
 }
 
+// A variable duration, which depends on length of night as indicated by saved sunrise time
 void SmartBlinker::scheduleFirstMorningBlinkTask() {
     TaskScheduler::scheduleTask(
             0,
