@@ -14,6 +14,7 @@
 <setEntry value="SUBPATH"/>
 <setEntry value="SYSTEM"/>
 </setAttribute>
+<stringAttribute key="com.ti.ccstudio.debug.debugModel.ATTR_LOAD_PROGRAM./home/bootch/git/smartBlinker/targetConfigs/MSP430FR2433.ccxml.TI MSP430 USB1/MSP430" value="SYBMOLS_ONLY"/>
 <stringAttribute key="com.ti.ccstudio.debug.debugModel.ATTR_PROGRAM./home/bootch/git/smartBlinker/targetConfigs/MSP430FR2433.ccxml.TI MSP430 USB1/MSP430" value="${build_artifact:smartBlinker}"/>
 <stringAttribute key="com.ti.ccstudio.debug.debugModel.ATTR_PROGRAM./home/bootch/git/smartBlinker/targetConfigs/MSP430FR6989.ccxml.TI MSP430 USB1/MSP430" value="${build_artifact:smartBlinker}"/>
 <stringAttribute key="com.ti.ccstudio.debug.debugModel.ATTR_PROJECT./home/bootch/git/smartBlinker/targetConfigs/MSP430FR2433.ccxml.TI MSP430 USB1/MSP430" value="smartBlinker"/>
@@ -21,7 +22,7 @@
 <stringAttribute key="com.ti.ccstudio.debug.debugModel.ATTR_TARGET_CONFIG" value="${target_config_active_default:smartBlinker}"/>
 <stringAttribute key="com.ti.ccstudio.debug.debugModel.MRU_PROGRAM./home/bootch/git/smartBlinker/targetConfigs/MSP430FR2433.ccxml.TI MSP430 USB1/MSP430" value="/home/bootch/git/smartBlinker/Debug/smartBlinker.out"/>
 <mapAttribute key="com.ti.ccstudio.debug.ui.displayFormats">
-<mapEntry key="TI MSP430 USB1/MSP430@##separator##@0" value="16-Bit Hex - C Style"/>
+<mapEntry key="TI MSP430 USB1/MSP430@##separator##@0" value="16-Bit Hex - TI Style"/>
 </mapAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
 <listEntry value="/smartBlinker"/>

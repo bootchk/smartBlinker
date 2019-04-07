@@ -46,7 +46,7 @@ void SmartBlinker::scheduleBlinkTask() {
 
 
 
-
+// FUTURE combine these into one parameterized method scheduleFirstBlinkTask
 
 // A fixed duration (typically 30 minutes) after now, which is sunset
 void SmartBlinker::scheduleFirstEveningBlinkTask() {
@@ -106,6 +106,11 @@ void SmartBlinker::scheduleKeepAliveTask()
             keepAliveTask,
             Parameters::BetweenSunChecks);
 }
+
+
+
+bool SmartBlinker::isSomeTaskScheduled() { return TaskScheduler::isTaskScheduled(); }
+
 
 
 

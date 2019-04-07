@@ -73,6 +73,9 @@ public:
     static void scheduleFirstNightBlinkTask();
     static void scheduleFirstMorningBlinkTask();
 
+    // Is some kind of task scheduled?
+    static bool isSomeTaskScheduled();
+
     ///static void scheduleLaggedCheckSunsetTask();
 
 

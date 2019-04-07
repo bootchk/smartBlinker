@@ -7,6 +7,8 @@
 // I.E. the real app that we delegate to.
 #include "smartBlinker.h"
 
+#include "day.h"
+
 #include <assert/myAssert.h>
 
 
@@ -55,3 +57,14 @@ Duration App::durationOfSleep() { return SmartBlinker::durationUntilWake(); }
 
 
 
+void App::takeTimeNow() {
+    /*
+     * If sunrise was detected earlier in this waking period,
+     * capture time of sunrise.
+     * We do this now since timeNow should already be memoized;
+     * this not cause another access to RTC.
+     */
+    if (Day::wasSunriseDetected()) {
+        Day::captureSunriseTime();
+    }
+}

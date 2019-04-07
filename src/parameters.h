@@ -74,9 +74,9 @@ public:
      * Counts of blinks.
      */
     // Expect only about 10 to exhaust power with small Cstor
-    static const unsigned int BlinksEvening = 20;
-    static const unsigned int BlinksNight = 10;
-    static const unsigned int BlinksMorning = 5;
+    static const unsigned int BlinksEvening = 8;
+    static const unsigned int BlinksNight = 5;
+    static const unsigned int BlinksMorning = 3;
 
 
 #elif defined( PRODUCTION_PARAMETERS)

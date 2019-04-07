@@ -18,25 +18,24 @@ namespace {
 #pragma PERSISTENT
 EpochTime previousSunrise = 0;
 
+
+/*
+ * Every waking period, c-startup initializes this to false.
+ */
+bool _wasSunriseDetected = false;
+
 }
 
 
 
 
-void Day::init() {
-    previousSunrise = 0;
-}
-
-
-
-void Day::setSunriseTime() {
-    previousSunrise = EpochClock::timeNowOrReset();
-}
-
+void Day::init() { previousSunrise = 0; }
+void Day::captureSunriseTime() { previousSunrise = EpochClock::timeNowOrReset(); }
 bool Day::isSunriseTimeValid() { return previousSunrise != 0; }
 
 
-
+void Day::setSunriseDetected() {  _wasSunriseDetected = true; }
+bool Day::wasSunriseDetected() { return  _wasSunriseDetected; }
 
 
 

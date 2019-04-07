@@ -15,7 +15,10 @@
 
 
 void SmartBlinker::onSunriseDetected() {
-    Day::setSunriseTime();
+    /*
+     * Flag that sunrise was detected, but don't capture time until later.
+     */
+    Day::setSunriseDetected();
 
     indicateEvent();
 
@@ -98,7 +101,7 @@ void SmartBlinker::onEveningBlinkPeriodOver() {
 
 void SmartBlinker::onNightBlinkPeriodOver() {
     /*
-     * Schedule morning blinking if possible.
+     * Schedule morning blinking if we know sunrise.
      *
      * If we cold started recently, we have not detected a sunrise yet
      */
@@ -106,6 +109,7 @@ void SmartBlinker::onNightBlinkPeriodOver() {
         if (PowerMgr::isPowerForBlinking()) {
             onPowerForMorningBlinking();
         }
+        // TODO MUST schedule something
     }
     else {
         /*

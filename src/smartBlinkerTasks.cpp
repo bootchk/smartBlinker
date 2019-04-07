@@ -43,6 +43,7 @@ void SmartBlinker::checkBlinkPeriodOverAndScheduleNextTask() {
      * - OR next blink task in this period
      * - OR checkSunrise task
      */
+    myAssert(isSomeTaskScheduled());
 }
 
 
@@ -86,7 +87,7 @@ void SmartBlinker::checkSunriseTask() {
             scheduleCheckSunriseTask();
         }
     }
-    // assert some task scheduled
+    myAssert(isSomeTaskScheduled());
 }
 
 
@@ -105,10 +106,11 @@ void SmartBlinker::checkSunsetTask() {
             onSunsetDetected();
         }
         else {
-            // still dark, schedule self again short time later
+            // still day, schedule self again short time later
             scheduleCheckSunsetTask();
         }
     }
+    myAssert(isSomeTaskScheduled());
 }
 
 
@@ -140,6 +142,8 @@ void SmartBlinker::blinkTask() {
 
 
 void SmartBlinker::indicateEvent() {
+#ifdef BLINK_LED_ON_SUN_EVENT
     LEDBlinker::blink();
+#endif
 }
 

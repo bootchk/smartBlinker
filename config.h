@@ -53,5 +53,20 @@
 /*
  * Whether to blink LED every check sun to indicate liveness
  */
-
 #define SUN_CHECK_BLINK_LIVENESS
+
+
+/*
+ * Whether to blink LED when sunrise and sunset detected.
+ */
+#define BLINK_LED_ON_SUN_EVENT
+
+
+
+
+/*
+ * Whether isNight() always returns false (forego use of light sensor.)
+ * A hack for testing, light sensor uses power, is sensitive to parameters, etc.
+ */
+//#define OMIT_LIGHT_SENSOR
+
