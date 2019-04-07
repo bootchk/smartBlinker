@@ -91,8 +91,7 @@ void SmartBlinker::onEveningBlinkPeriodOver() {
     else {
         /*
          * No more power tonight.
-         * But we must schedule same tasks as if we had done morning blinking,
-         * i.e. checkSunrise
+         * But schedule same tasks as if we had done morning blinking, i.e. checkSunrise
          */
         scheduleCheckSunriseTask();
     }
@@ -109,7 +108,9 @@ void SmartBlinker::onNightBlinkPeriodOver() {
         if (PowerMgr::isPowerForBlinking()) {
             onPowerForMorningBlinking();
         }
-        // TODO MUST schedule something
+        else {
+            scheduleCheckSunriseTask();
+        }
     }
     else {
         /*
@@ -119,6 +120,7 @@ void SmartBlinker::onNightBlinkPeriodOver() {
          */
         scheduleCheckSunriseTask();
     }
+    // assert some task is scheduled
 }
 
 
