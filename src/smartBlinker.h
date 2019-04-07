@@ -69,9 +69,10 @@ public:
     static void scheduleCheckSunsetTask();
     static void scheduleKeepAliveTask();
 
-    static void scheduleFirstEveningBlinkTask();
-    static void scheduleFirstNightBlinkTask();
-    static void scheduleFirstMorningBlinkTask();
+    static void scheduleFirstBlinkTaskOfPeriod(const Duration durationUntilFirstBlink);
+    //static void scheduleFirstEveningBlinkTask();
+    //static void scheduleFirstNightBlinkTask();
+    //static void scheduleFirstMorningBlinkTask();
 
     // Is some kind of task scheduled?
     static bool isSomeTaskScheduled();

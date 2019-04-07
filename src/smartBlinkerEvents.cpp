@@ -59,17 +59,17 @@ void SmartBlinker::onSunsetDetected() {
 
 void SmartBlinker::onPowerForEveningBlinking() {
     BlinkPeriod::initForEveningBlinking();
-    scheduleFirstEveningBlinkTask();
+    scheduleFirstBlinkTaskOfPeriod(Parameters::BetweenSunsetAndBlinking);
 }
 
 void SmartBlinker::onPowerForNightBlinking() {
     BlinkPeriod::initForNightBlinking();
-    scheduleFirstNightBlinkTask();
+    scheduleFirstBlinkTaskOfPeriod(Parameters::BetweenEveningAndNightBlinking);
 }
 
 void SmartBlinker::onPowerForMorningBlinking() {
     BlinkPeriod::initForMorningBlinking();
-    scheduleFirstMorningBlinkTask();
+    scheduleFirstBlinkTaskOfPeriod(durationUntilMorningBlinkPeriodStart());
 }
 
 
