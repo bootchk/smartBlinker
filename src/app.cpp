@@ -21,11 +21,15 @@ void App::onPowerOnReset() {
 	SmartBlinker::init();
 
 	/*
-	 * Power on MUST be in light conditions, since we are solar powered.
+	 * POR (Power On Reset) MUST be in light conditions, since we are solar powered.
+	 * Power COULD reach Vbor in fading light,
+	 * but not after light levels stabilize to dark levels.
+	 * We will assume that POR occurs almost always in the morning, in rising light levels.
+	 *
 	 * Test that LEDAndLightSensor detects light.
 	 * If not, it is miscalibrated (LED out of spec, or SW parameters are wrong.)
 	 */
-	myAssert(not SmartBlinker::isNight() );
+	SmartBlinker::calibrateLightSensor();
 }
 
 

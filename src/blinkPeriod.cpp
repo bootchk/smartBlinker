@@ -27,7 +27,8 @@ bool _isActive = false;
 
 }
 
-
+// FUTURE enum for period kind
+// FUTURE _isActive => _isOver
 
 void BlinkPeriod::initForEveningBlinking()
 {

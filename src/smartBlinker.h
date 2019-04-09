@@ -87,6 +87,10 @@ public:
     static Duration durationUntilMorningBlinkPeriodStart();
 
 
+    /*
+     * Resets if not in light.
+     */
+    static void calibrateLightSensor();
     static bool isNight();
     static void indicateEvent();
 };

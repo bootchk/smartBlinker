@@ -122,6 +122,12 @@ void SmartBlinker::testTasks() {
 
 
 
+
+void SmartBlinker::calibrateLightSensor() {
+    LightSensor::calibrateInLightOrReset();
+}
+
+
 bool SmartBlinker::isNight() {
 #ifdef OMIT_LIGHT_SENSOR
     return false;
