@@ -17,12 +17,10 @@
  * - timer for blink duration
  */
 
-void LEDBlinker::blink()
+void LEDBlinker::blinkBright()
 {
     // Same LED as used to measure light, now used to generate light
     LEDAndLightSensor::toOnFromOff();
-
-
 
 #ifdef ACCELERATED_TIME_PARAMETERS
     // 2 millisecond is easily visible if staring from close distance
@@ -36,6 +34,20 @@ void LEDBlinker::blink()
 
     LEDAndLightSensor::toOffFromOn();
 }
+
+
+
+void LEDBlinker::blinkDim() {
+    LEDAndLightSensor::toOnFromOff();
+    /*
+     * This is probably the absolute minimum.
+     * Some say a 6uS blink is visible.
+     */
+    LowPowerTimer::delayTicksOf100uSec(1);
+    LEDAndLightSensor::toOffFromOn();
+}
+
+
 
 
 void LEDBlinker::configureGPIO() {

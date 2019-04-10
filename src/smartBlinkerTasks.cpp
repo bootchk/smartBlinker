@@ -74,10 +74,7 @@ void SmartBlinker::checkSunriseTask() {
         scheduleKeepAliveTask();
     }
     else{
-
-#ifdef SUN_CHECK_BLINK_LIVENESS
-    LEDBlinker::blink();
-#endif
+        blinkLiveness();
 
         if (not isNight()) {
             onSunriseDetected();
@@ -97,10 +94,7 @@ void SmartBlinker::checkSunsetTask() {
         scheduleKeepAliveTask();
     }
     else {
-
-#ifdef SUN_CHECK_BLINK_LIVENESS
-        LEDBlinker::blink();
-#endif
+        blinkLiveness();
 
         if (isNight()) {
             onSunsetDetected();
@@ -118,7 +112,7 @@ void SmartBlinker::checkSunsetTask() {
 void SmartBlinker::blinkTask() {
 
     // main task: blink
-    LEDBlinker::blink();
+    LEDBlinker::blinkBright();
 
     ///TestMain::blinkForcedGreenLED(5);
 
@@ -140,10 +134,17 @@ void SmartBlinker::blinkTask() {
 
 
 
+void SmartBlinker::blinkLiveness() {
+#ifdef SUN_CHECK_BLINK_LIVENESS
+    LEDBlinker::blinkDim();
+#endif
+}
+
+
 
 void SmartBlinker::indicateEvent() {
 #ifdef BLINK_LED_ON_SUN_EVENT
-    LEDBlinker::blink();
+    LEDBlinker::blinkDim();
 #endif
 }
 

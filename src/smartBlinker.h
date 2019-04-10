@@ -92,5 +92,7 @@ public:
      */
     static void calibrateLightSensor();
     static bool isNight();
+
+    static void blinkLiveness();
     static void indicateEvent();
 };
