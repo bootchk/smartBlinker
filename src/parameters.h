@@ -2,7 +2,7 @@
 #pragma once
 
 // msp430Drivers
-#include <time/timeTypes.h>
+#include <alarmClock/time/timeTypes.h>
 
 /*
  * Parameters of application (smart blinking)
@@ -81,15 +81,15 @@ public:
 
 #elif defined( PRODUCTION_PARAMETERS)
     // Normal, production parameters
-    static constexpr Duration BetweenBlinks = 10};
-    static constexpr Duration BetweenSunsetAndBlinking = 1800};  // Thirty minutes
-    static constexpr Duration BetweenEveningAndNightBlinking = 60}; // One minute
+    static constexpr Duration BetweenBlinks = {10};
+    static constexpr Duration BetweenSunsetAndBlinking = {1800};  // Thirty minutes
+    static constexpr Duration BetweenEveningAndNightBlinking = {60}; // One minute
 
     // Check sun every 3 minutes
     ///static constexpr Duration BetweenSunChecks = 120};
-    static constexpr Duration BetweenSunChecks = 900};  // Fifteen minutes
+    static constexpr Duration BetweenSunChecks = {900};  // Fifteen minutes
 
-    static constexpr Duration BetweenMorningBlinkStartAndSunrise = 7200};    // Two hours
+    static constexpr Duration BetweenMorningBlinkStartAndSunrise = {7200};    // Two hours
 
     /*
      * Counts of blinks.
@@ -138,7 +138,7 @@ static const unsigned int MinVccForBrownout = 190; // 180 // 1.8V
 static const unsigned int MinVccForBlinking = 220; // 2.2V
 
 // Vcc at which brownout might be imminent.
-static const unsigned int MinVccForBrownout = 180; // 1.8V
+static const unsigned int MinVccForBrownout = 190; // 1.9V
 
 
 #endif

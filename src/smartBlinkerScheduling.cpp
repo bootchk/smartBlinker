@@ -10,7 +10,7 @@
 #include <OS/taskScheduler.h>
 
 // msp430Drivers
-#include <realTimeClock/epochClock/epochClock.h>
+#include <alarmClock/epochClock/epochClock.h>
 
 
 

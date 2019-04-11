@@ -1,8 +1,11 @@
+#include "day.h"
+#include "parameters.h"
 
-#include <realTimeClock/epochClock/epochClock.h>
+
+#include <alarmClock/epochClock/epochClock.h>
 #include <assert/myAssert.h>
-#include <src/day.h>
-#include <src/parameters.h>
+
+
 
 
 
