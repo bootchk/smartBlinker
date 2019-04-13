@@ -25,7 +25,7 @@ public:
      * Return true if this putative event confirms consecutive events.
      * Else mark no event occurred (side effect) and return false.
      */
-    static bool doesThisEventConfirm(bool wasEvent);
+    static bool doesThisEventConfirm(const bool wasEvent);
 
 
     /*

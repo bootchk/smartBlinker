@@ -10,7 +10,6 @@
 
 // msp430Drivers
 #include <assert/myAssert.h>
-//#include <logger/logger.h>
 #include <softFault/softFault.h>
 
 
@@ -74,8 +73,6 @@ void SmartBlinker::checkSunriseTask() {
         scheduleKeepAliveTask();
     }
     else{
-        blinkLiveness();
-
         if (isDay()) {
             onSunriseDetected();
         }
@@ -83,6 +80,9 @@ void SmartBlinker::checkSunriseTask() {
             // still dark, schedule self again short time later
             scheduleCheckSunriseTask();
         }
+
+        // Use LED *after* we used it for light sensing
+        blinkLiveness();
     }
     myAssert(isSomeTaskScheduled());
 }
@@ -94,8 +94,6 @@ void SmartBlinker::checkSunsetTask() {
         scheduleKeepAliveTask();
     }
     else {
-        blinkLiveness();
-
         if (isNight()) {
             onSunsetDetected();
         }
@@ -103,6 +101,9 @@ void SmartBlinker::checkSunsetTask() {
             // still day, schedule self again short time later
             scheduleCheckSunsetTask();
         }
+
+        // Use LED *after* we used it for light sensing
+        blinkLiveness();
     }
     myAssert(isSomeTaskScheduled());
 }

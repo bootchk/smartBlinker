@@ -44,14 +44,14 @@ bool SmartBlinker::isNight() {
 
 
 bool SmartBlinker::isDay() {
-    // not dark => putative day
+    // not dark => putative sunrise
     return ConfirmedSunEvent::doesThisEventConfirm(  not LightSensor::isDark() );
 }
 
 
 
 bool SmartBlinker::isNight() {
-    // dark => putative night
+    // dark => putative sunset
     return ConfirmedSunEvent::doesThisEventConfirm( LightSensor::isDark() );
 }
 

@@ -7,30 +7,34 @@
 namespace {
 
 #pragma PERSISTENT
-unsigned int countEvents;
+unsigned int countEvents = 0;
 
 }
 
 
-bool ConfirmedSunEvent::doesThisEventConfirm( bool isPutativeEvent ) {
-    bool result;
+bool ConfirmedSunEvent::doesThisEventConfirm( const bool isPutativeEvent ) {
+    bool isConfirmed;
 
-    if (isPutativeEvent) {
+    if (isPutativeEvent)
+    {
         countEvents += 1;
-        result = (countEvents >= 2);
+        isConfirmed = (countEvents >= 2);
 
-        /*
-         * Since confirmed, prepare for opposite events.
-         * E.G. if we confirmed sunrise, prepare for confirming sunset.
-         * (Although the app could confirm sunrise again.)
-         */
-        ConfirmedSunEvent::reset();
+        if (isConfirmed) {
+            /*
+             * Since confirmed, prepare for opposite events.
+             * E.G. if we confirmed sunrise, prepare for confirming sunset.
+             * (Although the app could confirm sunrise again.)
+             */
+            ConfirmedSunEvent::reset();
+        }
     }
     else {
         ConfirmedSunEvent::reset();
-        result = false;
+        isConfirmed = false;
     }
-    return result;
+    // assert countEvents in [0,1]
+    return isConfirmed;
 }
 
 
