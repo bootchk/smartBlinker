@@ -61,7 +61,6 @@ void SmartBlinker::checkBlinkingPowerExhaustedAndTerminateBlinkPeriod() {
 
 /*
  * Checking sun and blinking are mutually exclusive.
- *
  */
 
 
@@ -77,7 +76,7 @@ void SmartBlinker::checkSunriseTask() {
     else{
         blinkLiveness();
 
-        if (not isNight()) {
+        if (isDay()) {
             onSunriseDetected();
         }
         else {

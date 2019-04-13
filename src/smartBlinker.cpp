@@ -2,17 +2,12 @@
 #include "smartBlinker.h"
 
 #include "day.h"
-#include "parameters.h"
-#include "powerMgr.h"
-
-
+#include "ConfirmedSunEvent.h"
 
 // embeddedDutyCycle
 #include <OS/taskScheduler.h>
 
 // MSP430Drivers
-#include <LED/led.h>
-#include <lightSensor/lightSensor.h>
 #include <assert/myAssert.h>
 
 
@@ -87,8 +82,11 @@ void SmartBlinker::init() {
     // This power spike obscures EnergyTrace low power, so remove it.
     // indicateEvent();
 
-    // Show ignorance of actual day.
+    // Show ignorance of day attributes (sunrise time).
     Day::init();
+
+    // Show ignorance of putative sunrise/sunset events
+    ConfirmedSunEvent::reset();
 
     TaskScheduler::init();
     // Assert no tasks schedule, ready to schedule
@@ -110,7 +108,14 @@ EpochTime SmartBlinker::timeToWake() {
 #endif
 
 
+
+
 Duration SmartBlinker::durationUntilWake() { return TaskScheduler::durationUntilNextTask(); }
+
+
+
+
+
 
 
 
@@ -120,18 +125,3 @@ void SmartBlinker::testTasks() {
     blinkTask();
 }
 
-
-
-
-void SmartBlinker::calibrateLightSensor() {
-    LightSensor::calibrateInLightOrReset();
-}
-
-
-bool SmartBlinker::isNight() {
-#ifdef OMIT_LIGHT_SENSOR
-    return false;
-#else
-    return LightSensor::isDark();
-#endif
-}
