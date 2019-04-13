@@ -10,7 +10,8 @@
 
 // msp430Drivers
 #include <assert/myAssert.h>
-#include <logger/logger.h>
+//#include <logger/logger.h>
+#include <softFault/softFault.h>
 
 
 
@@ -70,7 +71,7 @@ void SmartBlinker::checkBlinkingPowerExhaustedAndTerminateBlinkPeriod() {
 
 void SmartBlinker::checkSunriseTask() {
     if (PowerMgr::isNearBrownOut()) {
-        Logger::log(4);
+        SoftFault::info(4);
         scheduleKeepAliveTask();
     }
     else{
@@ -90,7 +91,7 @@ void SmartBlinker::checkSunriseTask() {
 
 void SmartBlinker::checkSunsetTask() {
     if (PowerMgr::isNearBrownOut()) {
-        Logger::log(4);
+        SoftFault::info(4);
         scheduleKeepAliveTask();
     }
     else {
