@@ -8,8 +8,8 @@
 #include "smartBlinker.h"
 
 #include "day.h"
-
 #include <assert/myAssert.h>
+#include <src/partialSchedule.h>
 
 
 
@@ -71,4 +71,9 @@ void App::takeTimeNow() {
     if (Day::wasSunriseDetected()) {
         Day::captureSunriseTime();
     }
+
+    /*
+     * If some task was partial scheduled, complete schedule it now.
+     */
+    PartialSchedule::complete();
 }

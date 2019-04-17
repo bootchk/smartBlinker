@@ -3,30 +3,20 @@
  */
 #include "smartBlinker.h"
 #include "parameters.h"
-#include "day.h"
 
 
 // embeddedDutyCycle
 #include <OS/taskScheduler.h>
 
-// msp430Drivers
-#include <alarmClock/epochClock/epochClock.h>
+
+/*
+ * !!!! Cannot use clock, which is not ready.
+ */
 
 
 
 
 
-
-
-
-
-Duration SmartBlinker::durationUntilMorningBlinkPeriodStart() {
-#ifdef ACCELERATED_TIME_PARAMETERS
-    return Parameters::BetweenEveningAndNightBlinking;
-#else
-    return Day::durationUntilNextSunriseLessSeconds(Parameters::BetweenMorningBlinkStartAndSunrise);
-#endif
-}
 
 /*
  * Task of kind 0 i.e. blink tasks
