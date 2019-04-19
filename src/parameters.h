@@ -91,6 +91,8 @@ public:
 
     static constexpr Duration BetweenMorningBlinkStartAndSunrise = {7200};    // Two hours
 
+    static constexpr Duration BetweenKeepAlive = {3600};  // hour
+
     /*
      * Counts of blinks.
      */

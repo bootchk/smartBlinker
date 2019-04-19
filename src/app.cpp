@@ -9,7 +9,6 @@
 
 #include "day.h"
 #include <assert/myAssert.h>
-#include <src/partialSchedule.h>
 
 
 
@@ -73,7 +72,10 @@ void App::takeTimeNow() {
     }
 
     /*
+     * OLD
      * If some task was partial scheduled, complete schedule it now.
+     *
+     * PartialSchedule::complete();
      */
-    PartialSchedule::complete();
+
 }

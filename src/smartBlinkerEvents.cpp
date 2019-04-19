@@ -3,8 +3,9 @@
 
 #include <src/blinkPeriod.h>
 #include <src/day.h>
-#include <src/partialSchedule.h>
 #include <src/powerMgr.h>
+
+#include "moment.h"
 
 
 
@@ -62,26 +63,17 @@ void SmartBlinker::onSunsetDetected() {
 
 void SmartBlinker::onPowerForEveningBlinking() {
     BlinkPeriod::initForEveningBlinking();
-    scheduleFirstBlinkTaskOfPeriod(Parameters::BetweenSunsetAndBlinking);
+    scheduleFirstBlinkTaskOfPeriod(Moment::betweenSunsetAndBlinking);
 }
 
 void SmartBlinker::onPowerForNightBlinking() {
     BlinkPeriod::initForNightBlinking();
-    scheduleFirstBlinkTaskOfPeriod(Parameters::BetweenEveningAndNightBlinking);
+    scheduleFirstBlinkTaskOfPeriod(Moment::betweenEveningAndNightBlinking);
 }
 
 void SmartBlinker::onPowerForMorningBlinking() {
     BlinkPeriod::initForMorningBlinking();
-
-    // NEW
-    /*
-     * Partially schedule morning blinking.
-     */
-    PartialSchedule::schedule();
-
-
-    // OLD when clock was always available
-    //scheduleFirstBlinkTaskOfPeriod(durationUntilMorningBlinkPeriodStart());
+    scheduleFirstBlinkTaskOfPeriod(Moment::untilMorningBlinkPeriodStart);
 }
 
 

@@ -2,8 +2,8 @@
  * Scheduling methods
  */
 #include "smartBlinker.h"
-#include "parameters.h"
 
+#include "moment.h"
 
 // embeddedDutyCycle
 #include <OS/taskScheduler.h>
@@ -19,25 +19,21 @@
 
 
 /*
- * Task of kind 0 i.e. blink tasks
+ * Blink tasks
  */
 
 void SmartBlinker::scheduleBlinkTask() {
     TaskScheduler::scheduleTask(
-            0,
             blinkTask,
-            Parameters::BetweenBlinks);
+            Moment::betweenBlinks);
 }
 
 
-
-
-void SmartBlinker::scheduleFirstBlinkTaskOfPeriod(const Duration durationUntilFirstBlink) {
+void SmartBlinker::scheduleFirstBlinkTaskOfPeriod(MomentMethodPtr momentFirstBlink) {
 
     TaskScheduler::scheduleTask(
-            0,
             blinkTask,
-            durationUntilFirstBlink);
+            momentFirstBlink);
 }
 
 
@@ -46,33 +42,29 @@ void SmartBlinker::scheduleFirstBlinkTaskOfPeriod(const Duration durationUntilFi
 
 
 /*
- * Tasks of kind 1 i.e. check sun tasks
+ * Check sun tasks
  */
 
 
 void SmartBlinker::scheduleCheckSunriseTask()
 {
     TaskScheduler::scheduleTask(
-            1,
             checkSunriseTask,
-            Parameters::BetweenSunChecks);
+            Moment::betweenSunChecks);
 }
 
 void SmartBlinker::scheduleCheckSunsetTask()
 {
     TaskScheduler::scheduleTask(
-            1,
             checkSunsetTask,
-            Parameters::BetweenSunChecks);
+            Moment::betweenSunChecks);
 }
 
-// FUTURE Scheduled with different frequency as sun checks
 void SmartBlinker::scheduleKeepAliveTask()
 {
     TaskScheduler::scheduleTask(
-            1,
             keepAliveTask,
-            Parameters::BetweenSunChecks);
+            Moment::betweenKeepAlive);
 }
 
 

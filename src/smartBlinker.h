@@ -1,6 +1,9 @@
 
+// msp430Drivers
 #include <alarmClock/time/timeTypes.h>  // EpochTime
 
+// embeddedDutyCycle
+#include <OS/task.h>    // MomentMethodPtr
 
 
 
@@ -69,7 +72,7 @@ public:
     static void scheduleCheckSunsetTask();
     static void scheduleKeepAliveTask();
 
-    static void scheduleFirstBlinkTaskOfPeriod(const Duration durationUntilFirstBlink);
+    static void scheduleFirstBlinkTaskOfPeriod(MomentMethodPtr momentMethod);
     //static void scheduleFirstEveningBlinkTask();
     //static void scheduleFirstNightBlinkTask();
     //static void scheduleFirstMorningBlinkTask();
@@ -78,13 +81,6 @@ public:
     static bool isSomeTaskScheduled();
 
     ///static void scheduleLaggedCheckSunsetTask();
-
-
-    /*
-     * Timing etc
-     */
-    static EpochTime timeOfMorningBlinkPeriodStart();
-    static Duration durationUntilMorningBlinkPeriodStart();
 
 
     /*
