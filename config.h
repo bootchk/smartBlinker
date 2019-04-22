@@ -11,15 +11,15 @@
 
 // For testing
 /*
- * Normal, production parameters
+ * Normal, real time parameters
  */
 #define PRODUCTION_PARAMETERS
 /*
- * Normal operation, but compressed.  For bench testing using hand and Launchpad power.
+ * Normal operation, but compressed time.  For bench testing using hand and Launchpad power.
  */
 //#define COMPRESSED_TIME_PARAMETERS
 /*
- * Quasi normal operation, also compressed. For stand-alone testing in sun.
+ * Quasi normal operation, also compressed. For stand-alone testing solar powered PCB.
  * Capacitor is smaller to accelerate events.
  */
 //#define ACCELERATED_TIME_PARAMETERS

@@ -2,7 +2,7 @@
 #pragma once
 
 // msp430Drivers
-#include <alarmClock/time/timeTypes.h>
+//#include <alarmClock/time/timeTypes.h>
 
 /*
  * Parameters of application (smart blinking)
@@ -17,10 +17,20 @@
 
 
 
-class Parameters {
-public:
 
-    static constexpr Duration TwentyFourHours = {86400};
+
+
+// class Parameters {
+// public:
+namespace Parameters {
+
+
+
+    //static constexpr Duration TwentyFourHours = {86400};
+    //static const Duration TwentyFourHours(86400);  // most vexing parse
+    //static const Duration TwentyFourHours= Duration(86400);
+    //static constexpr Duration TwentyFourHours {Duration{86400}};
+static constexpr unsigned long int TwentyFourHours = 86400;
 
 
 #ifdef COMPRESSED_TIME_PARAMETERS
@@ -60,15 +70,17 @@ public:
     // See also
 
     // All duration units: seconds
-    static constexpr Duration BetweenBlinks = {1};
-    static constexpr Duration BetweenSunsetAndBlinking = {10};  // 30
+    static const unsigned int BetweenBlinks = 2;
+    static const unsigned int BetweenSunsetAndBlinking = 10;  // 30
     // Not expected to reach night blinking, should exhaust power first
-    static constexpr Duration BetweenEveningAndNightBlinking = {10};  // 60
+    static const unsigned int BetweenEveningAndNightBlinking = 10;  // 60
 
-    static constexpr Duration BetweenSunChecks = {3};
+    static const unsigned int BetweenSunChecks = 3;
 
     // For accelerated testing, this doesn't matter since we will force sunrise early
-    static constexpr Duration BetweenMorningBlinkStartAndSunrise = {7200};// Two hours
+    static const unsigned int BetweenMorningBlinkStartAndSunrise = 7200;// Two hours
+
+    static const unsigned int BetweenKeepAlive = 3;
 
     /*
      * Counts of blinks.
@@ -81,6 +93,8 @@ public:
 
 #elif defined( PRODUCTION_PARAMETERS)
     // Normal, production parameters
+
+#ifdef OLD
     static constexpr Duration BetweenBlinks = {10};
     static constexpr Duration BetweenSunsetAndBlinking = {1800};  // Thirty minutes
     static constexpr Duration BetweenEveningAndNightBlinking = {60}; // One minute
@@ -104,6 +118,32 @@ public:
 
     // Morning blink for 2 hours every 10 seconds
     static const unsigned int BlinksMorning = 6 * 60 * 2;
+#endif
+
+static constexpr unsigned int BetweenBlinks = 10;
+static constexpr unsigned int BetweenSunsetAndBlinking = 1800;  // Thirty minutes
+static constexpr unsigned int BetweenEveningAndNightBlinking = 60; // One minute
+
+// Check sun every 3 minutes
+///static constexpr unsigned int BetweenSunChecks = 120};
+static constexpr unsigned int BetweenSunChecks = 900;  // Fifteen minutes
+
+static constexpr unsigned int BetweenMorningBlinkStartAndSunrise = 7200; // Two hours
+
+static constexpr unsigned int BetweenKeepAlive = 3600;  // hour
+
+/*
+ * Counts of blinks.
+ */
+// Evening blink for 2 hours every 10 seconds
+// 6 ticks/minute * 60 minutes/hour * 4 hours
+static constexpr unsigned int BlinksEvening = 6 * 60 * 2;
+
+static constexpr unsigned int BlinksNight = 6 * 60 * 2;
+
+// Morning blink for 2 hours every 10 seconds
+static constexpr unsigned int BlinksMorning = 6 * 60 * 2;
+
 #endif
 
 

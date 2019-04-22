@@ -52,7 +52,8 @@ EpochTime Day::timeOfNextSunriseAfterTime(EpochTime& now) {
 
     EpochTime nextSunrise = now;
     while (nextSunrise < now) {
-        nextSunrise += Parameters::TwentyFourHours.seconds;
+        // FUTURE Implement operator + for EpochTime   nextSunrise += Duration(Parameters::TwentyFourHours);
+        nextSunrise += Parameters::TwentyFourHours;
     }
     // assert nextSunrise > now ( is after the present moment )
     // assert nextSunrise < (now + 24hours)
@@ -73,21 +74,20 @@ Duration Day::durationUntilNextSunriseLessSeconds(Duration lessDuration){
 
     EpochTime nextSunrise = timeOfNextSunriseAfterTime(now);
 
+    // Subtract two EpochTimes yields a Duration
+    Duration durationToNextSunrise = Duration(nextSunrise - now);
 
-    Duration durationToNextSunrise;
-    durationToNextSunrise.seconds = nextSunrise - now;
+    // OLD
+    // Duration result;
+    //result.seconds = durationToNextSunrise.seconds - lessDuration.seconds;
+    // return result;
 
     /*
-     * Unsigned arithmetic.  Avoid overflow on subtraction, which yields a very large unsigned int.
-     * Method must not be called within lessDuration seconds of nextSunrise
+     * Unsigned arithmetic.  Duration subtraction avoids overflow on subtraction, which yields a very large unsigned int.
+     * If method is called within lessDuration seconds of nextSunrise, result is zero.
      */
-    // TODO this should be an operator on Duration, safe
-    // Really don't want to assert, want to proceed with a small result
-    myAssert( durationToNextSunrise.seconds > lessDuration.seconds);
-
-    Duration result;
-    result.seconds = durationToNextSunrise.seconds - lessDuration.seconds;
-    return result;
+    // assert result is zero or a duration smaller than the max practical duration (a day), but not a huge number.
+    return durationToNextSunrise - lessDuration;
 }
 
 
