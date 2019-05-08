@@ -23,6 +23,7 @@ public:
      * These return constants, but to satisfy MomentMethodPtr, they are not declared such.
      */
     static Duration betweenBlinks(void);
+    static Duration betweenDarkChecks(void);
     static Duration betweenSunChecks(void);
     static Duration betweenKeepAlive(void);
     static Duration betweenSunsetAndBlinking(void);

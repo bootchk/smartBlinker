@@ -1,7 +1,7 @@
 
 #include "smartBlinker.h"
 
-#include "ConfirmedSunEvent.h"
+#include "../ConfirmedSunEvent.h"
 
 
 

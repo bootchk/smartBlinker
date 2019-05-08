@@ -1,12 +1,15 @@
 
 #include "smartBlinker.h"
 
-#include "day.h"
-#include "ConfirmedSunEvent.h"
-#include "periodedBlinker/periodedBlinker.h"
-#include "ledBlinker.h"
+#include "../day.h"
+#include "../ConfirmedSunEvent.h"
+#include "../ledBlinker.h"
 
-#include "../config.h"
+#include "../../config.h"
+
+// Choose a strategy
+//#include "../periodedBlinker/periodedBlinker.h"
+#include "../darkBlinker/darkBlinker.h"
 
 // embeddedDutyCycle
 #include <OS/taskScheduler.h>
@@ -59,7 +62,8 @@ void SmartBlinker::scheduleInitialTask() {
 #endif
 #if defined(NORMAL_PERIODS)
     // Delegate to strategy i.e. set of tasks
-    PeriodedBlinker::scheduleInitialTask();
+    //PeriodedBlinker::scheduleInitialTask();
+    DarkBlinker::scheduleInitialTask();
 #endif
 
     // Some task is scheduled

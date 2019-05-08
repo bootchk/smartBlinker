@@ -2,7 +2,8 @@
 #include "src/periodedBlinker/periodedBlinker.h"
 
 
-#include <src/smartBlinker.h>
+#include "../blinker/smartBlinker.h"
+
 #include <src/blinkPeriod.h>
 #include <src/day.h>
 #include <src/powerMgr.h>

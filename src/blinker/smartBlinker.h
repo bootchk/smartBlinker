@@ -33,14 +33,9 @@ public:
     static Duration durationUntilWake();
 
     // Tasks not dependent on strategy
+    static bool transitionToKeepAlive();
     static void keepAliveTask();
     static void scheduleKeepAliveTask();
-
-    /*
-     * Test harness to call all tasks to find unresolved symbols.
-     */
-    static void testTasks();
-
 
 
     // Is some kind of task scheduled?
@@ -49,9 +44,7 @@ public:
     ///static void scheduleLaggedCheckSunsetTask();
 
 
-    /*
-     * Resets if not in light.
-     */
+    // Resets if not in light.
     static void calibrateLightSensor();
 
 
@@ -65,4 +58,9 @@ public:
     static void blinkLiveness();
 
     static void indicateEvent();
+
+    /*
+     * Test harness to call all tasks to find unresolved symbols.
+     */
+    static void testTasks();
 };

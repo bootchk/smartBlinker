@@ -1,14 +1,18 @@
 
 #include "smartBlinker.h"
 
-#include "periodedBlinker/periodedBlinker.h"
+//#include "../periodedBlinker/periodedBlinker.h"
+#include "../darkBlinker/darkBlinker.h"
 
-#include "powerMgr.h"
-
-#include "moment.h"
+#include "../powerMgr.h"
+#include "../moment.h"
 
 // embeddedDutyCycle
 #include <OS/taskScheduler.h>
+
+// msp430Drivers
+#include <assert/myAssert.h>
+#include <softFault/softFault.h>
 
 
 
@@ -28,10 +32,12 @@ void SmartBlinker::keepAliveTask() {
          * There is enough power to check sun.
          */
         if (isNight()) {
-            PeriodedBlinker::onPowerGoodAtNight();
+            //PeriodedBlinker::onPowerGoodAtNight();
+            DarkBlinker::onPowerGoodAtNight();
         }
         else {
-            PeriodedBlinker::onPowerGoodAtDay();
+            //PeriodedBlinker::onPowerGoodAtDay();
+            DarkBlinker::onPowerGoodAtDay();
         }
     }
     else {
@@ -49,4 +55,17 @@ void SmartBlinker::scheduleKeepAliveTask()
     TaskScheduler::scheduleTask(
             keepAliveTask,
             Moment::betweenKeepAlive);
+}
+
+
+bool SmartBlinker::transitionToKeepAlive() {
+    bool result = false;
+
+    if (PowerMgr::isNearBrownOut()) {
+            SoftFault::info(4);
+            SmartBlinker::scheduleKeepAliveTask();
+            result = true;
+    }
+    return result;
+
 }

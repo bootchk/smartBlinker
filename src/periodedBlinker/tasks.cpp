@@ -1,15 +1,14 @@
 
 #include "periodedBlinker.h"
-#include "../smartBlinker.h"
+#include "../blinker/smartBlinker.h"
 
 #include "../blinkPeriod.h"
 #include "../powerMgr.h"
 
 
-
 // msp430Drivers
 #include <assert/myAssert.h>
-#include <softFault/softFault.h>
+
 
 
 
@@ -67,11 +66,7 @@ void PeriodedBlinker::checkBlinkingPowerExhaustedAndTerminateBlinkPeriod() {
  */
 
 void PeriodedBlinker::checkSunriseTask() {
-    if (PowerMgr::isNearBrownOut()) {
-        SoftFault::info(4);
-        SmartBlinker::scheduleKeepAliveTask();
-    }
-    else{
+    if ( not SmartBlinker::transitionToKeepAlive() ) {
         if (SmartBlinker::isDay()) {
             onSunriseDetected();
         }
@@ -88,11 +83,7 @@ void PeriodedBlinker::checkSunriseTask() {
 
 
 void PeriodedBlinker::checkSunsetTask() {
-    if (PowerMgr::isNearBrownOut()) {
-        SoftFault::info(4);
-        SmartBlinker::scheduleKeepAliveTask();
-    }
-    else {
+    if ( not SmartBlinker::transitionToKeepAlive() ) {
         if (SmartBlinker::isNight()) {
             onSunsetDetected();
         }

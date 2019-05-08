@@ -5,7 +5,7 @@
 
 // Somewhat similar API behind facade.
 // I.E. the real app that we delegate to.
-#include "smartBlinker.h"
+#include "blinker/smartBlinker.h"
 
 #include "day.h"
 #include <assert/myAssert.h>

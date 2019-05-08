@@ -82,6 +82,8 @@ static constexpr unsigned long int TwentyFourHours = 86400;
 
     static const unsigned int BetweenKeepAlive = 3;
 
+    static const unsigned int BetweenDarkChecks = 10;
+
     /*
      * Counts of blinks.
      */
@@ -121,6 +123,15 @@ static constexpr unsigned long int TwentyFourHours = 86400;
 #endif
 
 static constexpr unsigned int BetweenBlinks = 10;
+static constexpr unsigned int BetweenKeepAlive = 3600;  // hour
+static constexpr unsigned int BetweenDarkChecks = 300;  // 5 minutes
+
+
+
+
+
+
+
 static constexpr unsigned int BetweenSunsetAndBlinking = 1800;  // Thirty minutes
 static constexpr unsigned int BetweenEveningAndNightBlinking = 60; // One minute
 
@@ -130,7 +141,7 @@ static constexpr unsigned int BetweenSunChecks = 900;  // Fifteen minutes
 
 static constexpr unsigned int BetweenMorningBlinkStartAndSunrise = 7200; // Two hours
 
-static constexpr unsigned int BetweenKeepAlive = 3600;  // hour
+
 
 /*
  * Counts of blinks.
