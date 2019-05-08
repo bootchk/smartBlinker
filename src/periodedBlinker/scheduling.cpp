@@ -1,9 +1,9 @@
 /*
  * Scheduling methods
  */
-#include "smartBlinker.h"
+#include "periodedBlinker.h"
 
-#include "moment.h"
+#include "../moment.h"
 
 // embeddedDutyCycle
 #include <OS/taskScheduler.h>
@@ -14,7 +14,20 @@
  */
 
 
-
+/*
+ * Schedule sun detection
+ *
+ * Assume it is daylight.
+ * Start detecting sunset.
+ *
+ * Case 1: is already night, the first check sunset will immediately start checking for sunrise.
+ * and possibly start blinking.
+ *
+ * Case 2: is daylight.  Check and continue checking for sunset.
+ */
+void PeriodedBlinker::scheduleInitialTask() {
+    scheduleCheckSunsetTask();
+}
 
 
 
@@ -22,14 +35,14 @@
  * Blink tasks
  */
 
-void SmartBlinker::scheduleBlinkTask() {
+void PeriodedBlinker::scheduleBlinkTask() {
     TaskScheduler::scheduleTask(
             blinkTask,
             Moment::betweenBlinks);
 }
 
 
-void SmartBlinker::scheduleFirstBlinkTaskOfPeriod(MomentMethodPtr momentFirstBlink) {
+void PeriodedBlinker::scheduleFirstBlinkTaskOfPeriod(MomentMethodPtr momentFirstBlink) {
 
     TaskScheduler::scheduleTask(
             blinkTask,
@@ -46,30 +59,22 @@ void SmartBlinker::scheduleFirstBlinkTaskOfPeriod(MomentMethodPtr momentFirstBli
  */
 
 
-void SmartBlinker::scheduleCheckSunriseTask()
+void PeriodedBlinker::scheduleCheckSunriseTask()
 {
     TaskScheduler::scheduleTask(
             checkSunriseTask,
             Moment::betweenSunChecks);
 }
 
-void SmartBlinker::scheduleCheckSunsetTask()
+void PeriodedBlinker::scheduleCheckSunsetTask()
 {
     TaskScheduler::scheduleTask(
             checkSunsetTask,
             Moment::betweenSunChecks);
 }
 
-void SmartBlinker::scheduleKeepAliveTask()
-{
-    TaskScheduler::scheduleTask(
-            keepAliveTask,
-            Moment::betweenKeepAlive);
-}
 
 
-
-bool SmartBlinker::isSomeTaskScheduled() { return TaskScheduler::isTaskScheduled(); }
 
 
 
@@ -77,13 +82,13 @@ bool SmartBlinker::isSomeTaskScheduled() { return TaskScheduler::isTaskScheduled
 
 #ifdef OLD
 //Now we schedule by duration, not time.
-EpochTime SmartBlinker::timeOfMorningBlinkPeriodStart() {
+EpochTime PeriodedBlinker::timeOfMorningBlinkPeriodStart() {
     return Day::timeBeforeNextSunriseBySeconds(Parameters::BetweenMorningBlinkStartAndSunrise);
 }
 #endif
 
 #ifdef FUTURE
-void SmartBlinker::scheduleLaggedCheckSunsetTask() {
+void PeriodedBlinker::scheduleLaggedCheckSunsetTask() {
     TaskScheduler::scheduleTask(1,
                                 checkSunsetTask,
                                 EpochClock::timeDurationFromNow(900));
@@ -93,7 +98,7 @@ void SmartBlinker::scheduleLaggedCheckSunsetTask() {
 
 #ifdef OLD
 // A fixed duration (typically 30 minutes) after now, which is sunset
-void SmartBlinker::scheduleFirstEveningBlinkTask() {
+void PeriodedBlinker::scheduleFirstEveningBlinkTask() {
 
     TaskScheduler::scheduleTask(
             0,
@@ -102,7 +107,7 @@ void SmartBlinker::scheduleFirstEveningBlinkTask() {
 }
 
 // A fixed duration (typically 1 minute) after now, which is end of evening blinking
-void SmartBlinker::scheduleFirstNightBlinkTask() {
+void PeriodedBlinker::scheduleFirstNightBlinkTask() {
     // 1 minute from now (from end of evening.)
     TaskScheduler::scheduleTask(
             0,
@@ -111,7 +116,7 @@ void SmartBlinker::scheduleFirstNightBlinkTask() {
 }
 
 // A variable duration, which depends on length of night as indicated by saved sunrise time
-void SmartBlinker::scheduleFirstMorningBlinkTask() {
+void PeriodedBlinker::scheduleFirstMorningBlinkTask() {
     TaskScheduler::scheduleTask(
             0,
             blinkTask,

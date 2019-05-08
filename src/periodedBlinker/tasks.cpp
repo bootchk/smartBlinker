@@ -1,10 +1,9 @@
 
+#include "periodedBlinker.h"
+#include "../smartBlinker.h"
 
-#include "smartBlinker.h"
-
-#include "blinkPeriod.h"
-#include "ledBlinker.h"
-#include "powerMgr.h"
+#include "../blinkPeriod.h"
+#include "../powerMgr.h"
 
 
 
@@ -17,7 +16,7 @@
 
 
 
-void SmartBlinker::checkBlinkPeriodOverAndScheduleNextTask() {
+void PeriodedBlinker::checkBlinkPeriodOverAndScheduleNextTask() {
 
     if (BlinkPeriod::isOver()) {
         if (BlinkPeriod::isEvening()) {
@@ -43,14 +42,14 @@ void SmartBlinker::checkBlinkPeriodOverAndScheduleNextTask() {
      * - OR next blink task in this period
      * - OR checkSunrise task
      */
-    myAssert(isSomeTaskScheduled());
+    myAssert(SmartBlinker::isSomeTaskScheduled());
 }
 
 
 /*
  * Check power and terminate blink period prematurely.
  */
-void SmartBlinker::checkBlinkingPowerExhaustedAndTerminateBlinkPeriod() {
+void PeriodedBlinker::checkBlinkingPowerExhaustedAndTerminateBlinkPeriod() {
     if (not PowerMgr::isPowerForBlinking()) {
         BlinkPeriod::terminatePrematurely();
         // assert BlinkPeriod::isOver()
@@ -67,13 +66,13 @@ void SmartBlinker::checkBlinkingPowerExhaustedAndTerminateBlinkPeriod() {
  * Tasks
  */
 
-void SmartBlinker::checkSunriseTask() {
+void PeriodedBlinker::checkSunriseTask() {
     if (PowerMgr::isNearBrownOut()) {
         SoftFault::info(4);
-        scheduleKeepAliveTask();
+        SmartBlinker::scheduleKeepAliveTask();
     }
     else{
-        if (isDay()) {
+        if (SmartBlinker::isDay()) {
             onSunriseDetected();
         }
         else {
@@ -82,19 +81,19 @@ void SmartBlinker::checkSunriseTask() {
         }
 
         // Use LED *after* we used it for light sensing
-        blinkLiveness();
+        SmartBlinker::blinkLiveness();
     }
-    myAssert(isSomeTaskScheduled());
+    myAssert(SmartBlinker::isSomeTaskScheduled());
 }
 
 
-void SmartBlinker::checkSunsetTask() {
+void PeriodedBlinker::checkSunsetTask() {
     if (PowerMgr::isNearBrownOut()) {
         SoftFault::info(4);
-        scheduleKeepAliveTask();
+        SmartBlinker::scheduleKeepAliveTask();
     }
     else {
-        if (isNight()) {
+        if (SmartBlinker::isNight()) {
             onSunsetDetected();
         }
         else {
@@ -103,17 +102,16 @@ void SmartBlinker::checkSunsetTask() {
         }
 
         // Use LED *after* we used it for light sensing
-        blinkLiveness();
+        SmartBlinker::blinkLiveness();
     }
-    myAssert(isSomeTaskScheduled());
+    myAssert(SmartBlinker::isSomeTaskScheduled());
 }
 
 
 
-void SmartBlinker::blinkTask() {
+void PeriodedBlinker::blinkTask() {
 
-    // main task: blink
-    LEDBlinker::blinkBright();
+    SmartBlinker::blinkDecorative();
 
     ///TestMain::blinkForcedGreenLED(5);
 
@@ -135,17 +133,5 @@ void SmartBlinker::blinkTask() {
 
 
 
-void SmartBlinker::blinkLiveness() {
-#ifdef SUN_CHECK_BLINK_LIVENESS
-    LEDBlinker::blinkDim();
-#endif
-}
 
-
-
-void SmartBlinker::indicateEvent() {
-#ifdef BLINK_LED_ON_SUN_EVENT
-    LEDBlinker::blinkDim();
-#endif
-}
 

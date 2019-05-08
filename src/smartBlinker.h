@@ -8,22 +8,19 @@
 
 
 /*
- * App:
- * - blink in two periods, after sunset and before sunset
- * - detect sunrise and sunset
+ * App: blink decoratively when dark and power permits
+ * or blink keep alive
  *
- * A set of tasks and events
+ * Framework for essential behaviour (detecting light and blinking.)
+ * Uses a set of tasks and events that further defines behaviour.
  */
 
 class SmartBlinker {
-private:
-    static void scheduleInitialTask();
-
-    static void checkBlinkPeriodOverAndScheduleNextTask();
-
-    static void checkBlinkingPowerExhaustedAndTerminateBlinkPeriod();
 
 public:
+
+    static void scheduleInitialTask();
+
     /*
      * API of generic app
      */
@@ -35,47 +32,16 @@ public:
     static EpochTime timeToWake();
     static Duration durationUntilWake();
 
-    /*
-     * Scheduled tasks
-     */
-    static void checkSunriseTask();
-    static void checkSunsetTask();
-    static void blinkTask();
+    // Tasks not dependent on strategy
     static void keepAliveTask();
+    static void scheduleKeepAliveTask();
 
     /*
      * Test harness to call all tasks to find unresolved symbols.
      */
     static void testTasks();
 
-    /*
-     * Events
-     * Determined by tasks, from external events.
-     */
-    static void onSunriseDetected();
-    static void onSunsetDetected();
 
-    static void onPowerForEveningBlinking();
-    static void onPowerForNightBlinking();
-    static void onPowerForMorningBlinking();
-
-    static void onEveningBlinkPeriodOver();
-    static void onNightBlinkPeriodOver();
-    static void onMorningBlinkPeriodOver();
-
-
-    /*
-     * Scheduling
-     */
-    static void scheduleBlinkTask();
-    static void scheduleCheckSunriseTask();
-    static void scheduleCheckSunsetTask();
-    static void scheduleKeepAliveTask();
-
-    static void scheduleFirstBlinkTaskOfPeriod(MomentMethodPtr momentMethod);
-    //static void scheduleFirstEveningBlinkTask();
-    //static void scheduleFirstNightBlinkTask();
-    //static void scheduleFirstMorningBlinkTask();
 
     // Is some kind of task scheduled?
     static bool isSomeTaskScheduled();
@@ -87,9 +53,16 @@ public:
      * Resets if not in light.
      */
     static void calibrateLightSensor();
+
+
     static bool isNight();
     static bool isDay();
 
+
+    // ultimate goal: blink for entertainment
+    static void blinkDecorative();
+    // blink to show system still live
     static void blinkLiveness();
+
     static void indicateEvent();
 };

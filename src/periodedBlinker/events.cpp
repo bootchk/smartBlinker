@@ -1,11 +1,13 @@
 
-#include "src/smartBlinker.h"
+#include "src/periodedBlinker/periodedBlinker.h"
 
+
+#include <src/smartBlinker.h>
 #include <src/blinkPeriod.h>
 #include <src/day.h>
 #include <src/powerMgr.h>
 
-#include "moment.h"
+#include "../moment.h"
 
 
 
@@ -16,15 +18,31 @@
  */
 
 
+/*
+ * On leaving KeepAlive state.
+ * Resume detecting sun.
+ */
+void PeriodedBlinker::onPowerGoodAtDay() {
+    scheduleCheckSunsetTask();
+}
+
+void PeriodedBlinker::onPowerGoodAtNight() {
+    scheduleCheckSunriseTask();
+}
 
 
-void SmartBlinker::onSunriseDetected() {
+
+
+
+
+
+void PeriodedBlinker::onSunriseDetected() {
     /*
      * Flag that sunrise was detected, but don't capture time until later.
      */
     Day::setSunriseDetected();
 
-    indicateEvent();
+    SmartBlinker::indicateEvent();
 
     scheduleCheckSunsetTask();
     /// Optional optimization of power:
@@ -34,10 +52,10 @@ void SmartBlinker::onSunriseDetected() {
 
 
 
-void SmartBlinker::onSunsetDetected() {
+void PeriodedBlinker::onSunsetDetected() {
     // We don't record sunset
 
-    indicateEvent();
+    SmartBlinker::indicateEvent();
 
     if (PowerMgr::isPowerForBlinking()) {
         onPowerForEveningBlinking();
@@ -61,17 +79,17 @@ void SmartBlinker::onSunsetDetected() {
  * We determined there is enough power for a blink period.
  */
 
-void SmartBlinker::onPowerForEveningBlinking() {
+void PeriodedBlinker::onPowerForEveningBlinking() {
     BlinkPeriod::initForEveningBlinking();
     scheduleFirstBlinkTaskOfPeriod(Moment::betweenSunsetAndBlinking);
 }
 
-void SmartBlinker::onPowerForNightBlinking() {
+void PeriodedBlinker::onPowerForNightBlinking() {
     BlinkPeriod::initForNightBlinking();
     scheduleFirstBlinkTaskOfPeriod(Moment::betweenEveningAndNightBlinking);
 }
 
-void SmartBlinker::onPowerForMorningBlinking() {
+void PeriodedBlinker::onPowerForMorningBlinking() {
     BlinkPeriod::initForMorningBlinking();
     scheduleFirstBlinkTaskOfPeriod(Moment::untilMorningBlinkPeriodStart);
 }
@@ -84,7 +102,7 @@ void SmartBlinker::onPowerForMorningBlinking() {
  * On startup, might not exist.
  */
 
-void SmartBlinker::onEveningBlinkPeriodOver() {
+void PeriodedBlinker::onEveningBlinkPeriodOver() {
     /*
      * Schedule night blinking if power.
      */
@@ -102,7 +120,7 @@ void SmartBlinker::onEveningBlinkPeriodOver() {
 }
 
 
-void SmartBlinker::onNightBlinkPeriodOver() {
+void PeriodedBlinker::onNightBlinkPeriodOver() {
     /*
      * Schedule morning blinking if we know sunrise.
      *
@@ -128,7 +146,7 @@ void SmartBlinker::onNightBlinkPeriodOver() {
 }
 
 
-void SmartBlinker::onMorningBlinkPeriodOver() {
+void PeriodedBlinker::onMorningBlinkPeriodOver() {
     /*
      * In this design, we don't check for sunrise until morning blink is over.
      * That should be soon enough for an advancing sunrise due to seasons,

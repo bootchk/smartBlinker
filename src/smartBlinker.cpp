@@ -3,6 +3,10 @@
 
 #include "day.h"
 #include "ConfirmedSunEvent.h"
+#include "periodedBlinker/periodedBlinker.h"
+#include "ledBlinker.h"
+
+#include "../config.h"
 
 // embeddedDutyCycle
 #include <OS/taskScheduler.h>
@@ -54,19 +58,8 @@ void SmartBlinker::scheduleInitialTask() {
 
 #endif
 #if defined(NORMAL_PERIODS)
-    /*
-     * Schedule sun detection
-     */
-    /*
-     * Assume it is daylight.
-     * Start detecting sunset.
-     *
-     * Case 1: is already night, the first check sunset will immediately start checking for sunrise.
-     * and possibly start blinking.
-     *
-     * Case 2: is daylight.  Check and continue checking for sunset.
-     */
-    scheduleCheckSunsetTask();
+    // Delegate to strategy i.e. set of tasks
+    PeriodedBlinker::scheduleInitialTask();
 #endif
 
     // Some task is scheduled
@@ -115,13 +108,37 @@ Duration SmartBlinker::durationUntilWake() { return TaskScheduler::durationUntil
 
 
 
+bool SmartBlinker::isSomeTaskScheduled() { return TaskScheduler::isTaskScheduled(); }
 
 
 
 
+
+
+void SmartBlinker::blinkDecorative() {
+    LEDBlinker::blinkBright();
+}
+
+void SmartBlinker::blinkLiveness() {
+#ifdef SUN_CHECK_BLINK_LIVENESS
+    LEDBlinker::blinkDim();
+#endif
+}
+
+
+void SmartBlinker::indicateEvent() {
+#ifdef BLINK_LED_ON_SUN_EVENT
+    LEDBlinker::blinkDim();
+#endif
+}
+
+
+
+
+#ifdef NOT_USED
 void SmartBlinker::testTasks() {
     checkSunriseTask();
     checkSunsetTask();
     blinkTask();
 }
-
+#endif

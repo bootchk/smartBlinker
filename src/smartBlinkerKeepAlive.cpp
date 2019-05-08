@@ -1,7 +1,14 @@
 
 #include "smartBlinker.h"
 
+#include "periodedBlinker/periodedBlinker.h"
+
 #include "powerMgr.h"
+
+#include "moment.h"
+
+// embeddedDutyCycle
+#include <OS/taskScheduler.h>
 
 
 
@@ -21,10 +28,10 @@ void SmartBlinker::keepAliveTask() {
          * There is enough power to check sun.
          */
         if (isNight()) {
-             scheduleCheckSunriseTask();
+            PeriodedBlinker::onPowerGoodAtNight();
         }
         else {
-            scheduleCheckSunsetTask();
+            PeriodedBlinker::onPowerGoodAtDay();
         }
     }
     else {
@@ -36,3 +43,10 @@ void SmartBlinker::keepAliveTask() {
     // assert some task scheduled
 }
 
+
+void SmartBlinker::scheduleKeepAliveTask()
+{
+    TaskScheduler::scheduleTask(
+            keepAliveTask,
+            Moment::betweenKeepAlive);
+}
