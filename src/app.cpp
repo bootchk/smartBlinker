@@ -7,7 +7,7 @@
 // I.E. the real app that we delegate to.
 #include "blinker/smartBlinker.h"
 
-#include "day.h"
+#include "day/day.h"
 #include <assert/myAssert.h>
 
 

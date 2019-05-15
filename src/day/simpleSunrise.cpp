@@ -1,12 +1,8 @@
-#include "day.h"
-#include "parameters.h"
+#include "simpleSunrise.h"
 
+#include "../parameters.h"
 
 #include <alarmClock/epochClock/epochClock.h>
-#include <assert/myAssert.h>
-
-
-
 
 
 
@@ -21,34 +17,33 @@ namespace {
 #pragma PERSISTENT
 EpochTime previousSunrise = 0;
 
-
-/*
- * Every waking period, c-startup initializes this to false.
- */
-bool _wasSunriseDetected = false;
-
 }
 
 
 
 
-void Day::init() { previousSunrise = 0; }
-void Day::captureSunriseTime() { previousSunrise = EpochClock::timeNowOrReset(); }
-bool Day::isSunriseTimeValid() { return previousSunrise != 0; }
-
-
-void Day::setSunriseDetected() {  _wasSunriseDetected = true; }
-bool Day::wasSunriseDetected() { return  _wasSunriseDetected; }
+void SimpleSunrise::init() {
+    previousSunrise = 0;
+}
 
 
 
+void SimpleSunrise::captureSunriseTime() {
+    previousSunrise = EpochClock::timeNowOrReset();
+}
+
+
+bool SimpleSunrise::isSunriseTimeValid() {
+    return previousSunrise != 0;
+}
 
 
 /*
+ * Implementation:
  * Next sunrise is previous + 24 hours.
  * If called more than 24 hours after previous sunrise, must keep adding 24 .
  */
-EpochTime Day::timeOfNextSunriseAfterTime(EpochTime& now) {
+EpochTime SimpleSunrise::timeOfNextSunriseAfterTime(EpochTime& now) {
 
     EpochTime nextSunrise = now;
     while (nextSunrise < now) {
@@ -60,9 +55,7 @@ EpochTime Day::timeOfNextSunriseAfterTime(EpochTime& now) {
     return nextSunrise;
 }
 
-
-
-Duration Day::durationUntilNextSunriseLessSeconds(Duration lessDuration){
+Duration SimpleSunrise::durationUntilNextSunriseLessSeconds(Duration lessDuration){
     /*
      * Effectively:  nextSunriseTime - nowTime - lessDuration
      *
@@ -90,22 +83,3 @@ Duration Day::durationUntilNextSunriseLessSeconds(Duration lessDuration){
     return durationToNextSunrise - lessDuration;
 }
 
-
-
-
-#ifdef OLD
-// Now we schedule by duration, not time
-
-/*
- * Time ahead of next sunrise by given seconds.
- *
- * Must not be called if now is less than duration from next sunrise.
- */
-static EpochTime timeBeforeNextSunriseBySeconds(Duration);
-
-EpochTime Day::timeBeforeNextSunriseBySeconds(Duration duration) {
-
-    myAssert(isSunriseTimeValid());
-    return EpochClock::timeDurationFromTime(previousSunrise, Parameters::TwentyFourHours - duration);
-}
-#endif

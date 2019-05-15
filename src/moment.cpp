@@ -21,7 +21,7 @@ Duration Moment::betweenEveningAndNightBlinking(void) { return Parameters::Betwe
 // Strategy DarkBlinker
 Duration Moment::betweenDarkChecks(void) { return Parameters::BetweenDarkChecks; }
 
-#include "day.h"
+#include "day/day.h"
 
 
 /*

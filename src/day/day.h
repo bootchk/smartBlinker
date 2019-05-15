@@ -17,6 +17,8 @@
  * Valid sequence is init(); setSunriseTime(); isSunriseTimeValid=>true; timeOfNextSunriseAfterTime()
  *
  * Illegal to call timeOfNextSunriseAfterTime() when not isSunriseTimeValid()
+ *
+ * Abstracts two implementations.
  */
 
 
@@ -41,11 +43,15 @@ public:
 
 
     /*
-     * Read timeNow and store it as sunrise time.
+     * Called when sunrise detected.
+     *
+     * One imp:: Read timeNow and store it as sunrise time.
      */
     static void captureSunriseTime();
 
     /*
+     * Do we know sunrise yet?
+     *
      * Has setSunriseTime() been called at least once in the past.
      * Does not guarantee that sunrise time is within 24 hours of now, i.e. not far in the past.
      */
