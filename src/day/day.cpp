@@ -12,7 +12,7 @@
 //#include "simpleSunrise.h"
 //#define SunriseEstimator SimpleSunrise
 
-#include "estimatedSunrise.h"
+#include "sunriseEstimator/estimatedSunrise.h"
 #define SunriseEstimator EstimatedSunrise
 
 

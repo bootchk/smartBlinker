@@ -5,7 +5,7 @@
 #include "../blinker/smartBlinker.h"
 
 #include <src/blinkPeriod.h>
-#include <src/day.h>
+#include <src/day/day.h>
 #include <src/powerMgr.h>
 
 #include "../moment.h"
