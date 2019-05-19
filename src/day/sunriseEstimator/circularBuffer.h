@@ -7,7 +7,9 @@
 
 class CircularBuffer {
 public:
-
+    /*
+     * Adds sample, replacing oldest one if necessary.
+     */
     static void addSample(EpochTime sample);
 
     static void empty();

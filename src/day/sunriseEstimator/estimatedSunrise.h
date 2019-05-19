@@ -1,4 +1,4 @@
-
+#pragma once
 
 // msp430Drivers
 #include <alarmClock/time/timeTypes.h>
@@ -15,10 +15,8 @@ public:
     static bool isSunriseTimeValid();
 
     /*
-     * Next sunrise is previous + 24 hours.
-     * If called more than 24 hours after previous sunrise, must keep adding 24 .
+     * Duration til next estimated sunrise.
+     * Zero if next sunrise is closer than lessDuration from now.
      */
-    static EpochTime timeOfNextSunriseAfterTime(EpochTime& now);
-
     static Duration durationUntilNextSunriseLessSeconds(Duration lessDuration);
 };

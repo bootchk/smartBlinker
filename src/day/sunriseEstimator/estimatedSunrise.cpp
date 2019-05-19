@@ -45,19 +45,30 @@ bool EstimatedSunrise::isSunriseTimeValid() { return PeriodicTimeSeriesState::is
  * Implementation:
  *
  */
-EpochTime EstimatedSunrise::timeOfNextSunriseAfterTime(EpochTime& now) {
 
-    EpochTime nextSunrise = now;
 
-    // TODO
-
-    return nextSunrise;
-}
-
+/*
+ * Implementation:
+ *
+ * SunriseCalculator does not know EpochClock, nor how to calculate Durations.
+ * This handles exception: called so close to next sunrise that we can't subtract lessDuration;
+ *
+ */
 Duration EstimatedSunrise::durationUntilNextSunriseLessSeconds(Duration lessDuration){
     myRequire(isSunriseTimeValid());
-    // TODO
-    EpochTime estimatedPreviousSunrise = SunriseCalculator::estimatePreviousSunrise();
+
+    EpochTime now = EpochClock::timeNowOrReset();
+
+    EpochTime estimatedNextSunrise = SunriseCalculator::projectTimePastReferenceTime(
+            SunriseCalculator::estimatePreviousSunrise(),
+            now );
+
+    Duration tilSunrise = estimatedNextSunrise - now;
+
+    return  tilSunrise - lessDuration;
+    /*
+     * assert result >= 0
+     */
 
 }
 

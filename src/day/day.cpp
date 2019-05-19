@@ -9,11 +9,17 @@
 
 
 // choose implementation
-//#include "simpleSunrise.h"
-//#define SunriseEstimator SimpleSunrise
+#include "config.h"
 
+#ifdef USE_SUNRISE_ESTIMATOR
 #include "sunriseEstimator/estimatedSunrise.h"
 #define SunriseEstimator EstimatedSunrise
+#else
+#include "simpleSunrise.h"
+#define SunriseEstimator SimpleSunrise
+#endif
+
+
 
 
 
@@ -39,7 +45,7 @@ void Day::setSunriseDetected() {  _wasSunriseDetected = true; }
 bool Day::wasSunriseDetected() { return  _wasSunriseDetected; }
 
 
-EpochTime Day::timeOfNextSunriseAfterTime(EpochTime& now) { return SunriseEstimator::timeOfNextSunriseAfterTime(now); }
+// OLD EpochTime Day::timeOfNextSunriseAfterTime(EpochTime& now) { return SunriseEstimator::timeOfNextSunriseAfterTime(now); }
 
 Duration Day::durationUntilNextSunriseLessSeconds(Duration lessDuration){ return SunriseEstimator::durationUntilNextSunriseLessSeconds(lessDuration) ; }
 

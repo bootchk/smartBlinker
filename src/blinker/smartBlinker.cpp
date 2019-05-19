@@ -8,8 +8,13 @@
 #include "../../config.h"
 
 // Choose a strategy
+#ifdef USE_PERIODED_BLINKER
 #include "../periodedBlinker/periodedBlinker.h"
-//#include "../darkBlinker/darkBlinker.h"
+#define BlinkStrategy PeriodedBlinker
+#else
+#include "../darkBlinker/darkBlinker.h"
+#define BlinkStrategy DarkBlinker
+#endif
 
 // embeddedDutyCycle
 #include <OS/taskScheduler.h>
@@ -62,8 +67,7 @@ void SmartBlinker::scheduleInitialTask() {
 #endif
 #if defined(NORMAL_PERIODS)
     // Delegate to strategy i.e. set of tasks
-    PeriodedBlinker::scheduleInitialTask();
-    //DarkBlinker::scheduleInitialTask();
+    BlinkStrategy::scheduleInitialTask();
 #endif
 
     // Some task is scheduled

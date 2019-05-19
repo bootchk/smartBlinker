@@ -1,14 +1,16 @@
 #include "sunriseCalculator.h"
 
 #include "circularBuffer.h"
+#include "../../parameters.h"
 
+// msp430Drivers
 #include <assert/myAssert.h>
 
 
 
-namespace {
 
-bool doesSampleFitsSampleSet(EpochTime sample) {
+
+bool SunriseCalculator::doesSampleFitsSampleSet(EpochTime sample) {
    myRequire(not CircularBuffer::isEmpty());
 
    bool result;
@@ -21,10 +23,10 @@ bool doesSampleFitsSampleSet(EpochTime sample) {
    /*
     * Does estimatedPreviousSunrise project to within delta of sample?
     */
-   result = SunriseCalculator::projectTimetoReferenceTimeWithinDelta (
+   result = projectTimetoReferenceTimeWithinDelta (
             previousSunset,
             sample,
-            1,// TODO
+            Parameters::SunriseDelta,
             interval );
    return result;
 }
@@ -32,12 +34,8 @@ bool doesSampleFitsSampleSet(EpochTime sample) {
 
 
 
-/*
- * Project samples to latestSample and sum intervals to latestSample
- *
- * Assert all samples are projectable (invariant.)
- */
-Interval averageIntervalToLatestSample() {
+
+Interval SunriseCalculator::averageIntervalToLatestSample() {
     myRequire(not CircularBuffer::isEmpty());
 
     CircularBuffer::startIter();
@@ -53,35 +51,16 @@ Interval averageIntervalToLatestSample() {
     EpochTime toProjectTime;
     while ( (toProjectTime = CircularBuffer::nextIter()) != 0 ) {
         Interval interval;
-        SunriseCalculator::projectTimetoReferenceTimeWithinDelta(toProjectTime,
+        projectTimetoReferenceTimeWithinDelta(toProjectTime,
                                               latestSunriseSample,
-                                              1,
-                                              interval );
+                                              Parameters::SunriseDelta,
+                                              interval);
         intervalSum += interval;
     }
 
     // Signed integer division
     return intervalSum/CircularBuffer::getCount();
-}
-
-
-}
-
-
-
-
-
-EpochTime SunriseCalculator::estimatePreviousSunrise() {
-    myRequire(not CircularBuffer::isEmpty());
-
-    CircularBuffer::startIter();
-    EpochTime latestSunriseSample = CircularBuffer::nextIter();
-
-    // This also uses iterator
-    Interval averageInterval = averageIntervalToLatestSample();
-
-    return latestSunriseSample + averageInterval;
-    // estimate is in the past, not projected to current time
+    // assert abs(interval) <= delta
 }
 
 
@@ -97,13 +76,7 @@ bool SunriseCalculator::projectTimetoReferenceTimeWithinDelta (
 
     bool result;
 
-    EpochTime workingProjection = time;
-
-    // Project forward
-    do {
-        workingProjection += 24; // TODO hours
-    }
-    while (workingProjection < referenceTime);
+    EpochTime workingProjection = projectTimePastReferenceTime(time, referenceTime);
 
     Interval workingInterval;
     workingInterval = workingProjection - referenceTime;
@@ -114,11 +87,14 @@ bool SunriseCalculator::projectTimetoReferenceTimeWithinDelta (
     }
     else {
         // Projection is more than delta beyond reference time.  Back up and test again.
-        workingProjection -= 24; // TODO hours
+        workingProjection -= Parameters::SunrisePeriod;
         workingInterval = referenceTime - workingProjection;
-        if ( -workingInterval < delta.seconds) {
-              interval = workingInterval;
-              result = true;
+        myAssert(workingInterval >=0);
+        if ( workingInterval < delta.seconds) {
+            // we have been working with absolute value i.e. magnitude.
+            // Return negative since within delta is before referenceTime
+            interval = -workingInterval;
+            result = true;
         }
         else {
             // Can not project within delta
@@ -131,10 +107,32 @@ bool SunriseCalculator::projectTimetoReferenceTimeWithinDelta (
 
 
 
-/*
- * Sample is good if sampleSet empty
- * OR fits previous samples
- */
+// public
+
+
+
+
+EpochTime SunriseCalculator::estimatePreviousSunrise() {
+    myRequire(not CircularBuffer::isEmpty());
+
+    CircularBuffer::startIter();
+    EpochTime latestSunriseSample = CircularBuffer::nextIter();
+
+    // This also uses iterator
+    Interval averageInterval = averageIntervalToLatestSample();
+
+    return latestSunriseSample + averageInterval;
+    /*
+     * Estimate is in the past, not projected to current time.
+     * May be many days in the past.
+     * Estimate may be earlier than latestSunriseSample.
+     */
+}
+
+
+
+
+
 bool SunriseCalculator::isGoodSample(EpochTime sample) {
     bool result = false;
 
@@ -144,6 +142,20 @@ bool SunriseCalculator::isGoodSample(EpochTime sample) {
     else {
         result = doesSampleFitsSampleSet(sample);
     }
-
     return result;
+}
+
+
+
+
+EpochTime SunriseCalculator::projectTimePastReferenceTime(EpochTime time,
+                                                  EpochTime referenceTime) {
+    EpochTime workingProjection = time;
+
+    // Project forward by 24 hours
+    do {
+        workingProjection += Parameters::SunrisePeriod;
+    }
+    while (workingProjection < referenceTime);
+    return workingProjection;
 }

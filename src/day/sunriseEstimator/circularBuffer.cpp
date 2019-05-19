@@ -12,16 +12,13 @@ unsigned int head;  // Always points to most recent sample
 #pragma PERSISTENT
 unsigned int count = 0;
 
+
+
 #pragma PERSISTENT
 EpochTime sampleSet[3]; //  = 0;
 
 
-// not persistent
-unsigned int iterIndex;
-unsigned int iterCount;
-
-
-
+// After adding at head.
 void adjustHeadAndCount() {
     head++;
     if (head > 2 )  head = 0;
@@ -30,13 +27,25 @@ void adjustHeadAndCount() {
     if (count < 3) count++;
 }
 
-void adjustIterIndexandCount() {
-    count--;
-    iterIndex++;
-    if (iterIndex > 2) iterIndex = 0;
+}
+
+
+
+namespace iter {
+
+// not persistent
+unsigned int index;
+unsigned int count;
+
+void adjustIterIndexandCountAfterNextIter() {
+    iter::count--;
+    iter::index++;
+    if (iter::index > 2) iter::index = 0;
 }
 
 }
+
+
 
 
 
@@ -48,7 +57,6 @@ void CircularBuffer::empty(){
 void CircularBuffer::addSample(EpochTime sample){
     adjustHeadAndCount();
     sampleSet[head] = sample;
-
 }
 
 
@@ -58,19 +66,20 @@ bool CircularBuffer::isEmpty(){ return count == 0; }
 unsigned int CircularBuffer::getCount(){ return count; }
 
 void CircularBuffer::startIter(){
-    iterIndex = head;
-    iterCount = count;
+    // iteration starts at most recent sample
+    iter::index = head;
+    iter::count = count;
 }
+
 
 EpochTime CircularBuffer::nextIter(){
     EpochTime result;
 
-    if (iterCount == 0)
+    if (iter::count == 0)
         result = 0;
     else {
-        result = sampleSet[iterIndex];
-        count--;
-        adjustIterIndexandCount();
+        result = sampleSet[iter::index];
+        iter::adjustIterIndexandCountAfterNextIter();
     }
     return result;
 }

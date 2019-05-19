@@ -28,7 +28,7 @@ void App::onPowerOnReset() {
 	 * Test that LEDAndLightSensor detects light.
 	 * If not, it is miscalibrated (LED out of spec, or SW parameters are wrong.)
 	 */
-	SmartBlinker::calibrateLightSensor();
+	// TODO for iterative light sensing   SmartBlinker::calibrateLightSensor();
 }
 
 

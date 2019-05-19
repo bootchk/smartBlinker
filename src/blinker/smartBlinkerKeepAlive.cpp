@@ -67,5 +67,4 @@ bool SmartBlinker::transitionToKeepAlive() {
             result = true;
     }
     return result;
-
 }

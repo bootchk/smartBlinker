@@ -33,6 +33,8 @@ namespace Parameters {
 static constexpr unsigned long int TwentyFourHours = 86400;
 
 
+
+
 #ifdef COMPRESSED_TIME_PARAMETERS
     // Most durations very short so time compressed
 
@@ -92,6 +94,11 @@ static constexpr unsigned long int TwentyFourHours = 86400;
     static const unsigned int BlinksNight = 5;
     static const unsigned int BlinksMorning = 3;
 
+    // SunriseEstimator
+    // Average over seasons of length of day (not length of daylight, includes night.)
+    static constexpr unsigned long int SunrisePeriod = 300;    // 5 minutes
+    static constexpr unsigned long int SunriseDelta = 30; // 30 seconds
+
 
 #elif defined( PRODUCTION_PARAMETERS)
     // Normal, production parameters
@@ -127,11 +134,6 @@ static constexpr unsigned int BetweenKeepAlive = 3600;  // hour
 static constexpr unsigned int BetweenDarkChecks = 300;  // 5 minutes
 
 
-
-
-
-
-
 static constexpr unsigned int BetweenSunsetAndBlinking = 1800;  // Thirty minutes
 static constexpr unsigned int BetweenEveningAndNightBlinking = 60; // One minute
 
@@ -141,7 +143,10 @@ static constexpr unsigned int BetweenSunChecks = 900;  // Fifteen minutes
 
 static constexpr unsigned int BetweenMorningBlinkStartAndSunrise = 7200; // Two hours
 
-
+// SunriseEstimator
+// Average over seasons of length of day (not length of daylight, includes night.)
+static constexpr unsigned long int SunrisePeriod = 86400;    // 24 hours
+static constexpr unsigned long int SunriseDelta = 1800; // half hour
 
 /*
  * Counts of blinks.
