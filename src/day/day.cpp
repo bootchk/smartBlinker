@@ -26,6 +26,8 @@
 namespace {
 
 /*
+ * A flag between sunrise checking (when clock is not available) and later in the wake period (when clock is available.)
+ *
  * Every waking period, c-startup initializes this to false.
  */
 bool _wasSunriseDetected = false;

@@ -43,7 +43,7 @@ void PeriodedBlinker::onSunriseDetected() {
      */
     Day::setSunriseDetected();
 
-    SmartBlinker::indicateEvent();
+    SmartBlinker::indicateSunEvent();
 
     scheduleCheckSunsetTask();
     /// Optional optimization of power:
@@ -56,7 +56,7 @@ void PeriodedBlinker::onSunriseDetected() {
 void PeriodedBlinker::onSunsetDetected() {
     // We don't record sunset
 
-    SmartBlinker::indicateEvent();
+    SmartBlinker::indicateSunEvent();
 
     if (PowerMgr::isPowerForBlinking()) {
         onPowerForEveningBlinking();

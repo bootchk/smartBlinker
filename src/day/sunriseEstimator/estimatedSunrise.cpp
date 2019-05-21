@@ -20,7 +20,7 @@ void EstimatedSunrise::init() {
 
 
 /*
- * Called at time sunrise ostensibly detected.
+ * Called at end of wake period during which sunrise ostensibly detected.
  * If it is periodic with prior samples,
  * add it to sample set and feed to state machine.
  */
@@ -37,8 +37,10 @@ void EstimatedSunrise::captureSunriseTime() {
 }
 
 
-
-bool EstimatedSunrise::isSunriseTimeValid() { return PeriodicTimeSeriesState::isConfirmed(); }
+/*
+ * Valid if enough good samples and not too many bad samples.
+ */
+bool EstimatedSunrise::isSunriseTimeValid() { return PeriodicTimeSeriesState::isValid(); }
 
 
 /*
@@ -65,7 +67,7 @@ Duration EstimatedSunrise::durationUntilNextSunriseLessSeconds(Duration lessDura
 
     Duration tilSunrise = estimatedNextSunrise - now;
 
-    return  tilSunrise - lessDuration;
+    return  (tilSunrise - lessDuration);
     /*
      * assert result >= 0
      */

@@ -17,7 +17,7 @@
 
 
 
-
+#define TWO_MINUTES 120
 
 
 // class Parameters {
@@ -31,6 +31,10 @@ namespace Parameters {
     //static const Duration TwentyFourHours= Duration(86400);
     //static constexpr Duration TwentyFourHours {Duration{86400}};
 static constexpr unsigned long int TwentyFourHours = 86400;
+
+
+// For DarkBlinker strategy
+static const unsigned int BetweenDarkChecks = 10;
 
 
 
@@ -69,26 +73,49 @@ static constexpr unsigned long int TwentyFourHours = 86400;
 
 #elif defined( ACCELERATED_TIME_PARAMETERS)
 
-    // See also
+#define REALLY_ACCELERATED
+#ifdef REALLY_ACCELERATED
 
-    // All duration units: seconds
+// Testing w unlimited power on Launchpad, but full integration test with sunrises and morning blinking using SunriseEstimator
+
+static const unsigned int BetweenSunChecks = 3;
+static const unsigned int BetweenKeepAlive = 3;
+
+// Blink Period parameters
+static const unsigned int BetweenBlinks = 1;
+static const unsigned int BetweenSunsetAndBlinking = 3;
+// Not expected to reach night blinking, should exhaust power first
+static const unsigned int BetweenEveningAndNightBlinking = 1;
+// Enough time for entire morning blink: four blinks (4 seconds)
+static const unsigned int BetweenMorningBlinkStartAndSunrise = 15;
+
+// Counts of blinks.
+// Expect only about 10 to exhaust power with small Cstor
+static const unsigned int BlinksEvening = 4;
+static const unsigned int BlinksNight = 1;
+static const unsigned int BlinksMorning = 4;
+
+// SunriseEstimator
+// Average over seasons of length of day (not length of daylight, includes night.)
+static constexpr unsigned long int SunrisePeriod = TWO_MINUTES;
+static constexpr unsigned long int SunriseDelta = 20;
+
+#else
+
+    static const unsigned int BetweenSunChecks = 3;
+    static const unsigned int BetweenKeepAlive = 3;
+
+
+    // Blink Period parameters
     static const unsigned int BetweenBlinks = 2;
     static const unsigned int BetweenSunsetAndBlinking = 10;  // 30
     // Not expected to reach night blinking, should exhaust power first
     static const unsigned int BetweenEveningAndNightBlinking = 10;  // 60
 
-    static const unsigned int BetweenSunChecks = 3;
-
     // For accelerated testing, this doesn't matter since we will force sunrise early
     static const unsigned int BetweenMorningBlinkStartAndSunrise = 7200;// Two hours
 
-    static const unsigned int BetweenKeepAlive = 3;
-
-    static const unsigned int BetweenDarkChecks = 10;
-
-    /*
-     * Counts of blinks.
-     */
+    // Counts of blinks.
     // Expect only about 10 to exhaust power with small Cstor
     static const unsigned int BlinksEvening = 8;
     static const unsigned int BlinksNight = 5;
@@ -98,7 +125,7 @@ static constexpr unsigned long int TwentyFourHours = 86400;
     // Average over seasons of length of day (not length of daylight, includes night.)
     static constexpr unsigned long int SunrisePeriod = 300;    // 5 minutes
     static constexpr unsigned long int SunriseDelta = 30; // 30 seconds
-
+#endif // REALLY_ACCELERATED
 
 #elif defined( PRODUCTION_PARAMETERS)
     // Normal, production parameters

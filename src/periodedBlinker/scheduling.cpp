@@ -115,7 +115,7 @@ void PeriodedBlinker::scheduleFirstNightBlinkTask() {
             Parameters::BetweenEveningAndNightBlinking);
 }
 
-// A variable duration, which depends on length of night as indicated by saved sunrise time
+// A variable duration, which depends on length of night via saved sunrise time
 void PeriodedBlinker::scheduleFirstMorningBlinkTask() {
     TaskScheduler::scheduleTask(
             0,

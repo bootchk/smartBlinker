@@ -1,8 +1,14 @@
 
 #include "smartBlinker.h"
 
-//#include "../periodedBlinker/periodedBlinker.h"
+#include "config.h"
+
+#ifdef USE_PERIODED_BLINKER
+#include "../periodedBlinker/periodedBlinker.h"
+#else
+
 #include "../darkBlinker/darkBlinker.h"
+#endif
 
 #include "../powerMgr.h"
 #include "../moment.h"
@@ -31,13 +37,11 @@ void SmartBlinker::keepAliveTask() {
         /*
          * There is enough power to check sun.
          */
-        if (isNight()) {
-            //PeriodedBlinker::onPowerGoodAtNight();
-            DarkBlinker::onPowerGoodAtNight();
+        if (checkIsNight()) {
+            BlinkStrategy::onPowerGoodAtNight();
         }
         else {
-            //PeriodedBlinker::onPowerGoodAtDay();
-            DarkBlinker::onPowerGoodAtDay();
+            BlinkStrategy::onPowerGoodAtDay();
         }
     }
     else {

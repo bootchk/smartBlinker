@@ -67,7 +67,7 @@ void PeriodedBlinker::checkBlinkingPowerExhaustedAndTerminateBlinkPeriod() {
 
 void PeriodedBlinker::checkSunriseTask() {
     if ( not SmartBlinker::transitionToKeepAlive() ) {
-        if (SmartBlinker::isDay()) {
+        if (SmartBlinker::checkIsDaylight()) {
             onSunriseDetected();
         }
         else {
@@ -76,7 +76,7 @@ void PeriodedBlinker::checkSunriseTask() {
         }
 
         // Use LED *after* we used it for light sensing
-        SmartBlinker::blinkLiveness();
+        SmartBlinker::indicateSunCheck();
     }
     myAssert(SmartBlinker::isSomeTaskScheduled());
 }
@@ -84,7 +84,7 @@ void PeriodedBlinker::checkSunriseTask() {
 
 void PeriodedBlinker::checkSunsetTask() {
     if ( not SmartBlinker::transitionToKeepAlive() ) {
-        if (SmartBlinker::isNight()) {
+        if (SmartBlinker::checkIsNight()) {
             onSunsetDetected();
         }
         else {
@@ -93,7 +93,7 @@ void PeriodedBlinker::checkSunsetTask() {
         }
 
         // Use LED *after* we used it for light sensing
-        SmartBlinker::blinkLiveness();
+        SmartBlinker::indicateSunCheck();
     }
     myAssert(SmartBlinker::isSomeTaskScheduled());
 }

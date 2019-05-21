@@ -31,12 +31,10 @@ Duration Moment::betweenDarkChecks(void) { return Parameters::BetweenDarkChecks;
  * Which is why schedule stores MomentMethods, that are called later when clock is ready.
  */
 Duration Moment::untilMorningBlinkPeriodStart() {
+    // TESTING, certain accelerated: return Parameters::BetweenEveningAndNightBlinking;
 
-#ifdef ACCELERATED_TIME_PARAMETERS
-    return Parameters::BetweenEveningAndNightBlinking;
-#else
     return Day::durationUntilNextSunriseLessSeconds(Parameters::BetweenMorningBlinkStartAndSunrise);
-#endif
+
 
     /*
      * Duration can be zero, meaning sunrise is so imminent that we can't schedule a moment before it less seconds.

@@ -6,7 +6,7 @@
 
 
 /*
- * Estimated statistically
+ * Estimated statistically from a time series of samples
  */
 class EstimatedSunrise {
 public:

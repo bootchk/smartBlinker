@@ -41,7 +41,7 @@ void DarkBlinker::scheduleBlinkTask() {
 
 void DarkBlinker::checkDarkTask() {
     if ( not SmartBlinker::transitionToKeepAlive()) {
-        if (SmartBlinker::isNight()) {
+        if (SmartBlinker::checkIsNight()) {
                    onDarkDetected();
         }
         else {
@@ -58,7 +58,7 @@ void DarkBlinker::checkDarkTask() {
 
 void DarkBlinker::blinkTask() {
     if (   (not PowerMgr::isPowerForBlinking())
-            or SmartBlinker::isDay()
+            or SmartBlinker::checkIsDaylight()
        ) {
         /*
          * Don't blink, and wait for dark again.

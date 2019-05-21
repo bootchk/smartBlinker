@@ -39,8 +39,16 @@ void toConfirmedWBad() {
 
 
 
-void PeriodicTimeSeriesState::init() { state = State::Unconfirmed; }
-bool PeriodicTimeSeriesState::  isConfirmed() { return state == State::Confirmed; }
+void PeriodicTimeSeriesState::init() { toUnconfirmed(); }
+
+/*
+ * Is valid if confirmed or confirmed with few bad.
+ * When ConfirmedWBad, we can still estimate sunrise, from several days ago.
+ */
+bool PeriodicTimeSeriesState::  isValid() {
+    return (state == State::Confirmed)
+            or (state == State::ConfirmedWBad);
+}
 
 
 
@@ -83,7 +91,7 @@ void PeriodicTimeSeriesState::recordBadSample() {
         break;
 
     case State::ConfirmedWBad:
-        // This is second bad in a row
+        // This is second bad in a row, clear sampleSet
         toUnconfirmed();
         break;
     }

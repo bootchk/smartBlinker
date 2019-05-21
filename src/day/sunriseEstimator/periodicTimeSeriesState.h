@@ -18,7 +18,7 @@ public:
     /*
      * Does time series have enough good samples and not too many bad samples?
      */
-    static bool isConfirmed();
+    static bool isValid();
 
     static void recordGoodSample(EpochTime sample);
     static void recordBadSample();

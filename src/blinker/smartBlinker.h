@@ -48,16 +48,16 @@ public:
     static void calibrateLightSensor();
 
 
-    static bool isNight();
-    static bool isDay();
+    static bool checkIsNight();
+    static bool checkIsDaylight();
 
 
     // ultimate goal: blink for entertainment
     static void blinkDecorative();
-    // blink to show system still live
-    static void blinkLiveness();
 
-    static void indicateEvent();
+    // Other indicateions (may be blinks): optional, dim
+    static void indicateSunCheck();
+    static void indicateSunEvent();
 
     /*
      * Test harness to call all tasks to find unresolved symbols.

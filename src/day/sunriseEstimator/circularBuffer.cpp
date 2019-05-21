@@ -6,25 +6,32 @@
 
 namespace {
 
+// head in range [0, SampleSetSize-1]
 #pragma PERSISTENT
-unsigned int head;  // Always points to most recent sample
+unsigned int head = 0;  // Always points to most recent sample
 
+// count in range [0, SampleSetSize]
 #pragma PERSISTENT
 unsigned int count = 0;
 
 
+//#define SampleSetSize 3
+#define SampleSetSize 2
+#define MaxSampleSetIndex (SampleSetSize - 1)
+
+
 
 #pragma PERSISTENT
-EpochTime sampleSet[3]; //  = 0;
+EpochTime sampleSet[SampleSetSize]; //  = 0;
 
 
-// After adding at head.
+// Before adding at head.
 void adjustHeadAndCount() {
     head++;
-    if (head > 2 )  head = 0;
+    if (head > MaxSampleSetIndex )  head = 0;
 
     // Max count is 3
-    if (count < 3) count++;
+    if (count < SampleSetSize) count++;
 }
 
 }
@@ -40,7 +47,7 @@ unsigned int count;
 void adjustIterIndexandCountAfterNextIter() {
     iter::count--;
     iter::index++;
-    if (iter::index > 2) iter::index = 0;
+    if (iter::index > MaxSampleSetIndex) iter::index = 0;
 }
 
 }
@@ -61,7 +68,7 @@ void CircularBuffer::addSample(EpochTime sample){
 
 
 
-bool CircularBuffer::isFull(){ return count == 3; }
+bool CircularBuffer::isFull(){ return count == SampleSetSize; }
 bool CircularBuffer::isEmpty(){ return count == 0; }
 unsigned int CircularBuffer::getCount(){ return count; }
 

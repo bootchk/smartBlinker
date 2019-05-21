@@ -10,10 +10,8 @@
 // Choose a strategy
 #ifdef USE_PERIODED_BLINKER
 #include "../periodedBlinker/periodedBlinker.h"
-#define BlinkStrategy PeriodedBlinker
 #else
 #include "../darkBlinker/darkBlinker.h"
-#define BlinkStrategy DarkBlinker
 #endif
 
 // embeddedDutyCycle
@@ -127,15 +125,15 @@ void SmartBlinker::blinkDecorative() {
     LEDBlinker::blinkBright();
 }
 
-void SmartBlinker::blinkLiveness() {
-#ifdef SUN_CHECK_BLINK_LIVENESS
+void SmartBlinker::indicateSunCheck() {
+#ifdef BLINK_ON_SUN_CHECK
     LEDBlinker::blinkDim();
 #endif
 }
 
 
-void SmartBlinker::indicateEvent() {
-#ifdef BLINK_LED_ON_SUN_EVENT
+void SmartBlinker::indicateSunEvent() {
+#ifdef BLINK_ON_SUN_EVENT
     LEDBlinker::blinkDim();
 #endif
 }

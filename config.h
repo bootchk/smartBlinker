@@ -53,13 +53,13 @@
 /*
  * Whether to blink LED every check sun to indicate liveness
  */
-#define SUN_CHECK_BLINK_LIVENESS
+#define BLINK_ON_SUN_CHECK
 
 
 /*
  * Whether to blink LED when sunrise and sunset detected.
  */
-#define BLINK_LED_ON_SUN_EVENT
+//#define BLINK_ON_SUN_EVENT
 
 
 
@@ -75,6 +75,10 @@
  * Whether to use PeriodedBlinker
  */
 #define USE_PERIODED_BLINKER
+#ifdef USE_PERIODED_BLINKER
+#define BlinkStrategy PeriodedBlinker
+#else
+#endif
 
 /*
  * Whether isNight() always returns false (forego use of light sensor.)
