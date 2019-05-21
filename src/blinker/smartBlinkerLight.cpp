@@ -24,6 +24,11 @@ bool SmartBlinker::checkIsDaylight() {
 }
 
 
+void SmartBlinker::feedDaylightEvent() {
+    ConfirmedSunEvent::feedDaylightEvent();
+}
+
+
 bool SmartBlinker::checkIsNight() {
     // dark => putative sunset
     return ConfirmedSunEvent::doesThisEventConfirm( LightSensor::isDark() );
@@ -32,14 +37,12 @@ bool SmartBlinker::checkIsNight() {
 
 
 
-#ifdef OLD
-
 /*
  * Nieve implementation, without confirmation.
  * Is subject to ephemeral weather events.
  */
 
-bool SmartBlinker::isDay() {
+bool SmartBlinker::isDaylight() {
     return not isNight();
 }
 
@@ -52,8 +55,6 @@ bool SmartBlinker::isNight() {
     return LightSensor::isDark();
 #endif
 }
-
-#endif
 
 
 

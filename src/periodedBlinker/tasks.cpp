@@ -3,6 +3,7 @@
 #include "../blinker/smartBlinker.h"
 
 #include "../blinkPeriod.h"
+#include "../morningBlinkPeriod.h"
 #include "../powerMgr.h"
 
 
@@ -18,16 +19,18 @@
 void PeriodedBlinker::checkBlinkPeriodOverAndScheduleNextTask() {
 
     if (BlinkPeriod::isOver()) {
-        if (BlinkPeriod::isEvening()) {
+        switch (BlinkPeriod::getKind()) {
+        case BlinkPeriodKind::Evening :
             onEveningBlinkPeriodOver();
             // first blink task of next period (if any) is scheduled
-        }
-        else if (BlinkPeriod::isNight()) {
+            break;
+        case BlinkPeriodKind::Night :
             onNightBlinkPeriodOver();
-        }
-        else {
+            break;
+        case BlinkPeriodKind::Morning :
             // else morning blink subperiod over,  blink period over, no blinkTask scheduled
             onMorningBlinkPeriodOver();
+            break;
         }
         // assert another blinkPeriod is scheduled OR checkSunrise task is scheduled
     }
@@ -51,6 +54,7 @@ void PeriodedBlinker::checkBlinkPeriodOverAndScheduleNextTask() {
 void PeriodedBlinker::checkBlinkingPowerExhaustedAndTerminateBlinkPeriod() {
     if (not PowerMgr::isPowerForBlinking()) {
         BlinkPeriod::terminatePrematurely();
+        MorningBlinkPeriod::terminate();
         // assert BlinkPeriod::isOver()
     }
 }

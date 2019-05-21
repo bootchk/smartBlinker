@@ -9,14 +9,12 @@
 #include <src/powerMgr.h>
 
 #include "../moment.h"
+#include "../morningBlinkPeriod.h"
+
+// msp430Drivers
+#include <softFault/softFault.h>
 
 
-
-
-
-/*
- * Events
- */
 
 
 /*
@@ -91,30 +89,27 @@ void PeriodedBlinker::onPowerForNightBlinking() {
 }
 
 void PeriodedBlinker::onPowerForMorningBlinking() {
+    // init subperiod
     BlinkPeriod::initForMorningBlinking();
-    scheduleFirstBlinkTaskOfPeriod(Moment::untilMorningBlinkPeriodStart);
+    // init superperiod
+    MorningBlinkPeriod::init();
+    scheduleFirstMorningBlinkTask();
 }
 
 
 
 /*
- * We schedule evening blinking from a detected sunset.
- * We can only schedule morning blinking if there exists a prior detected sunrise.
- * On startup, might not exist.
+ * Schedule evening blinking from a detected sunset.
+ * If power.
  */
-
 void PeriodedBlinker::onEveningBlinkPeriodOver() {
-    /*
-     * Schedule night blinking if power.
-     */
-
     if (PowerMgr::isPowerForBlinking()) {
             onPowerForNightBlinking();
     }
     else {
         /*
-         * No more power tonight.
-         * But schedule same tasks as if we had done morning blinking, i.e. checkSunrise
+         * No more power tonight.  Skip night and morning blinking.
+         * But schedule same tasks as if, i.e. checkSunrise
          */
         scheduleCheckSunriseTask();
     }
@@ -125,7 +120,7 @@ void PeriodedBlinker::onNightBlinkPeriodOver() {
     /*
      * Schedule morning blinking if we know sunrise.
      *
-     * If we cold started recently, we have not detected a sunrise yet
+     * If we cold started recently, we don't know valid sunrise yet
      */
     if (Day::isSunriseTimeValid()) {
         if (PowerMgr::isPowerForBlinking()) {
@@ -138,8 +133,7 @@ void PeriodedBlinker::onNightBlinkPeriodOver() {
     else {
         /*
          * We don't know when to start, so omit morning blinking.
-         * But we must schedule same tasks as if we had done morning blinking,
-         * i.e. checkSunrise
+         * But schedule same tasks as if,  i.e. checkSunrise.
          */
         scheduleCheckSunriseTask();
     }
@@ -147,12 +141,41 @@ void PeriodedBlinker::onNightBlinkPeriodOver() {
 }
 
 
+/*
+ * In this design, we don't check for sunrise until morning blink is over.
+ * That should be soon enough for an advancing sunrise due to seasons,
+ * That is also safer: no possiblity of falsely detecting sunrise, then sunset while it is really night.
+ *
+ * But we check sunrise immediately.
+ * If morning blink period overruns, it pushes sunrise out, falsely.
+ * Morning blink would continue to overrun, worsening in a feedback loop.
+ * Morning blink should check sunrise no less frequently than the usual checkSunrise interval.
+ */
 void PeriodedBlinker::onMorningBlinkPeriodOver() {
-    /*
-     * In this design, we don't check for sunrise until morning blink is over.
-     * That should be soon enough for an advancing sunrise due to seasons,
-     * That is also safer: no possiblity of falsely detecting sunrise, then sunset while it is really night.
-     */
-    scheduleCheckSunriseTask();
+
+
+    if (SmartBlinker::isDaylight()) {
+        /*
+         * Morning blinking has overrun sunrise
+         * Count daylight detection.
+         * Not schedule another morning blink, schedule check sunrise again.
+         */
+        SmartBlinker::feedDaylightEvent();
+        scheduleCheckSunriseTask();
+    }
+    else {
+        // If last morning blink period or it was terminated prematurely
+        if (MorningBlinkPeriod::isDone())
+        {
+            scheduleCheckSunriseTask();
+        }
+        else
+        {
+            // Schedule another morning blink task
+            BlinkPeriod::initForMorningBlinking();
+            scheduleSubsequentMorningBlinkTask();
+        }
+    }
+    // assert some task is scheduled
 }
 

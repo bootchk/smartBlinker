@@ -57,7 +57,10 @@ public:
     static void scheduleCheckSunsetTask();
 
     static void scheduleFirstBlinkTaskOfPeriod(MomentMethodPtr momentMethod);
+
+    static void scheduleFirstMorningBlinkTask();
+    static void scheduleSubsequentMorningBlinkTask();
+
     //static void scheduleFirstEveningBlinkTask();
     //static void scheduleFirstNightBlinkTask();
-    //static void scheduleFirstMorningBlinkTask();
 };

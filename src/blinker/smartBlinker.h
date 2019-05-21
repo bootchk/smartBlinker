@@ -48,8 +48,20 @@ public:
     static void calibrateLightSensor();
 
 
+    /*
+     * Check day with side effects to ConfirmedSunEvent
+     */
     static bool checkIsNight();
     static bool checkIsDaylight();
+
+    /*
+     * Simple checks of light conditions.
+     */
+    static bool isNight();
+    static bool isDaylight();
+
+    // Feed detected daylight
+    static void feedDaylightEvent();
 
 
     // ultimate goal: blink for entertainment

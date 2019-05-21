@@ -12,6 +12,28 @@
 
 
 
+namespace {
+
+/*
+ * Sunrise was detected during this wake period.
+ * Return the time of detection.
+ *
+ * Because of filtering, first time of detection was earlier.
+ * Also, we may shade it earlier.
+ * Because:
+ * - we don't check often enough, so shade by half the detect period
+ * - if we were late to try detect (morning blink period overrun) ????
+ *
+ */
+EpochTime getSunriseTimeSample() {
+    EpochTime now = EpochClock::timeNowOrReset();
+    // See ConfirmedSunEvent: we first detected on previous sun check
+    return (now - Parameters::BetweenSunChecks);
+}
+
+
+}
+
 
 void EstimatedSunrise::init() {
     CircularBuffer::empty();
@@ -25,7 +47,7 @@ void EstimatedSunrise::init() {
  * add it to sample set and feed to state machine.
  */
 void EstimatedSunrise::captureSunriseTime() {
-    EpochTime possibleSunriseTime = EpochClock::timeNowOrReset();
+    EpochTime possibleSunriseTime = getSunriseTimeSample();
     // assert possibleSunriseTime > previousSunset
 
     if (SunriseCalculator::isGoodSample(possibleSunriseTime)) {

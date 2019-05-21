@@ -44,6 +44,10 @@ void ConfirmedSunEvent::reset() {
 }
 
 
+void ConfirmedSunEvent::feedDaylightEvent() {
+    countEvents += 1;
+}
+
 
 #ifdef OLD
 void ConfirmedSunEvent::markEvent() {

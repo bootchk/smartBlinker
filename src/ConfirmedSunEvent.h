@@ -29,6 +29,11 @@ public:
 
 
     /*
+     * Called when daylight detected raw w/o calling doesThisEventConfirm
+     */
+    static void feedDaylightEvent();
+
+    /*
      * Show that we have no history of putative events.
      */
     static void reset();

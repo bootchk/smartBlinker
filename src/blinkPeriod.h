@@ -26,7 +26,11 @@
  */
 
 
-
+enum class BlinkPeriodKind {
+    Evening,
+    Night,
+    Morning
+};
 
 
 class BlinkPeriod {
@@ -43,9 +47,7 @@ public:
      */
     static bool isOver();
 
-    static bool isEvening();
-    static bool isNight();
-    // else isMorning()
+    static BlinkPeriodKind getKind();
 
     static void advance();
 

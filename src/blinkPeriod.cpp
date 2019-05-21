@@ -1,5 +1,6 @@
 
 #include <src/blinkPeriod.h>
+#include "morningBlinkPeriod.h"
 
 
 
@@ -16,11 +17,9 @@ namespace {
 #pragma PERSISTENT
 int blinkCounter = 0;
 
-// State variable, evening and morning blink subperiods
+// State variable
 #pragma PERSISTENT
-bool _isEvening = false;
-#pragma PERSISTENT
-bool _isNight = false;
+BlinkPeriodKind kind;
 
 #pragma PERSISTENT
 bool _isActive = false;
@@ -33,25 +32,26 @@ bool _isActive = false;
 void BlinkPeriod::initForEveningBlinking()
 {
     blinkCounter = Parameters::BlinksEvening;
-    _isEvening = true;
+    kind = BlinkPeriodKind::Evening;
     _isActive = true;
 }
 
 
+/*
+ * !!! Don't init the sequence of morning blink periods here, only the subperiod.
+ */
 void BlinkPeriod::initForMorningBlinking()
 {
-
     blinkCounter = Parameters::BlinksMorning;
-    _isEvening = false;
-    _isNight = false;
+    kind = BlinkPeriodKind::Morning;
     _isActive = true;
 }
+
 
 void BlinkPeriod::initForNightBlinking()
 {
     blinkCounter = Parameters::BlinksNight;
-    _isEvening = false;
-    _isNight = true;
+    kind = BlinkPeriodKind::Night;
     _isActive = true;
 }
 
@@ -90,16 +90,10 @@ bool BlinkPeriod::isOver()
 }
 
 
-bool BlinkPeriod::isEvening() { return _isEvening; }
-bool BlinkPeriod::isNight() { return _isNight; }
+BlinkPeriodKind BlinkPeriod::getKind() { return kind; }
 
 
-void BlinkPeriod::advance()
-{
-    blinkCounter--;
-}
+void BlinkPeriod::advance() { blinkCounter--; }
 
 
-void BlinkPeriod::terminatePrematurely() {
-    _isActive = false;
-}
+void BlinkPeriod::terminatePrematurely() { _isActive = false; }

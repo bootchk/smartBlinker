@@ -74,8 +74,19 @@ void PeriodedBlinker::scheduleCheckSunsetTask()
 }
 
 
+/*
+ * Schedule for a long while from now, wee hours of morning.
+ */
+void PeriodedBlinker::scheduleFirstMorningBlinkTask() {
+    scheduleFirstBlinkTaskOfPeriod(Moment::untilMorningBlinkPeriodStart);
+}
 
-
+/*
+ * Schedule immediately following current morning blink period.
+ */
+void PeriodedBlinker::scheduleSubsequentMorningBlinkTask() {
+    scheduleFirstBlinkTaskOfPeriod(Moment::untilSubsequentMorningBlinkPeriodStart);
+}
 
 
 

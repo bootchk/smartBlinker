@@ -32,6 +32,8 @@ namespace Parameters {
     //static constexpr Duration TwentyFourHours {Duration{86400}};
 static constexpr unsigned long int TwentyFourHours = 86400;
 
+// Eight periods same time as checkSun duration
+static constexpr unsigned long int CountMorningBlinkPeriods = 8;
 
 // For DarkBlinker strategy
 static const unsigned int BetweenDarkChecks = 10;

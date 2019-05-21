@@ -33,6 +33,8 @@ public:
      * This returns a varying Duration.
      */
     static Duration untilMorningBlinkPeriodStart(void);
+
+    static Duration untilSubsequentMorningBlinkPeriodStart(void);
 };
 
 
