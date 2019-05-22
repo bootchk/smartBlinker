@@ -19,7 +19,7 @@ int blinkCounter = 0;
 
 // State variable
 #pragma PERSISTENT
-BlinkPeriodKind kind;
+BlinkPeriodKind kind = BlinkPeriodKind::Evening;
 
 #pragma PERSISTENT
 bool _isActive = false;
@@ -42,7 +42,7 @@ void BlinkPeriod::initForEveningBlinking()
  */
 void BlinkPeriod::initForMorningBlinking()
 {
-    blinkCounter = Parameters::BlinksMorning;
+    blinkCounter = Parameters::BlinksMorningSubperiod;
     kind = BlinkPeriodKind::Morning;
     _isActive = true;
 }

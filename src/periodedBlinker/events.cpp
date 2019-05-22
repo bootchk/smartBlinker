@@ -88,6 +88,7 @@ void PeriodedBlinker::onPowerForNightBlinking() {
     scheduleFirstBlinkTaskOfPeriod(Moment::betweenEveningAndNightBlinking);
 }
 
+// Enough power and sunrise valid
 void PeriodedBlinker::onPowerForMorningBlinking() {
     // init subperiod
     BlinkPeriod::initForMorningBlinking();
@@ -142,7 +143,7 @@ void PeriodedBlinker::onNightBlinkPeriodOver() {
 
 
 /*
- * In this design, we don't check for sunrise until morning blink is over.
+ * OLD In this design, we don't check for sunrise until morning blink is over.
  * That should be soon enough for an advancing sunrise due to seasons,
  * That is also safer: no possiblity of falsely detecting sunrise, then sunset while it is really night.
  *
@@ -152,7 +153,6 @@ void PeriodedBlinker::onNightBlinkPeriodOver() {
  * Morning blink should check sunrise no less frequently than the usual checkSunrise interval.
  */
 void PeriodedBlinker::onMorningBlinkPeriodOver() {
-
 
     if (SmartBlinker::isDaylight()) {
         /*
@@ -164,14 +164,14 @@ void PeriodedBlinker::onMorningBlinkPeriodOver() {
         scheduleCheckSunriseTask();
     }
     else {
-        // If last morning blink period or it was terminated prematurely
+        // If last morning blink sub period or it was terminated prematurely
         if (MorningBlinkPeriod::isDone())
         {
             scheduleCheckSunriseTask();
         }
         else
         {
-            // Schedule another morning blink task
+            // Schedule another morning blink subperiod
             BlinkPeriod::initForMorningBlinking();
             scheduleSubsequentMorningBlinkTask();
         }

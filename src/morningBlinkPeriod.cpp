@@ -10,7 +10,7 @@ namespace {
 #pragma PERSISTENT
 unsigned int countMorningBlinkPeriods = 0;
 
-#pragma PERISTENT
+#pragma PERSISTENT
 bool terminated = false;
 }
 
@@ -27,7 +27,8 @@ void MorningBlinkPeriod::init() {
 void MorningBlinkPeriod::terminate() { terminated = true; }
 
 bool MorningBlinkPeriod::isDone() {
-    bool result;
+    bool result = false;
+
     countMorningBlinkPeriods++;
     if ( countMorningBlinkPeriods > Parameters::CountMorningBlinkPeriods ) {
         result = true;

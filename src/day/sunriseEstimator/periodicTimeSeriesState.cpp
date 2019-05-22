@@ -61,7 +61,7 @@ void PeriodicTimeSeriesState::recordGoodSample(EpochTime sample) {
             break;
 
         case State::Confirmed:
-            // replace oldest sample
+            // replace oldest sample, remain in state Confirmed
             CircularBuffer::addSample(sample);
             break;
 

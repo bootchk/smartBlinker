@@ -43,7 +43,6 @@ void PeriodedBlinker::scheduleBlinkTask() {
 
 
 void PeriodedBlinker::scheduleFirstBlinkTaskOfPeriod(MomentMethodPtr momentFirstBlink) {
-
     TaskScheduler::scheduleTask(
             blinkTask,
             momentFirstBlink);
@@ -76,6 +75,9 @@ void PeriodedBlinker::scheduleCheckSunsetTask()
 
 /*
  * Schedule for a long while from now, wee hours of morning.
+ *
+ * If moment is zero, blinking periods are longer than night duration?
+ * Could be true at high latitudes.
  */
 void PeriodedBlinker::scheduleFirstMorningBlinkTask() {
     scheduleFirstBlinkTaskOfPeriod(Moment::untilMorningBlinkPeriodStart);

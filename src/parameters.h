@@ -11,6 +11,7 @@
  * - normal
  * - for testing in compressed time
  *
+ * Note a schedule of one second really takes two seconds (Lamport's rule adds an average of half second.)
  */
 #include "config.h"   // chooses
 
@@ -33,7 +34,7 @@ namespace Parameters {
 static constexpr unsigned long int TwentyFourHours = 86400;
 
 // Eight periods same time as checkSun duration
-static constexpr unsigned long int CountMorningBlinkPeriods = 8;
+static constexpr unsigned int CountMorningBlinkPeriods = 8;
 
 // For DarkBlinker strategy
 static const unsigned int BetweenDarkChecks = 10;
@@ -80,6 +81,9 @@ static const unsigned int BetweenDarkChecks = 10;
 
 // Testing w unlimited power on Launchpad, but full integration test with sunrises and morning blinking using SunriseEstimator
 
+static constexpr unsigned int SampleSetSize = 2;
+static constexpr unsigned int MaxSampleSetIndex = (SampleSetSize-1);
+
 static const unsigned int BetweenSunChecks = 3;
 static const unsigned int BetweenKeepAlive = 3;
 
@@ -88,14 +92,16 @@ static const unsigned int BetweenBlinks = 1;
 static const unsigned int BetweenSunsetAndBlinking = 3;
 // Not expected to reach night blinking, should exhaust power first
 static const unsigned int BetweenEveningAndNightBlinking = 1;
-// Enough time for entire morning blink: four blinks (4 seconds)
-static const unsigned int BetweenMorningBlinkStartAndSunrise = 15;
+
+// Enough time for entire morning blink: eight blinks (8 at 2 seconds = 16 seconds)
+static const unsigned int BetweenMorningBlinkStartAndSunrise = 20;
 
 // Counts of blinks.
 // Expect only about 10 to exhaust power with small Cstor
-static const unsigned int BlinksEvening = 4;
+static const unsigned int BlinksEvening = 3;
 static const unsigned int BlinksNight = 1;
-static const unsigned int BlinksMorning = 4;
+// 1 blink per subperiod times 8 subperiods
+static const unsigned int BlinksMorningSubperiod = 1;
 
 // SunriseEstimator
 // Average over seasons of length of day (not length of daylight, includes night.)
@@ -160,7 +166,6 @@ static constexpr unsigned long int SunriseDelta = 20;
 
 static constexpr unsigned int BetweenBlinks = 10;
 static constexpr unsigned int BetweenKeepAlive = 3600;  // hour
-static constexpr unsigned int BetweenDarkChecks = 300;  // 5 minutes
 
 
 static constexpr unsigned int BetweenSunsetAndBlinking = 1800;  // Thirty minutes
@@ -186,8 +191,9 @@ static constexpr unsigned int BlinksEvening = 6 * 60 * 2;
 
 static constexpr unsigned int BlinksNight = 6 * 60 * 2;
 
-// Morning blink for 2 hours every 10 seconds
-static constexpr unsigned int BlinksMorning = 6 * 60 * 2;
+// Morning blink for 2 hours every 10 seconds (6 * 60 * 2 = 720 total)
+// 8 subperiods of 15 minutes (90 blinks) is 720 total
+static constexpr unsigned int BlinksMorningSubperiod = 6 * 15;
 
 #endif
 

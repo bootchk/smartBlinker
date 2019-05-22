@@ -1,6 +1,7 @@
 
 #include "circularBuffer.h"
 
+#include "../../parameters.h"   // SampleSetSize
 
 
 
@@ -15,23 +16,21 @@ unsigned int head = 0;  // Always points to most recent sample
 unsigned int count = 0;
 
 
-//#define SampleSetSize 3
-#define SampleSetSize 2
-#define MaxSampleSetIndex (SampleSetSize - 1)
-
 
 
 #pragma PERSISTENT
-EpochTime sampleSet[SampleSetSize]; //  = 0;
+EpochTime sampleSet[Parameters::SampleSetSize]; //  = 0;
 
 
 // Before adding at head.
 void adjustHeadAndCount() {
     head++;
-    if (head > MaxSampleSetIndex )  head = 0;
+    if (head > Parameters::MaxSampleSetIndex )  head = 0;
 
-    // Max count is 3
-    if (count < SampleSetSize) count++;
+    // Max count is SampleSetSize
+    if (count < Parameters::SampleSetSize) count++;
+
+    // head points to most recent sample
 }
 
 }
@@ -44,10 +43,11 @@ namespace iter {
 unsigned int index;
 unsigned int count;
 
+// Counts down
 void adjustIterIndexandCountAfterNextIter() {
     iter::count--;
     iter::index++;
-    if (iter::index > MaxSampleSetIndex) iter::index = 0;
+    if (iter::index > Parameters::MaxSampleSetIndex) iter::index = 0;
 }
 
 }
@@ -68,9 +68,15 @@ void CircularBuffer::addSample(EpochTime sample){
 
 
 
-bool CircularBuffer::isFull(){ return count == SampleSetSize; }
+bool CircularBuffer::isFull(){ return count == Parameters::SampleSetSize; }
 bool CircularBuffer::isEmpty(){ return count == 0; }
 unsigned int CircularBuffer::getCount(){ return count; }
+
+
+
+
+
+
 
 void CircularBuffer::startIter(){
     // iteration starts at most recent sample
