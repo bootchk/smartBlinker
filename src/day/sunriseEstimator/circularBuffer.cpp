@@ -43,11 +43,17 @@ namespace iter {
 unsigned int index;
 unsigned int count;
 
-// Counts down
+/*
+ * Called after getting nextIter.
+ * Counts down, iterates in reverse order of add.
+ */
 void adjustIterIndexandCountAfterNextIter() {
     iter::count--;
-    iter::index++;
-    if (iter::index > Parameters::MaxSampleSetIndex) iter::index = 0;
+    // Iter in reverse.  Modulo.
+    if (iter::index == 0)
+        iter::index = Parameters::MaxSampleSetIndex;
+    else
+        iter::index--;
 }
 
 }
@@ -59,11 +65,13 @@ void adjustIterIndexandCountAfterNextIter() {
 void CircularBuffer::empty(){
     head = 0;
     count = 0;
+    myAssert(isEmpty());
 }
 
 void CircularBuffer::addSample(EpochTime sample){
     adjustHeadAndCount();
     sampleSet[head] = sample;
+    myAssert(not isEmpty());
 }
 
 

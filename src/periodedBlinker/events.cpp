@@ -93,7 +93,7 @@ void PeriodedBlinker::onPowerForMorningBlinking() {
     // init subperiod
     BlinkPeriod::initForMorningBlinking();
     // init superperiod
-    MorningBlinkPeriod::init();
+    MorningSuperBlinkPeriod::init();
     scheduleFirstMorningBlinkTask();
 }
 
@@ -165,7 +165,7 @@ void PeriodedBlinker::onMorningBlinkPeriodOver() {
     }
     else {
         // If last morning blink sub period or it was terminated prematurely
-        if (MorningBlinkPeriod::isDone())
+        if (MorningSuperBlinkPeriod::isDone())
         {
             scheduleCheckSunriseTask();
         }

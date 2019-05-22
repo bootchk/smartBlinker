@@ -54,7 +54,7 @@ void PeriodedBlinker::checkBlinkPeriodOverAndScheduleNextTask() {
 void PeriodedBlinker::checkBlinkingPowerExhaustedAndTerminateBlinkPeriod() {
     if (not PowerMgr::isPowerForBlinking()) {
         BlinkPeriod::terminatePrematurely();
-        MorningBlinkPeriod::terminate();
+        MorningSuperBlinkPeriod::terminate();
         // assert BlinkPeriod::isOver()
     }
 }

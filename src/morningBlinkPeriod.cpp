@@ -7,8 +7,9 @@
 
 namespace {
 
+// counts up
 #pragma PERSISTENT
-unsigned int countMorningBlinkPeriods = 0;
+unsigned int countSubperiods = 0;
 
 #pragma PERSISTENT
 bool terminated = false;
@@ -18,19 +19,20 @@ bool terminated = false;
 
 
 
-void MorningBlinkPeriod::init() {
-    countMorningBlinkPeriods = 0;
+void MorningSuperBlinkPeriod::init() {
+    countSubperiods = 0;
     terminated = false;
 }
 
 
-void MorningBlinkPeriod::terminate() { terminated = true; }
+void MorningSuperBlinkPeriod::terminate() { terminated = true; }
 
-bool MorningBlinkPeriod::isDone() {
+// Side effect on state
+bool MorningSuperBlinkPeriod::isDone() {
     bool result = false;
 
-    countMorningBlinkPeriods++;
-    if ( countMorningBlinkPeriods > Parameters::CountMorningBlinkPeriods ) {
+    countSubperiods++;
+    if ( countSubperiods > Parameters::CountMorningBlinkPeriods ) {
         result = true;
     }
 

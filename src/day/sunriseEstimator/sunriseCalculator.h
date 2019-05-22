@@ -25,7 +25,7 @@ private:
      *
      * Project: advance time by 24 hours until it is near reference time.
      */
-    static bool projectTimetoReferenceTimeWithinDelta(EpochTime time,
+    static bool canProjectTimetoReferenceTimeWithinDelta(EpochTime time,
                                                       EpochTime referenceTime,
                                                       Duration delta,
                                                       Interval& interval);
