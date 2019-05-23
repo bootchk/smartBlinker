@@ -50,21 +50,23 @@ Interval SunriseCalculator::averageIntervalToLatestSample() {
      */
     EpochTime toProjectTime;
     while ( (toProjectTime = CircularBuffer::nextIter()) != 0 ) {
-        Interval interval;
+        Interval interval;  // no init, function will write it
         bool didProject = canProjectTimetoReferenceTimeWithinDelta(toProjectTime,
                                               latestSunriseSample,
-                                              Parameters::SunriseDelta,
+                                              2*Parameters::SunriseDelta,
                                               interval);
         /*
          * Not invariant: all samples project to within delta of head: myAssert (didProject);
          * It is only invariant that all samples project to average,
          * or that all samples project to with 2*delta of head
          */
+        myAssert (didProject);
         intervalSum += interval;
     }
 
+    unsigned int countSamples = CircularBuffer::getCount();
     // Signed integer division
-    Interval averageInterval = intervalSum/CircularBuffer::getCount();
+    Interval averageInterval = intervalSum/countSamples;
     myAssert( abs(averageInterval) <= 2*Parameters::SunriseDelta );
     return averageInterval ;
 }
