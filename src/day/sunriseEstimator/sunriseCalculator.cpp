@@ -21,7 +21,7 @@ bool SunriseCalculator::doesSampleFitsSampleSet(EpochTime sample) {
    myAssert(sample >= previousSunset);
 
    /*
-    * Does estimatedPreviousSunrise project to within delta of sample?
+    * Not use returned interval, only boolean result
     */
    result = canProjectTimetoReferenceTimeWithinDelta (
             previousSunset,
@@ -55,14 +55,18 @@ Interval SunriseCalculator::averageIntervalToLatestSample() {
                                               latestSunriseSample,
                                               Parameters::SunriseDelta,
                                               interval);
-        // Invariant is that all samples project
-        myAssert (didProject);
+        /*
+         * Not invariant: all samples project to within delta of head: myAssert (didProject);
+         * It is only invariant that all samples project to average,
+         * or that all samples project to with 2*delta of head
+         */
         intervalSum += interval;
     }
 
     // Signed integer division
-    return intervalSum/CircularBuffer::getCount();
-    // assert abs(interval) <= delta
+    Interval averageInterval = intervalSum/CircularBuffer::getCount();
+    myAssert( abs(averageInterval) <= 2*Parameters::SunriseDelta );
+    return averageInterval ;
 }
 
 
@@ -72,7 +76,7 @@ bool SunriseCalculator::canProjectTimetoReferenceTimeWithinDelta (
                 EpochTime time,
                 EpochTime referenceTime,
                 Duration delta,
-                Interval& interval
+                Interval& resultInterval
                 ) {
     myRequire(referenceTime >= time);
 
@@ -82,9 +86,9 @@ bool SunriseCalculator::canProjectTimetoReferenceTimeWithinDelta (
 
     Interval workingInterval;
     workingInterval = workingProjection - referenceTime;
-    myAssert(workingInterval >=0);
+    myAssert(workingInterval >=0 );
     if ( workingInterval < delta.seconds) {
-       interval = workingInterval;
+       resultInterval = workingInterval;
        result = true;
     }
     else {
@@ -95,7 +99,7 @@ bool SunriseCalculator::canProjectTimetoReferenceTimeWithinDelta (
         if ( workingInterval < delta.seconds) {
             // we have been working with absolute value i.e. magnitude.
             // Return negative since within delta is before referenceTime
-            interval = -workingInterval;
+            resultInterval = -workingInterval;
             result = true;
         }
         else {
@@ -103,6 +107,7 @@ bool SunriseCalculator::canProjectTimetoReferenceTimeWithinDelta (
             result = false;
         }
     }
+    // assert abs(resultInterval) < delta
     return result;
 }
 
@@ -123,6 +128,7 @@ EpochTime SunriseCalculator::estimatePreviousSunrise() {
     // This also uses iterator
     Interval averageInterval = averageIntervalToLatestSample();
 
+    // EpochTime +/- Interval
     return latestSunriseSample + averageInterval;
     /*
      * Estimate is in the past, not projected to current time.
@@ -152,12 +158,23 @@ bool SunriseCalculator::isGoodSample(EpochTime sample) {
 
 EpochTime SunriseCalculator::projectTimePastReferenceTime(EpochTime time,
                                                   EpochTime referenceTime) {
+    /*
+     * One design is to not require referenceTime > time.
+     * (That design uses while() do {} )
+     * The external design does ensure referenceTime > time,
+     * so we check that here, and use do {} while(), which otherwise might project too much.
+     *
+     * Strictly > (in the past)
+     */
+    myRequire( referenceTime > time);
+
     EpochTime workingProjection = time;
 
-    // Project forward by 24 hours
+    // Project forward by the period (say 24 hours)
     do {
         workingProjection += Parameters::SunrisePeriod;
     }
     while (workingProjection < referenceTime);
+    // assert workingProjection >= referenceTime and workingProjection < referenceTime + Parameters::SunrisePeriod
     return workingProjection;
 }

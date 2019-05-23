@@ -3,6 +3,8 @@
 
 #include "../../parameters.h"   // SampleSetSize
 
+// msp430Drivers
+#include <assert/myAssert.h>
 
 
 namespace {
@@ -19,7 +21,7 @@ unsigned int count = 0;
 
 
 #pragma PERSISTENT
-EpochTime sampleSet[Parameters::SampleSetSize]; //  = 0;
+EpochTime sampleSet[Parameters::SampleSetSize] = {0,0};
 
 
 // Before adding at head.
