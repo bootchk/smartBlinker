@@ -17,8 +17,12 @@
 
 
 
-
-#define TWO_MINUTES 120
+#define ONE_MINUTE        60
+#define TWO_MINUTES      120
+#define FIFTEEN_MINUTES  900
+#define HALF_HOUR       1800
+#define ONE_HOUR        3600
+#define TWO_HOURS       7200
 
 
 // class Parameters {
@@ -164,35 +168,38 @@ static constexpr unsigned long int SunriseDelta = 20;
     static const unsigned int BlinksMorning = 6 * 60 * 2;
 #endif
 
+// Require 3 consecutive sunrises to confirm
+static constexpr unsigned int SampleSetSize = 3;
+static constexpr unsigned int MaxSampleSetIndex = (SampleSetSize-1);
+
+
 static constexpr unsigned int BetweenBlinks = 10;
-static constexpr unsigned int BetweenKeepAlive = 3600;  // hour
+static constexpr unsigned int BetweenKeepAlive = ONE_HOUR;
 
+// Since detection takes two sun checks, will be fifteen minutes after sunset
+static constexpr unsigned int BetweenSunsetAndBlinking = ONE_MINUTE;
+static constexpr unsigned int BetweenEveningAndNightBlinking = ONE_MINUTE;
 
-static constexpr unsigned int BetweenSunsetAndBlinking = 1800;  // Thirty minutes
-static constexpr unsigned int BetweenEveningAndNightBlinking = 60; // One minute
+static constexpr unsigned int BetweenSunChecks = FIFTEEN_MINUTES;
 
-// Check sun every 3 minutes
-///static constexpr unsigned int BetweenSunChecks = 120};
-static constexpr unsigned int BetweenSunChecks = 900;  // Fifteen minutes
-
-static constexpr unsigned int BetweenMorningBlinkStartAndSunrise = 7200; // Two hours
+// Allow fifteen extra minutes beyond expected blink time of two hours
+static constexpr unsigned int BetweenMorningBlinkStartAndSunrise = TWO_HOURS + FIFTEEN_MINUTES;
 
 // SunriseEstimator
 // Average over seasons of length of day (not length of daylight, includes night.)
-static constexpr unsigned long int SunrisePeriod = 86400;    // 24 hours
-static constexpr unsigned long int SunriseDelta = 1800; // half hour
+static constexpr unsigned long int SunrisePeriod = TwentyFourHours;
+static constexpr unsigned long int SunriseDelta = HALF_HOUR;
 
-/*
- * Counts of blinks.
- */
-// Evening blink for 2 hours every 10 seconds
-// 6 ticks/minute * 60 minutes/hour * 4 hours
+
+// Evening and night blink for 2 hours every 10 seconds
+// 6 ticks/minute * 60 minutes/hour * x hours
 static constexpr unsigned int BlinksEvening = 6 * 60 * 2;
 
 static constexpr unsigned int BlinksNight = 6 * 60 * 2;
 
 // Morning blink for 2 hours every 10 seconds (6 * 60 * 2 = 720 total)
 // 8 subperiods of 15 minutes (90 blinks) is 720 total
+// !!!
 static constexpr unsigned int BlinksMorningSubperiod = 6 * 15;
 
 #endif
@@ -230,7 +237,12 @@ static const unsigned int MinVccForBrownout = 190; // 180 // 1.8V
 // Vcc which indicates enough charge on storage for LED blinking function.
 static const unsigned int MinVccForBlinking = 220; // 2.2V
 
-// Vcc at which brownout might be imminent.
+/*
+ * Vcc at which brownout might be imminent.
+ * The SVS shuts down system without an NMI warning, so we check it ourselves.
+ * See Table 5-2 SVS voltage levels.
+ * MSP430FR2433 SVS shutsdown at a max of 1.86V.
+ */
 static const unsigned int MinVccForBrownout = 190; // 1.9V
 
 

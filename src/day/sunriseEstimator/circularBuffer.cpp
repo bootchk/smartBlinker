@@ -51,6 +51,7 @@ unsigned int count;
  */
 void adjustIterIndexandCountAfterNextIter() {
     iter::count--;
+
     // Iter in reverse.  Modulo.
     if (iter::index == 0)
         iter::index = Parameters::MaxSampleSetIndex;

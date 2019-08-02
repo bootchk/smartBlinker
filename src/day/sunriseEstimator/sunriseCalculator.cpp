@@ -67,7 +67,8 @@ Interval SunriseCalculator::averageIntervalToLatestSample() {
     unsigned int countSamples = CircularBuffer::getCount();
     // Signed integer division
     Interval averageInterval = intervalSum/countSamples;
-    myAssert( abs(averageInterval) <= 2*Parameters::SunriseDelta );
+    // long absolute value
+    myAssert( labs(averageInterval) <= 2*Parameters::SunriseDelta );
     return averageInterval ;
 }
 
@@ -99,8 +100,8 @@ bool SunriseCalculator::canProjectTimetoReferenceTimeWithinDelta (
         workingInterval = referenceTime - workingProjection;
         myAssert(workingInterval >=0);
         if ( workingInterval < delta.seconds) {
-            // we have been working with absolute value i.e. magnitude.
-            // Return negative since within delta is before referenceTime
+            // workingInterval is unsigned positive i.e. magnitude.
+            // Return signed negative since within delta is before referenceTime
             resultInterval = -workingInterval;
             result = true;
         }
@@ -109,7 +110,7 @@ bool SunriseCalculator::canProjectTimetoReferenceTimeWithinDelta (
             result = false;
         }
     }
-    // assert abs(resultInterval) < delta
+    // assert (result == true and abs(resultInterval) < delta) or result == false
     return result;
 }
 
