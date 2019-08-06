@@ -4,7 +4,13 @@
 #include <alarmClock/time/timeTypes.h>
 
 
-
+/*
+ * Obsolete
+ *
+ * Non-filtering sunrise statistic.
+ *
+ * Knows whether and when sunrise was detected.
+ */
 
 class SimpleSunrise {
 public:

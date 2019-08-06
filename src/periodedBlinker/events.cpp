@@ -37,9 +37,10 @@ void PeriodedBlinker::onPowerGoodAtNight() {
 
 void PeriodedBlinker::onSunriseDetected() {
     /*
-     * Flag that sunrise was detected, but don't capture time until later.
+     * Tell Day.
+     * (It flags that sunrise was detected, but don't capture time until later.)
      */
-    Day::setSunriseDetected();
+    Day::onSunriseDetected();
 
     SmartBlinker::indicateSunEvent();
 
@@ -52,7 +53,8 @@ void PeriodedBlinker::onSunriseDetected() {
 
 
 void PeriodedBlinker::onSunsetDetected() {
-    // We don't record sunset
+
+    Day::onSunsetDetected();
 
     SmartBlinker::indicateSunEvent();
 

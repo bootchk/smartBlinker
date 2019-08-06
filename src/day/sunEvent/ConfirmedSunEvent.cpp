@@ -1,24 +1,29 @@
 
 
-#include <src/ConfirmedSunEvent.h>
+#include "ConfirmedSunEvent.h"
 
+// msp430Drivers
+#include <assert/myAssert.h>
 
 
 namespace {
 
 #pragma PERSISTENT
-unsigned int countEvents = 0;
+unsigned int countSunEvents = 0;
+
+#pragma PERSISTENT
+unsigned int falsifyingSunEvents = 0;
 
 }
 
 
-bool ConfirmedSunEvent::doesThisEventConfirm( const bool isPutativeEvent ) {
+bool ConfirmedSunEvent::doesThisEventConfirm( const bool isSampleIndicateEvent ) {
     bool isConfirmed;
 
-    if (isPutativeEvent)
+    if (isSampleIndicateEvent)
     {
-        countEvents += 1;
-        isConfirmed = (countEvents >= 2);
+        countSunEvents += 1;
+        isConfirmed = (countSunEvents >= 2);
 
         if (isConfirmed) {
             /*
@@ -30,22 +35,29 @@ bool ConfirmedSunEvent::doesThisEventConfirm( const bool isPutativeEvent ) {
         }
     }
     else {
+        /*
+         * Record spurious events.  For testing how often they occur, calibrating sensors, understanding weather, etc.
+         */
+        if (countSunEvents == 1) {
+            falsifyingSunEvents++;
+        }
+
         ConfirmedSunEvent::reset();
         isConfirmed = false;
     }
-    // assert countEvents in [0,1]
+    myAssert (countSunEvents == 0 or countSunEvents == 1);
     return isConfirmed;
 }
 
 
 
 void ConfirmedSunEvent::reset() {
-    countEvents = 0;
+    countSunEvents = 0;
 }
 
 
 void ConfirmedSunEvent::feedDaylightEvent() {
-    countEvents += 1;
+    countSunEvents += 1;
 }
 
 

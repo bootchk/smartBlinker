@@ -11,6 +11,8 @@
 // choose implementation
 #include "config.h"
 
+#include "sunEvent/ConfirmedSunEvent.h"
+
 #ifdef USE_SUNRISE_ESTIMATOR
 #include "sunriseEstimator/estimatedSunrise.h"
 #define SunriseEstimator EstimatedSunrise
@@ -37,13 +39,20 @@ bool _wasSunriseDetected = false;
 
 
 
-void Day::init() {  SunriseEstimator::init(); }
+void Day::init() {
+    SunriseEstimator::init();
+
+    ConfirmedSunEvent::reset();
+}
 
 void Day::captureSunriseTime() { SunriseEstimator::captureSunriseTime(); }
 bool Day::isSunriseTimeValid() { return SunriseEstimator::isSunriseTimeValid(); }
 
 
-void Day::setSunriseDetected() {  _wasSunriseDetected = true; }
+void Day::onSunriseDetected() {  _wasSunriseDetected = true; }
+// Not now keeping statistics about sunset.
+void Day::onSunsetDetected() {   }
+
 bool Day::wasSunriseDetected() { return  _wasSunriseDetected; }
 
 

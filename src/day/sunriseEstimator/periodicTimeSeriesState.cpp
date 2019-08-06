@@ -78,6 +78,8 @@ void PeriodicTimeSeriesState::recordGoodSample(EpochTime sample) {
 
 void PeriodicTimeSeriesState::recordBadSample() {
     // Not remember bad sample, just state
+    // TODO should remember bad sample, it might reflect reality better than previous samples.
+    // If we don't record it, it takes longer to come to confirmed state.
 
     switch (state) {
     case State::Unconfirmed:

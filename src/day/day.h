@@ -35,15 +35,21 @@ public:
     static void init();
 
     /*
+     * App has detected sun event.
+     *
      * A flag that indicates sunrise was detected in this waking period.
      * !!! Does not mean that sunrise time was captured in this waking period, or ever.
+     *
+     * Necessary because at the time sunrise is detected, clock is not available.
      */
-    static void setSunriseDetected();
+    static void onSunriseDetected();
     static bool wasSunriseDetected();
+
+    static void onSunsetDetected();
 
 
     /*
-     * Called when sunrise detected.
+     * Called after sunrise was earlier detected.
      *
      * One imp:: Read timeNow and store it as sunrise time.
      */

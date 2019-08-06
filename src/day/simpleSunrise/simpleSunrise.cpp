@@ -1,6 +1,6 @@
 #include "simpleSunrise.h"
 
-#include "../parameters.h"
+#include "../../parameters.h"
 
 #include <alarmClock/epochClock/epochClock.h>
 

@@ -6,12 +6,28 @@
 
 
 /*
- * Estimated statistically from a time series of samples
+ * Estimated statistically from a time series of samples.
+ * I.E. a model of the sinusoidal sunlight signal over many days.
  */
+
 class EstimatedSunrise {
 public:
+    // Called once at coldstart
     static void init();
+
+    /*
+     * With a confirmed sun event (sunrise), convert to a time.
+     */
+    static EpochTime getSunriseTimeSampleForConfirmedSunEvent();
+
+    /*
+     * With a confirmed sun event (sunrise), convert to time and feed to model.
+     */
     static void captureSunriseTime();
+
+    /*
+     * Is the model of sunrise valid (enough samples, consistent)
+     */
     static bool isSunriseTimeValid();
 
     /*

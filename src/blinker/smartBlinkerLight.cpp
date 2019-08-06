@@ -1,12 +1,11 @@
 
 #include "smartBlinker.h"
 
-#include "../ConfirmedSunEvent.h"
+#include "../day/sunEvent/ConfirmedSunEvent.h"
 
 
 
 // MSP430Drivers
-//#include <LED/led.h>
 #include <lightSensor/lightSensor.h>
 
 /*
@@ -19,8 +18,12 @@ void SmartBlinker::calibrateLightSensor() {
 
 
 bool SmartBlinker::checkIsDaylight() {
-    // not dark => putative sunrise
-    return ConfirmedSunEvent::doesThisEventConfirm(  not LightSensor::isDark() );
+    /*
+     * If daylight, feed event to filter.
+     */
+    bool isLight =  LightSensor::isLight();
+    return ConfirmedSunEvent::doesThisEventConfirm( isLight );
+    // TODO Here should do a sanity check
 }
 
 
@@ -30,8 +33,8 @@ void SmartBlinker::feedDaylightEvent() {
 
 
 bool SmartBlinker::checkIsNight() {
-    // dark => putative sunset
-    return ConfirmedSunEvent::doesThisEventConfirm( LightSensor::isDark() );
+    bool isDark =  LightSensor::isDark();
+    return ConfirmedSunEvent::doesThisEventConfirm( isDark );
 }
 
 

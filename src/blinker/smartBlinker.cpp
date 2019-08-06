@@ -2,7 +2,6 @@
 #include "smartBlinker.h"
 
 #include "../day/day.h"
-#include "../ConfirmedSunEvent.h"
 #include "../ledBlinker.h"
 
 #include "../../config.h"
@@ -82,10 +81,8 @@ void SmartBlinker::init() {
     // indicateEvent();
 
     // Show ignorance of day attributes (sunrise time).
+    // Show ignorance of any sunrise/sunset events
     Day::init();
-
-    // Show ignorance of putative sunrise/sunset events
-    ConfirmedSunEvent::reset();
 
     TaskScheduler::init();
     // Assert no tasks schedule, ready to schedule
