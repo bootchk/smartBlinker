@@ -79,8 +79,7 @@ bool EstimatedSunrise::isSunriseTimeValid() { return PeriodicTimeSeriesState::is
  *
  * SunriseCalculator does not know EpochClock, nor how to calculate Durations.
  *
- * This handles exception: called so close to next sunrise that we can't subtract lessDuration;
- *
+ * This handles case: called so close to next sunrise that we can't subtract lessDuration;
  */
 Duration EstimatedSunrise::durationUntilNextSunriseLessSeconds(Duration lessDuration){
     myRequire(isSunriseTimeValid());
@@ -90,13 +89,12 @@ Duration EstimatedSunrise::durationUntilNextSunriseLessSeconds(Duration lessDura
     EpochTime estimatedNextSunrise = SunriseCalculator::projectTimePastReferenceTime(
             SunriseCalculator::estimatePreviousSunrise(),
             now );
+    // assert estimatedNextSunrise >= now
 
     Duration tilSunrise = estimatedNextSunrise - now;
+    // assert tilSunrise >= 0
 
     return  (tilSunrise - lessDuration);
-    /*
-     * assert result >= 0
-     */
-
+    // assert result >= 0, since subtraction operator on Duration guarantees that.
 }
 

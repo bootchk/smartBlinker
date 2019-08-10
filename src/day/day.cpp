@@ -3,7 +3,7 @@
 
 
 
-
+// msp430Drivers
 #include <alarmClock/epochClock/epochClock.h>
 #include <assert/myAssert.h>
 
@@ -21,6 +21,7 @@
 #define SunriseEstimator SimpleSunrise
 #endif
 
+#include "../parameters.h"
 
 
 
@@ -37,6 +38,13 @@ bool _wasSunriseDetected = false;
 }
 
 
+namespace debugStats {
+
+// Count how many times we detected sunrise early
+#pragma PERSISTENT
+unsigned int earlySunriseDetect = 0;
+
+}
 
 
 void Day::init() {
@@ -62,6 +70,42 @@ Duration Day::durationUntilNextSunriseLessSeconds(Duration lessDuration){ return
 
 
 
+bool Day::isSunEventSane() {
+    bool result;
+
+    if (SunriseEstimator::isSunriseTimeValid()) {
+        // Now time is not correct, event time is shifted due to low pass filter.
+        EpochTime timeOfSunEvent = SunriseEstimator::getSunriseTimeSampleForConfirmedSunEvent();
+
+        /*
+         * Sane: within four hours of current model.
+         */
+        /*
+         * TODO Way past current model
+         */
+        Duration durationTilNextSunrise = durationUntilNextSunriseLessSeconds(0);
+        // Assert is positive
+        if (durationTilNextSunrise > Parameters::SaneSunEventLead ) {
+            // Much too early to be sunrise according to current model
+            result = false;
+            debugStats::earlySunriseDetect++;
+        }
+        else {
+            // Already past sunrise by unknown amount, could be way past.
+            result = true;
+        }
+    }
+    else {
+        /*
+         * Model is being built, feed this sample to model.
+         * Sample could be first sample.
+         * Or it could vastly revise earlier samples.
+         */
+        result = true;
+    }
+
+    return result;
+}
 
 
 

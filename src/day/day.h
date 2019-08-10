@@ -78,4 +78,12 @@ public:
      */
     static Duration durationUntilNextSunriseLessSeconds(Duration);
 
+    /*
+     * For sun event detected now, is it sane with respect to any known model of seasonal day length?
+     *
+     * A crude model does not account for seasonal changes.
+     * A more elaborate model does.
+     */
+    static bool isSunEventSane();
+
 };

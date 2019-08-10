@@ -108,9 +108,18 @@ static const unsigned int BlinksNight = 1;
 static const unsigned int BlinksMorningSubperiod = 1;
 
 // SunriseEstimator
-// Average over seasons of length of day (not length of daylight, includes night.)
+// Duration of day (not length of daylight, includes night.)
+// Period of sunrises wobbles a little around 24 hours.
 static constexpr unsigned long int SunrisePeriod = TWO_MINUTES;
-static constexpr unsigned long int SunriseDelta = 20;
+// Amount we allow samples to vary from existing model without invalidating model
+static constexpr unsigned long int MaxSunriseDelta = 20;
+
+// TODO why are some durations long and others just ints?
+
+// Samples earlier than this amount from model are rejected as not sane (spurious)
+static constexpr unsigned long int SaneSunEventLead = 30;
+
+
 
 #else
 

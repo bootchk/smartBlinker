@@ -71,6 +71,8 @@ void PeriodedBlinker::checkBlinkingPowerExhaustedAndTerminateBlinkPeriod() {
 
 void PeriodedBlinker::checkSunriseTask() {
     if ( not SmartBlinker::transitionToKeepAlive() ) {
+        // See blinker/smartBlinkerLight.cpp
+        // Filter low-pass
         if (SmartBlinker::checkIsDaylight()) {
             onSunriseDetected();
         }
@@ -82,6 +84,8 @@ void PeriodedBlinker::checkSunriseTask() {
         // Use LED *after* we used it for light sensing
         SmartBlinker::indicateSunCheck();
     }
+    // else not enough power, keepAliveTask is scheduled
+
     myAssert(SmartBlinker::isSomeTaskScheduled());
 }
 

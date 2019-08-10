@@ -20,7 +20,7 @@
 //#define COMPRESSED_TIME_PARAMETERS
 /*
  * Quasi normal operation, also compressed. For stand-alone testing solar powered PCB.
- * Capacitor is smaller to accelerate events.
+ * Capacitor might be smaller to accelerate events.
  */
 #define ACCELERATED_TIME_PARAMETERS
 
@@ -45,7 +45,12 @@
 /// Choose one
 ///#define PROTO_BOARD
 //#define FULL_PROTO_LAUNCHPAD
+
+// An obsolete PCB
 //#define MYPCB_BOARD_R3
+
+// My own PCB
+// OR launchpad configured same way as my own PCB, with RTC and LED daughter boards jumpered to LaunchPad
 #define MYPCB_BOARD_R5
 
 

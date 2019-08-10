@@ -26,7 +26,7 @@ bool SunriseCalculator::doesSampleFitsSampleSet(EpochTime sample) {
    result = canProjectTimetoReferenceTimeWithinDelta (
             previousSunset,
             sample,
-            Parameters::SunriseDelta,
+            Parameters::MaxSunriseDelta,
             interval );
    return result;
 }
@@ -53,7 +53,7 @@ Interval SunriseCalculator::averageIntervalToLatestSample() {
         Interval interval;  // no init, function will write it
         bool didProject = canProjectTimetoReferenceTimeWithinDelta(toProjectTime,
                                               latestSunriseSample,
-                                              2*Parameters::SunriseDelta,
+                                              2*Parameters::MaxSunriseDelta,
                                               interval);
         /*
          * Not invariant: all samples project to within delta of head: myAssert (didProject);
@@ -68,7 +68,7 @@ Interval SunriseCalculator::averageIntervalToLatestSample() {
     // Signed integer division
     Interval averageInterval = intervalSum/countSamples;
     // long absolute value
-    myAssert( labs(averageInterval) <= 2*Parameters::SunriseDelta );
+    myAssert( labs(averageInterval) <= 2*Parameters::MaxSunriseDelta );
     return averageInterval ;
 }
 

@@ -11,8 +11,13 @@ namespace {
 #pragma PERSISTENT
 unsigned int countSunEvents = 0;
 
+}
+
+namespace debugStats {
+
+// Count how many times we filter out spikes, not confirmed by next sample
 #pragma PERSISTENT
-unsigned int falsifyingSunEvents = 0;
+unsigned int filteredSunEventSpikes = 0;
 
 }
 
@@ -39,7 +44,7 @@ bool ConfirmedSunEvent::doesThisEventConfirm( const bool isSampleIndicateEvent )
          * Record spurious events.  For testing how often they occur, calibrating sensors, understanding weather, etc.
          */
         if (countSunEvents == 1) {
-            falsifyingSunEvents++;
+            debugStats::filteredSunEventSpikes++;
         }
 
         ConfirmedSunEvent::reset();
