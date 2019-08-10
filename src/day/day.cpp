@@ -14,12 +14,14 @@
 #include "sunEvent/ConfirmedSunEvent.h"
 
 #ifdef USE_SUNRISE_ESTIMATOR
-#include "sunriseEstimator/estimatedSunrise.h"
+#include <src/day/sunEventEstimate/sunEventEstimate.h>
 #define SunriseEstimator EstimatedSunrise
 #else
 #include "simpleSunrise.h"
 #define SunriseEstimator SimpleSunrise
 #endif
+
+
 
 #include "../parameters.h"
 
@@ -47,14 +49,22 @@ unsigned int earlySunriseDetect = 0;
 }
 
 
+
+#pragma NOINIT
+SunEventEstimate Day::sunriseEstimate; //  = SunEventEstimate();
+// TODO sunset
+
+
+
 void Day::init() {
-    SunriseEstimator::init();
+    //SunEventEstimate::init();
+    sunriseEstimate.init();
 
     ConfirmedSunEvent::reset();
 }
 
-void Day::captureSunriseTime() { SunriseEstimator::captureSunriseTime(); }
-bool Day::isSunriseTimeValid() { return SunriseEstimator::isSunriseTimeValid(); }
+void Day::captureSunriseTime() { sunriseEstimate.captureSunEventTime(); }
+bool Day::isSunriseTimeValid() { return sunriseEstimate.isSunEventTimeValid(); }
 
 
 void Day::onSunriseDetected() {  _wasSunriseDetected = true; }
@@ -64,18 +74,19 @@ void Day::onSunsetDetected() {   }
 bool Day::wasSunriseDetected() { return  _wasSunriseDetected; }
 
 
-// OLD EpochTime Day::timeOfNextSunriseAfterTime(EpochTime& now) { return SunriseEstimator::timeOfNextSunriseAfterTime(now); }
+// OLD EpochTime Day::timeOfNextSunriseAfterTime(EpochTime& now) { return SunEventEstimate::timeOfNextSunriseAfterTime(now); }
 
-Duration Day::durationUntilNextSunriseLessSeconds(Duration lessDuration){ return SunriseEstimator::durationUntilNextSunriseLessSeconds(lessDuration) ; }
+Duration Day::durationUntilNextSunriseLessSeconds(Duration lessDuration){ return sunriseEstimate.durationUntilNextSunEventLessSeconds(lessDuration) ; }
 
 
 
 bool Day::isSunEventSane() {
     bool result;
 
-    if (SunriseEstimator::isSunriseTimeValid()) {
+    // TODO general
+    if (sunriseEstimate.isSunEventTimeValid()) {
         // Now time is not correct, event time is shifted due to low pass filter.
-        EpochTime timeOfSunEvent = SunriseEstimator::getSunriseTimeSampleForConfirmedSunEvent();
+        EpochTime timeOfSunEvent = SunEventEstimate::getTimeForConfirmedSunEvent();
 
         /*
          * Sane: within four hours of current model.

@@ -1,82 +1,83 @@
 
-#include "periodicTimeSeriesState.h"
+
+#include "periodicTimeSeries.h"
 
 #include "circularBuffer.h"
+#include "sunriseCalculator.h"
 
 
 // TODO invariant
 
 
-enum class State {
-    Unconfirmed, // SampleSet possibly non-empty, but not full, and no bad samples
-    Confirmed,   // SampleSet full, without bad suffix
-    ConfirmedWBad // SampleSet full, with one bad suffix
-};
 
-namespace {
 
-#pragma PERSISTENT
-State state = State::Unconfirmed;
 
-// note state encodes a count of bad samples
+// Private
 
-void toConfirmed() {
+void PeriodicTimeSeries::toConfirmed() {
     state = State::Confirmed;
 }
 
-void toUnconfirmed() {
-    CircularBuffer::empty();
+void PeriodicTimeSeries::toUnconfirmed() {
+    sampleSequence.empty();
     state = State::Unconfirmed;
 }
 
-void toConfirmedWBad() {
+void PeriodicTimeSeries::toConfirmedWBad() {
     state = State::ConfirmedWBad;
 }
 
 
-}
+
+
+
+//#pragma PERSISTENT
+//State PeriodicTimeSeries::state = State::Unconfirmed;
+
+//#pragma PERSISTENT
+//CircularBuffer PeriodicTimeSeries::sampleSequence = CircularBuffer();
 
 
 
 
-void PeriodicTimeSeriesState::init() { toUnconfirmed(); }
+void PeriodicTimeSeries::init() { this->toUnconfirmed(); }
 
 /*
  * Is valid if confirmed or confirmed with few bad.
  * When ConfirmedWBad, we can still estimate sunrise, from several days ago.
  */
-bool PeriodicTimeSeriesState::  isValid() {
+bool PeriodicTimeSeries::  isValid() {
     return (state == State::Confirmed)
             or (state == State::ConfirmedWBad);
 }
 
 
 
-void PeriodicTimeSeriesState::recordGoodSample(EpochTime sample) {
+void PeriodicTimeSeries::recordGoodSample(EpochTime sample) {
     switch (state) {
         case State::Unconfirmed:
             // append to empty or short sequence
-            CircularBuffer::addSample(sample);
-            if (CircularBuffer::isFull()) toConfirmed();
+            sampleSequence.addSample(sample);
+            if (sampleSequence.isFull()) toConfirmed();
             break;
 
         case State::Confirmed:
             // replace oldest sample, remain in state Confirmed
-            CircularBuffer::addSample(sample);
+            sampleSequence.addSample(sample);
             break;
 
         case State::ConfirmedWBad:
             // One bad was seen, but filter it out now.
 
             // replace oldest sample
-            CircularBuffer::addSample(sample);
+            sampleSequence.addSample(sample);
             // A good sample obviates one intervening bad sample.
             toConfirmed();
             break;
         }
 }
 
-void PeriodicTimeSeriesState::recordBadSample() {
+void PeriodicTimeSeries::recordBadSample() {
     // Not remember bad sample, just state
     // TODO should remember bad sample, it might reflect reality better than previous samples.
     // If we don't record it, it takes longer to come to confirmed state.
@@ -99,4 +100,20 @@ void PeriodicTimeSeriesState::recordBadSample() {
     }
 }
 
+
+
+
+/*
+ * Delegate to calculator
+ * Pass this->sampleSequence
+ */
+bool PeriodicTimeSeries::isGoodSample(EpochTime sample) {
+    return SunriseCalculator::isGoodSample(sample, sampleSequence); }
+
+EpochTime PeriodicTimeSeries::projectTimePastReferenceTime(EpochTime time,  EpochTime referenceTime) {
+    return SunriseCalculator::projectTimePastReferenceTime(time, referenceTime);
+}
+EpochTime PeriodicTimeSeries::estimatePreviousSunrise() {
+    return SunriseCalculator::estimatePreviousSunrise(sampleSequence);
+}
 

@@ -1,7 +1,9 @@
 #pragma once
 
 
+#include "sunEventEstimate/sunEventEstimate.h"
 
+// mwp430Drivers
 #include <alarmClock/time/timeTypes.h>   // EpochTime
 
 
@@ -27,6 +29,9 @@
 
 
 class Day {
+private:
+    static SunEventEstimate sunriseEstimate;
+
 
 public:
     /*

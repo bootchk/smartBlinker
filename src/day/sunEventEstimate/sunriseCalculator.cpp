@@ -1,23 +1,23 @@
-#include "sunriseCalculator.h"
-
 #include "circularBuffer.h"
 #include "../../parameters.h"
 
 // msp430Drivers
 #include <assert/myAssert.h>
+#include <src/day/sunEventEstimate/circularBuffer.h>
+#include <src/day/sunEventEstimate/sunriseCalculator.h>
 
 
 
 
 
-bool SunriseCalculator::doesSampleFitsSampleSet(EpochTime sample) {
-   myRequire(not CircularBuffer::isEmpty());
+bool SunriseCalculator::doesSampleFitsSampleSet(EpochTime sample, CircularBuffer& sampleSequence) {
+   myRequire(not sampleSequence.isEmpty());
 
    bool result;
 
    Interval interval;
 
-   EpochTime previousSunset = SunriseCalculator::estimatePreviousSunrise();
+   EpochTime previousSunset = SunriseCalculator::estimatePreviousSunrise(sampleSequence);
    myAssert(sample >= previousSunset);
 
    /*
@@ -35,12 +35,12 @@ bool SunriseCalculator::doesSampleFitsSampleSet(EpochTime sample) {
 
 
 
-Interval SunriseCalculator::averageIntervalToLatestSample() {
-    myRequire(not CircularBuffer::isEmpty());
+Interval SunriseCalculator::averageIntervalToLatestSample(CircularBuffer& sampleSequence) {
+    myRequire(not sampleSequence.isEmpty());
 
-    CircularBuffer::startIter();
+    sampleSequence.startIter();
 
-    EpochTime latestSunriseSample = CircularBuffer::nextIter();
+    EpochTime latestSunriseSample = sampleSequence.nextIter();
 
     // latestSunriseSample has interval 0 to itself
     Interval intervalSum = 0;
@@ -49,7 +49,7 @@ Interval SunriseCalculator::averageIntervalToLatestSample() {
      * Sum intervals from remaining samples.
      */
     EpochTime toProjectTime;
-    while ( (toProjectTime = CircularBuffer::nextIter()) != 0 ) {
+    while ( (toProjectTime = sampleSequence.nextIter()) != 0 ) {
         Interval interval;  // no init, function will write it
         bool didProject = canProjectTimetoReferenceTimeWithinDelta(toProjectTime,
                                               latestSunriseSample,
@@ -64,7 +64,7 @@ Interval SunriseCalculator::averageIntervalToLatestSample() {
         intervalSum += interval;
     }
 
-    unsigned int countSamples = CircularBuffer::getCount();
+    unsigned int countSamples = sampleSequence.getCount();
     // Signed integer division
     Interval averageInterval = intervalSum/countSamples;
     // long absolute value
@@ -122,14 +122,14 @@ bool SunriseCalculator::canProjectTimetoReferenceTimeWithinDelta (
 
 
 
-EpochTime SunriseCalculator::estimatePreviousSunrise() {
-    myRequire(not CircularBuffer::isEmpty());
+EpochTime SunriseCalculator::estimatePreviousSunrise(CircularBuffer& sampleSequence) {
+    myRequire(not sampleSequence.isEmpty());
 
-    CircularBuffer::startIter();
-    EpochTime latestSunriseSample = CircularBuffer::nextIter();
+    sampleSequence.startIter();
+    EpochTime latestSunriseSample = sampleSequence.nextIter();
 
     // This also uses iterator
-    Interval averageInterval = averageIntervalToLatestSample();
+    Interval averageInterval = averageIntervalToLatestSample(sampleSequence);
 
     // EpochTime +/- Interval
     return latestSunriseSample + averageInterval;
@@ -144,14 +144,14 @@ EpochTime SunriseCalculator::estimatePreviousSunrise() {
 
 
 
-bool SunriseCalculator::isGoodSample(EpochTime sample) {
+bool SunriseCalculator::isGoodSample(EpochTime sample, CircularBuffer& sampleSequence) {
     bool result = false;
 
-    if (CircularBuffer::isEmpty()) {
+    if (sampleSequence.isEmpty()) {
         result = true;
     }
     else {
-        result = doesSampleFitsSampleSet(sample);
+        result = doesSampleFitsSampleSet(sample, sampleSequence );
     }
     return result;
 }

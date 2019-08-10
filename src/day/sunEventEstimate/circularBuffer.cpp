@@ -1,32 +1,22 @@
 
-#include "circularBuffer.h"
-
 #include "../../parameters.h"   // SampleSetSize
 
 // msp430Drivers
 #include <assert/myAssert.h>
-
-
-namespace {
-
-// head in range [0, SampleSetSize-1]
-#pragma PERSISTENT
-unsigned int head = 0;  // Always points to most recent sample
-
-// count in range [0, SampleSetSize]
-#pragma PERSISTENT
-unsigned int count = 0;
+#include <src/day/sunEventEstimate/circularBuffer.h>
 
 
 
 
-#pragma PERSISTENT
-EpochTime sampleSet[Parameters::SampleSetSize] = {0,0};
+
+
+
+
 
 
 // Before adding at head.
-void adjustHeadAndCount() {
-    head++;
+void CircularBuffer::adjustHeadAndCount() {
+    this->head++;
     if (head > Parameters::MaxSampleSetIndex )  head = 0;
 
     // Max count is SampleSetSize
@@ -35,7 +25,7 @@ void adjustHeadAndCount() {
     // head points to most recent sample
 }
 
-}
+
 
 
 
@@ -62,6 +52,16 @@ void adjustIterIndexandCountAfterNextIter() {
 }
 
 
+
+
+//#pragma PERSISTENT
+//unsigned int CircularBuffer::head; //{0};  // Always points to most recent sample
+
+//#pragma PERSISTENT
+//unsigned int CircularBuffer::count; // = 0;  // Always points to most recent sample
+
+//#pragma PERSISTENT
+//EpochTime CircularBuffersampleSet[Parameters::SampleSetSize] = {0,0};
 
 
 

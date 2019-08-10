@@ -1,8 +1,5 @@
-#include "estimatedSunrise.h"
 
-#include "circularBuffer.h"
-#include "periodicTimeSeriesState.h"
-#include "sunriseCalculator.h"
+#include "sunEventEstimate.h"
 
 #include "../../parameters.h"
 
@@ -11,10 +8,27 @@
 
 
 
+#include "periodicTimeSeries.h"
+//#include <src/day/sunEventEstimate/sunriseCalculator.h>
+
+
+
+//CircularBuffer SunEventEstimate::sampleSequence;
+PeriodicTimeSeries SunEventEstimate::timeSeries;
+
+
+
+
+
+SunEventEstimate::SunEventEstimate() {
+    timeSeries = PeriodicTimeSeries();
+}
+
+
 
 
 /*
- * Sunrise was detected during this wake period.
+ * SunEvent was detected during this wake period.
  * Return the time of detection.
  *
  * Because of filtering, first time of detection was earlier.
@@ -23,7 +37,7 @@
  * - we don't check often enough, so shift by half the detect period
  * - if we were late to try detect (morning blink period overrun) ????
  */
-EpochTime EstimatedSunrise::getSunriseTimeSampleForConfirmedSunEvent() {
+EpochTime SunEventEstimate::getTimeForConfirmedSunEvent() {
     EpochTime now = EpochClock::timeNowOrReset();
 
     /*
@@ -38,9 +52,9 @@ EpochTime EstimatedSunrise::getSunriseTimeSampleForConfirmedSunEvent() {
 
 
 
-void EstimatedSunrise::init() {
-    CircularBuffer::empty();
-    PeriodicTimeSeriesState::init();
+void SunEventEstimate::init() {
+    // OLD sampleSequence.empty();
+    timeSeries.init();
 }
 
 
@@ -55,15 +69,15 @@ void EstimatedSunrise::init() {
  * If it is periodic with samples from prior days, it is "good", else "bad".
  * The filter is a state machine.
  */
-void EstimatedSunrise::captureSunriseTime() {
-    EpochTime possibleSunriseTime = getSunriseTimeSampleForConfirmedSunEvent();
-    // assert possibleSunriseTime > previousSunset
+void SunEventEstimate::captureSunEventTime() {
+    EpochTime possibleSunEventTime = SunEventEstimate::getTimeForConfirmedSunEvent();
+    // assert possibleSunEventTime (sunrise) > previous opposite sun event (Sunset)
 
-    if (SunriseCalculator::isGoodSample(possibleSunriseTime)) {
-        PeriodicTimeSeriesState::recordGoodSample(possibleSunriseTime);
+    if (timeSeries.isGoodSample(possibleSunEventTime)) {
+        timeSeries.recordGoodSample(possibleSunEventTime);
     }
     else {
-        PeriodicTimeSeriesState::recordBadSample();
+        timeSeries.recordBadSample();
     }
 }
 
@@ -71,7 +85,7 @@ void EstimatedSunrise::captureSunriseTime() {
 /*
  * Valid if enough good samples and not too many bad samples.
  */
-bool EstimatedSunrise::isSunriseTimeValid() { return PeriodicTimeSeriesState::isValid(); }
+bool SunEventEstimate::isSunEventTimeValid() { return timeSeries.isValid(); }
 
 
 /*
@@ -81,17 +95,17 @@ bool EstimatedSunrise::isSunriseTimeValid() { return PeriodicTimeSeriesState::is
  *
  * This handles case: called so close to next sunrise that we can't subtract lessDuration;
  */
-Duration EstimatedSunrise::durationUntilNextSunriseLessSeconds(Duration lessDuration){
-    myRequire(isSunriseTimeValid());
+Duration SunEventEstimate::durationUntilNextSunEventLessSeconds(Duration lessDuration){
+    myRequire(isSunEventTimeValid());
 
     EpochTime now = EpochClock::timeNowOrReset();
 
-    EpochTime estimatedNextSunrise = SunriseCalculator::projectTimePastReferenceTime(
-            SunriseCalculator::estimatePreviousSunrise(),
+    EpochTime estimatedNextSunEvent = timeSeries.projectTimePastReferenceTime(
+            timeSeries.estimatePreviousSunrise(),
             now );
     // assert estimatedNextSunrise >= now
 
-    Duration tilSunrise = estimatedNextSunrise - now;
+    Duration tilSunrise = estimatedNextSunEvent - now;
     // assert tilSunrise >= 0
 
     return  (tilSunrise - lessDuration);

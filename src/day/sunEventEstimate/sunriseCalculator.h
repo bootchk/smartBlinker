@@ -4,7 +4,7 @@
 
 
 /*
- * Keeps a sample set (CircularBuffer) of detected sunrise.
+ * Understands a sample set of detected sunrise.
  *
  * SampleSet is kept such that samples are roughly 24 hours apart (periodic.)
  * The caller can determine whether a given sample suits the sampleSet
@@ -30,14 +30,14 @@ private:
                                                       Duration delta,
                                                       Interval& interval);
 
-    static bool doesSampleFitsSampleSet(EpochTime sample);
+    static bool doesSampleFitsSampleSet(EpochTime sample, CircularBuffer& sampleSequence);
 
     /*
      * Project samples to latestSample and sum intervals to latestSample
      *
      * Assert all samples when projected to latestSample are within delta of latestSample ????
      */
-    static Interval averageIntervalToLatestSample();
+    static Interval averageIntervalToLatestSample(CircularBuffer& sampleSequence);
 
 
 public:
@@ -47,16 +47,16 @@ public:
      *
      * Estimate may be many days in past.
      */
-    static EpochTime estimatePreviousSunrise();
+    static EpochTime estimatePreviousSunrise(CircularBuffer& sampleSequence);
 
 
-    static EpochTime estimateNextSunrise();
+    static EpochTime estimateNextSunrise(CircularBuffer& sampleSequence);
 
     /*
      * Sample is good if sampleSet empty
      * OR sample fits previous samples in sampleSet
      */
-    static bool isGoodSample(EpochTime);
+    static bool isGoodSample(EpochTime, CircularBuffer& sampleSequence);
 
 
     static EpochTime projectTimePastReferenceTime(EpochTime time,

@@ -1,3 +1,7 @@
+#pragma once
+
+#include "../../parameters.h"   // SampleSetSize
+
 
 // msp430Drivers
 #include <alarmClock/time/timeTypes.h>
@@ -21,23 +25,42 @@
  */
 
 class CircularBuffer {
+private:
+
+
+// head in range [0, SampleSetSize-1]
+// Always points to most recent sample
+//#pragma PERSISTENT
+unsigned int head;
+
+// count in range [0, SampleSetSize]
+// not static
+unsigned int count;
+
+EpochTime sampleSet[Parameters::SampleSetSize]; // = {0,0};
+
+
+
+void adjustHeadAndCount();
+
+
 public:
     /*
      * Adds sample, replacing oldest one if necessary.
      */
-    static void addSample(EpochTime sample);
+    void addSample(EpochTime sample);
 
-    static void empty();
-    static bool isFull();
-    static bool isEmpty();
+    void empty();
+    bool isFull();
+    bool isEmpty();
 
     // Returns [0, sizeof SampleSet]
-    static unsigned int getCount();
+    unsigned int getCount();
 
 
-    static void startIter();
+    void startIter();
     /*
      * Returns EpochTime or zero after last sample
      */
-    static EpochTime nextIter();
+    EpochTime nextIter();
 };
