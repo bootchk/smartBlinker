@@ -18,9 +18,11 @@ void SmartBlinker::calibrateLightSensor() {
 }
 
 
+/*
+ * Pair of similar functions
+ */
 bool SmartBlinker::checkIsDaylight() {
     bool result;
-
 
     bool isLight =  LightSensor::isLight();
 
@@ -30,7 +32,7 @@ bool SmartBlinker::checkIsDaylight() {
     // If not low-pass filtered
     if (isConfirmed) {
         // Is sane with respect to model of sunrise
-        result = Day::isSunEventSane();
+        result = Day::isSunEventSane(SunEventKind::Sunrise);
     }
     else {
         // Seems like daylight, but too early.  Keep checking for daylight
@@ -42,16 +44,29 @@ bool SmartBlinker::checkIsDaylight() {
 }
 
 
+bool SmartBlinker::checkIsNight() {
+    bool result;
+
+    bool isDark =  LightSensor::isDark();
+    bool isConfirmed = ConfirmedSunEvent::doesThisEventConfirm( isDark );
+
+    if (isConfirmed) {
+            // Is sane with respect to model of sunset
+            result = Day::isSunEventSane(SunEventKind::Sunset);
+    }
+    else {
+            // Seems like night, but too early.  Keep checking for sunset.
+            // We should eventually find sun event closer to estimate.
+            result = false;
+    }
+
+    return result;
+}
+
+
 void SmartBlinker::feedDaylightEvent() {
     ConfirmedSunEvent::feedDaylightEvent();
 }
-
-
-bool SmartBlinker::checkIsNight() {
-    bool isDark =  LightSensor::isDark();
-    return ConfirmedSunEvent::doesThisEventConfirm( isDark );
-}
-
 
 
 

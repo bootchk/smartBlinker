@@ -46,7 +46,7 @@ void adjustHeadAndCount();
 
 public:
     /*
-     * Adds sample, replacing oldest one if necessary.
+     * Replacing oldest one if necessary.
      */
     void addSample(EpochTime sample);
 

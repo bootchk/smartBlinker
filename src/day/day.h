@@ -9,7 +9,9 @@
 
 
 /*
- * Knows certain times of day transitions i.e. sunset, sunrise.
+ * Model of day i.e. sideral time, from sun event samples.
+ *
+ * Knows day events i.e. sunset, sunrise.
  *
  * Also knows whether sunrise was detected in this waking period.
  *
@@ -24,13 +26,17 @@
  */
 
 
-
+enum class SunEventKind {
+    Sunrise,
+    Sunset
+};
 
 
 
 class Day {
 private:
     static SunEventEstimate sunriseEstimate;
+    static SunEventEstimate sunsetEstimate;
 
 
 public:
@@ -54,7 +60,9 @@ public:
 
 
     /*
-     * Called after sunrise was earlier detected.
+     * Add event to model.
+     *
+     * Called after sun event detected (possibly earlier in waking period.)
      *
      * One imp:: Read timeNow and store it as sunrise time.
      */
@@ -75,13 +83,8 @@ public:
     static EpochTime timeOfNextSunriseAfterTime(EpochTime& time);
 
 
-
-    /*
-     * Duration from now til next sunrise less given seconds.
-     *
-     * Must not be called if now is less than duration from next sunrise.
-     */
-    static Duration durationUntilNextSunriseLessSeconds(Duration);
+    // Convenience (no need to pass kind.)
+    static Duration durationUntilNextSunriseLessSeconds(Duration lessDuration);
 
     /*
      * For sun event detected now, is it sane with respect to any known model of seasonal day length?
@@ -89,6 +92,9 @@ public:
      * A crude model does not account for seasonal changes.
      * A more elaborate model does.
      */
-    static bool isSunEventSane();
+    static bool isSunEventSane(SunEventKind);
+private:
+    // overloaded but private
+    static bool isSunEventSane(SunEventEstimate&);
 
 };

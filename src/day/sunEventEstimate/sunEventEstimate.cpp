@@ -9,21 +9,20 @@
 
 
 #include "periodicTimeSeries.h"
+
+// periodicTimeSeries has same API as sunriseCalculator, delegates to sunriseCalculator
 //#include <src/day/sunEventEstimate/sunriseCalculator.h>
 
 
 
-//CircularBuffer SunEventEstimate::sampleSequence;
-PeriodicTimeSeries SunEventEstimate::timeSeries;
 
 
 
-
-
+#ifdef NOTUSED
 SunEventEstimate::SunEventEstimate() {
     timeSeries = PeriodicTimeSeries();
 }
-
+#endif
 
 
 
@@ -53,7 +52,6 @@ EpochTime SunEventEstimate::getTimeForConfirmedSunEvent() {
 
 
 void SunEventEstimate::init() {
-    // OLD sampleSequence.empty();
     timeSeries.init();
 }
 

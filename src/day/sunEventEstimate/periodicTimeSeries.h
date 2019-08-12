@@ -9,7 +9,7 @@
 
 
 
-enum class State {
+enum class DSPState {
     Unconfirmed, // SampleSet possibly non-empty, but not full, and no bad samples
     Confirmed,   // SampleSet full, without bad suffix
     ConfirmedWBad // SampleSet full, with one bad suffix
@@ -17,7 +17,8 @@ enum class State {
 
 
 /*
- * A time series with a state.
+ * A time series of signal samples.
+ * Having a DSP model having a state.
  *
  * A state machine that counts sequences of good and bad samples.
  *
@@ -30,7 +31,7 @@ enum class State {
 class PeriodicTimeSeries {
 private:
     // state encodes a count of bad samples
-    State state;
+    DSPState DSPstate;
 
     CircularBuffer sampleSequence;
 

@@ -17,12 +17,12 @@
 class SunEventEstimate {
 
 private:
-    // static CircularBuffer sampleSequence;
-    static PeriodicTimeSeries timeSeries;
+    // !!! Not static
+    PeriodicTimeSeries timeSeries;
 
 public:
 
-    SunEventEstimate();
+    // No constructor    SunEventEstimate();
 
     // Called once at coldstart
     void init();

@@ -15,16 +15,16 @@
 // Private
 
 void PeriodicTimeSeries::toConfirmed() {
-    state = State::Confirmed;
+    DSPstate = DSPState::Confirmed;
 }
 
 void PeriodicTimeSeries::toUnconfirmed() {
     sampleSequence.empty();
-    state = State::Unconfirmed;
+    DSPstate = DSPState::Unconfirmed;
 }
 
 void PeriodicTimeSeries::toConfirmedWBad() {
-    state = State::ConfirmedWBad;
+    DSPstate = DSPState::ConfirmedWBad;
 }
 
 
@@ -32,7 +32,7 @@ void PeriodicTimeSeries::toConfirmedWBad() {
 
 
 //#pragma PERSISTENT
-//State PeriodicTimeSeries::state = State::Unconfirmed;
+//DSPState PeriodicTimeSeries::DSPstate = DSPState::Unconfirmed;
 
 //#pragma PERSISTENT
 //CircularBuffer PeriodicTimeSeries::sampleSequence = CircularBuffer();
@@ -40,33 +40,38 @@ void PeriodicTimeSeries::toConfirmedWBad() {
 
 
 
-void PeriodicTimeSeries::init() { this->toUnconfirmed(); }
+void PeriodicTimeSeries::init() {
+    // state
+    this->toUnconfirmed();
+
+    sampleSequence.empty();
+}
 
 /*
  * Is valid if confirmed or confirmed with few bad.
  * When ConfirmedWBad, we can still estimate sunrise, from several days ago.
  */
 bool PeriodicTimeSeries::  isValid() {
-    return (state == State::Confirmed)
-            or (state == State::ConfirmedWBad);
+    return (DSPstate == DSPState::Confirmed)
+            or (DSPstate == DSPState::ConfirmedWBad);
 }
 
 
 
 void PeriodicTimeSeries::recordGoodSample(EpochTime sample) {
-    switch (state) {
-        case State::Unconfirmed:
+    switch (DSPstate) {
+        case DSPState::Unconfirmed:
             // append to empty or short sequence
             sampleSequence.addSample(sample);
             if (sampleSequence.isFull()) toConfirmed();
             break;
 
-        case State::Confirmed:
+        case DSPState::Confirmed:
             // replace oldest sample, remain in state Confirmed
             sampleSequence.addSample(sample);
             break;
 
-        case State::ConfirmedWBad:
+        case DSPState::ConfirmedWBad:
             // One bad was seen, but filter it out now.
 
             // replace oldest sample
@@ -82,18 +87,18 @@ void PeriodicTimeSeries::recordBadSample() {
     // TODO should remember bad sample, it might reflect reality better than previous samples.
     // If we don't record it, it takes longer to come to confirmed state.
 
-    switch (state) {
-    case State::Unconfirmed:
+    switch (DSPstate) {
+    case DSPState::Unconfirmed:
         // Bad negates a partial string of good, must clear
         toUnconfirmed();
         break;
 
-    case State::Confirmed:
+    case DSPState::Confirmed:
         // Enter state for one bad suffix seen
         toConfirmedWBad();
         break;
 
-    case State::ConfirmedWBad:
+    case DSPState::ConfirmedWBad:
         // This is second bad in a row, clear sampleSet
         toUnconfirmed();
         break;

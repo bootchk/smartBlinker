@@ -31,7 +31,7 @@ void CircularBuffer::adjustHeadAndCount() {
 
 namespace iter {
 
-// not persistent
+// not persistent, after iteration is complete, don't care what values are
 unsigned int index;
 unsigned int count;
 
