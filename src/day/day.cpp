@@ -42,9 +42,16 @@ bool _wasSunriseDetected = false;
 
 namespace debugStats {
 
-// Count how many times we detected sunrise early
+// Count how many times we detected insane sun events
 #pragma PERSISTENT
-unsigned int earlySunriseDetect = 0;
+unsigned int earlySunrise = 0;
+#pragma PERSISTENT
+unsigned int lateSunrise = 0;
+
+#pragma PERSISTENT
+unsigned int earlySunset = 0;
+#pragma PERSISTENT
+unsigned int lateSunset = 0;
 
 }
 
@@ -69,6 +76,10 @@ void Day::captureSunriseTime() { sunriseEstimate.captureSunEventTime(); }
 bool Day::isSunriseTimeValid() { return sunriseEstimate.isSunEventTimeValid(); }
 
 
+
+/*
+ * HACK.  For one, we flag and capture later, for sunset we capture when detected.
+ */
 void Day::onSunriseDetected() {
     // Set flag for later action
     _wasSunriseDetected = true;
@@ -92,22 +103,54 @@ Duration Day::durationUntilNextSunriseLessSeconds(Duration lessDuration){ return
 
 bool Day::isSunEventSane(SunEventKind kind) {
     bool result;
+    SunEventSanity sanity;
 
     switch(kind) {
     case SunEventKind::Sunrise:
-        result = isSunEventSane(sunriseEstimate);
+        sanity = isSunEventSane(sunriseEstimate);
+        switch(sanity) {
+        case SunEventSanity::Early:
+            debugStats::earlySunrise++;
+            result = false;
+            break;
+        case SunEventSanity::Late:
+            debugStats::lateSunrise++;
+            result = false;
+            break;
+        case SunEventSanity::Sane:
+        case SunEventSanity::ModelInvalid:
+            // Keep event if sane or building model.
+            result = true;
+            break;
+        }
         break;
+
     case SunEventKind::Sunset:
-        result = isSunEventSane(sunsetEstimate);
+        sanity = isSunEventSane(sunsetEstimate);
+        switch(sanity) {
+                case SunEventSanity::Early:
+                    debugStats::earlySunset++;
+                    result = false;
+                    break;
+                case SunEventSanity::Late:
+                    debugStats::lateSunset++;
+                    result = false;
+                    break;
+                case SunEventSanity::Sane:
+                case SunEventSanity::ModelInvalid:
+                    // Keep event if sane or building model.
+                    result = true;
+                    break;
+        }
         break;
     }
     return result;
 }
 
 
-
-bool Day::isSunEventSane(SunEventEstimate& estimate) {
-    bool result;
+// The event is invisible parameter.  Event has occurred and we can get its attributes (time)
+SunEventSanity Day::isSunEventSane(SunEventEstimate& estimate) {
+    SunEventSanity result;
 
     if (estimate.isSunEventTimeValid()) {
         // Now time is not correct, event time is shifted due to low pass filter.
@@ -116,20 +159,33 @@ bool Day::isSunEventSane(SunEventEstimate& estimate) {
 
         /*
          * Sane:
-         * - not too much before estimate from any valid model.
-         * - TODO AND not too much after
+         * -not too distant from estimate from valid model of nearest sun event.
          */
+        Interval intervalFromNearestSunEvent = estimate.intervalFromNearestSunEvent();
+
+        if ( intervalFromNearestSunEvent > Parameters::SaneSunEventLead)  {
+            result = SunEventSanity::Late;
+        }
+        else if (intervalFromNearestSunEvent <= -Parameters::SaneSunEventLead) {
+             result = SunEventSanity::Early;
+        }
+        else {
+            result = SunEventSanity::Sane;
+        }
+
+#ifdef FLAWED
         Duration durationTilNextSunEvent = estimate.durationUntilNextSunEventLessSeconds(0);
         // Assert is positive or zero
         if (durationTilNextSunEvent > Parameters::SaneSunEventLead ) {
             // Much too early to be sun event according to current model
             result = false;
-            debugStats::earlySunriseDetect++;   // TODO
+
         }
         else {
             // Already past sunrise by unknown amount, could be way past.
             result = true;
         }
+#endif
     }
     else {
         /*
@@ -137,7 +193,7 @@ bool Day::isSunEventSane(SunEventEstimate& estimate) {
          * Sample could be first sample.
          * Or it could vastly revise earlier samples.
          */
-        result = true;
+        result = SunEventSanity::ModelInvalid;
     }
 
     return result;

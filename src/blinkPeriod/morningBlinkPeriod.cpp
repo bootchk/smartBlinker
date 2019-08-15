@@ -1,7 +1,7 @@
 
 
 #include "morningBlinkPeriod.h"
-#include "parameters.h"
+#include "../parameters.h"
 
 
 

@@ -6,12 +6,14 @@
 #include <alarmClock/epochClock/epochClock.h>
 #include <assert/myAssert.h>
 
-
-
+// periodicTimeSeries has same API as sunriseCalculator, delegates to sunriseCalculator
 #include "periodicTimeSeries.h"
 
-// periodicTimeSeries has same API as sunriseCalculator, delegates to sunriseCalculator
-//#include <src/day/sunEventEstimate/sunriseCalculator.h>
+// msp430Drivers
+#include <alarmClock/timeMath/timeMath.h>
+
+
+
 
 
 
@@ -57,7 +59,7 @@ void SunEventEstimate::init() {
 
 
 /*
- * Called when a possibly filtered, short duration (say an hour) light level signal detected sunrise.
+ * Called when a possibly filtered, short duration (say an hour) light level signal detected sun event.
  * Such a signal is "confirmed."
  * Called at end of wake period in some implementations.
  *
@@ -89,24 +91,48 @@ bool SunEventEstimate::isSunEventTimeValid() { return timeSeries.isValid(); }
 /*
  * Implementation:
  *
- * SunriseCalculator does not know EpochClock, nor how to calculate Durations.
+ * This handles case: called so close to next sun event that we can't subtract lessDuration.
  *
- * This handles case: called so close to next sunrise that we can't subtract lessDuration;
+ * But this returns a Duration in range [0, 24 hours]
  */
 Duration SunEventEstimate::durationUntilNextSunEventLessSeconds(Duration lessDuration){
     myRequire(isSunEventTimeValid());
 
     EpochTime now = EpochClock::timeNowOrReset();
 
-    EpochTime estimatedNextSunEvent = timeSeries.projectTimePastReferenceTime(
-            timeSeries.estimatePreviousSunrise(),
-            now );
-    // assert estimatedNextSunrise >= now
+    EpochTime estimatedNextSunEvent = TimeMath::projectTimePastReferenceTime(
+            timeSeries.estimatePreviousSunEvent(),
+            now,
+            Parameters::SunrisePeriod);
+    // assert estimatedNextSunEvent >= now
 
-    Duration tilSunrise = estimatedNextSunEvent - now;
-    // assert tilSunrise >= 0
+    Duration tilSunEvent = estimatedNextSunEvent - now;
+    // assert tilSunEvent >= 0
 
-    return  (tilSunrise - lessDuration);
+    return  (tilSunEvent - lessDuration);
     // assert result >= 0, since subtraction operator on Duration guarantees that.
+}
+
+
+
+/*
+ * Returns Interval in range [-12 hours, +12]
+ */
+Interval SunEventEstimate::intervalFromNearestSunEvent() {
+    myRequire(isSunEventTimeValid());
+
+    EpochTime now = EpochClock::timeNowOrReset();
+
+    EpochTime estimatedNearestSunEvent = TimeMath::projectTimePastReferenceTime(
+                timeSeries.estimatePreviousSunEvent(),
+                now,
+                Parameters::HalfDayPeriod);
+
+    Interval intervalFromSunEvent = estimatedNearestSunEvent - now;
+    // assert -12 hours < intervalFromSunEvent <= 12
+    myAssert( intervalFromSunEvent >= -Parameters::HalfDayPeriod);
+    myAssert( intervalFromSunEvent <= Parameters::HalfDayPeriod);
+
+    return intervalFromSunEvent;
 }
 

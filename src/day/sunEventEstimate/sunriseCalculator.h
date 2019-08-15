@@ -47,22 +47,14 @@ public:
      *
      * Estimate may be many days in past.
      */
-    static EpochTime estimatePreviousSunrise(CircularBuffer& sampleSequence);
+    static EpochTime estimatePreviousSunEvent(CircularBuffer& sampleSequence);
 
 
-    static EpochTime estimateNextSunrise(CircularBuffer& sampleSequence);
+    static EpochTime estimateNextSunEvent(CircularBuffer& sampleSequence);
 
     /*
      * Sample is good if sampleSet empty
      * OR sample fits previous samples in sampleSet
      */
     static bool isGoodSample(EpochTime, CircularBuffer& sampleSequence);
-
-    /*
-     * TODO belongs somewhere else
-     * Project give time in the past by 24 hours until it is beyond referenceTime , which is usually now.
-     * I.E. calculate EpochTime of same wall clock time as given time, for the current day.
-     */
-    static EpochTime projectTimePastReferenceTime(EpochTime time,
-                                                  EpochTime referenceTime);
 };

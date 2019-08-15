@@ -4,12 +4,16 @@
 
 #include "../blinker/smartBlinker.h"
 
-#include <src/blinkPeriod.h>
+#include "../blinkPeriod/blinkPeriod.h"
+#include "../blinkPeriod/morningBlinkPeriod.h"
+
 #include <src/day/day.h>
 #include <src/powerMgr.h>
 
 #include "../moment.h"
-#include "../morningBlinkPeriod.h"
+
+#include "../day/sunEvent/ConfirmedSunEvent.h"
+
 
 // msp430Drivers
 #include <softFault/softFault.h>
@@ -38,9 +42,14 @@ void PeriodedBlinker::onPowerGoodAtNight() {
 void PeriodedBlinker::onSunriseDetected() {
     /*
      * Tell Day.
-     * (It flags that sunrise was detected, but don't capture time until later.)
+     * (It might flag that sunrise was detected, but not capture time until later.)
      */
     Day::onSunriseDetected();
+
+    /*
+     * Reset low pass filter for new signal: sunset instead of sunrise
+     */
+    ConfirmedSunEvent::reset();
 
     SmartBlinker::indicateSunEvent();
 
@@ -55,7 +64,7 @@ void PeriodedBlinker::onSunriseDetected() {
 void PeriodedBlinker::onSunsetDetected() {
 
     Day::onSunsetDetected();
-
+    ConfirmedSunEvent::reset();
     SmartBlinker::indicateSunEvent();
 
     if (PowerMgr::isPowerForBlinking()) {

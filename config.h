@@ -56,7 +56,8 @@
 
 
 /*
- * Whether to blink LED every check sun to indicate liveness
+ * Whether to blink LED every check sun to indicate liveness.
+ * When on launchpad, not required, waking is obvious on debugger probe LED
  */
 #define BLINK_ON_SUN_CHECK
 

@@ -2,8 +2,8 @@
 #include "periodedBlinker.h"
 #include "../blinker/smartBlinker.h"
 
-#include "../blinkPeriod.h"
-#include "../morningBlinkPeriod.h"
+#include "../blinkPeriod/blinkPeriod.h"
+#include "../blinkPeriod/morningBlinkPeriod.h"
 #include "../powerMgr.h"
 
 

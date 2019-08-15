@@ -33,10 +33,13 @@ bool SmartBlinker::checkIsDaylight() {
     if (isConfirmed) {
         // Is sane with respect to model of sunrise
         result = Day::isSunEventSane(SunEventKind::Sunrise);
+        /*
+         * When result false, Seems like daylight, but too early.  Keep checking for daylight.
+         * We should eventually find seeming daylight closer to modeled sunrise.
+         */
     }
     else {
-        // Seems like daylight, but too early.  Keep checking for daylight
-        // We should eventually find seeming daylight closer to modeled sunrise.
+        // Not confirmed, wait for confirmation (two signals in a row.)
         result = false;
     }
 
@@ -55,8 +58,6 @@ bool SmartBlinker::checkIsNight() {
             result = Day::isSunEventSane(SunEventKind::Sunset);
     }
     else {
-            // Seems like night, but too early.  Keep checking for sunset.
-            // We should eventually find sun event closer to estimate.
             result = false;
     }
 

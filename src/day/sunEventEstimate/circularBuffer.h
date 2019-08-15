@@ -28,13 +28,15 @@ class CircularBuffer {
 private:
 
 
+    /*
+     * Instance data members are persistent if owning object is.
+     * Usually they are persistent, we are buffering through a LPM45 reset.
+     */
 // head in range [0, SampleSetSize-1]
 // Always points to most recent sample
-//#pragma PERSISTENT
 unsigned int head;
 
 // count in range [0, SampleSetSize]
-// not static
 unsigned int count;
 
 EpochTime sampleSet[Parameters::SampleSetSize]; // = {0,0};

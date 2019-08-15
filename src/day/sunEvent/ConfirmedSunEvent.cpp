@@ -9,7 +9,7 @@
 namespace {
 
 #pragma PERSISTENT
-unsigned int countSunEvents = 0;
+unsigned int lowPassFilterCount = 0;
 
 }
 
@@ -23,46 +23,45 @@ unsigned int filteredSunEventSpikes = 0;
 
 
 bool ConfirmedSunEvent::doesThisEventConfirm( const bool isSampleIndicateEvent ) {
-    bool isConfirmed;
+    bool result;
 
     if (isSampleIndicateEvent)
     {
-        countSunEvents += 1;
-        isConfirmed = (countSunEvents >= 2);
+        lowPassFilterCount += 1;
+        result = (lowPassFilterCount >= 2);
 
-        if (isConfirmed) {
-            /*
-             * Since confirmed, prepare for opposite events.
-             * E.G. if we confirmed sunrise, prepare for confirming sunset.
-             * (Although the app could confirm sunrise again.)
-             */
+#ifdef OLD
+        if (result) {
+            // Since confirmed, automatically prepare for new signal.
             ConfirmedSunEvent::reset();
         }
+#endif
     }
     else {
         /*
          * Record spurious events.  For testing how often they occur, calibrating sensors, understanding weather, etc.
          */
-        if (countSunEvents == 1) {
+        if (lowPassFilterCount == 1) {
             debugStats::filteredSunEventSpikes++;
         }
 
         ConfirmedSunEvent::reset();
-        isConfirmed = false;
+        result = false;
     }
-    myAssert (countSunEvents == 0 or countSunEvents == 1);
-    return isConfirmed;
+    // lowPassFilterCount can increment indefinitely
+    // We could check that it is not too large, meaning failure higher in caller
+    return result;
 }
 
 
 
 void ConfirmedSunEvent::reset() {
-    countSunEvents = 0;
+    lowPassFilterCount = 0;
 }
 
 
 void ConfirmedSunEvent::feedDaylightEvent() {
-    countSunEvents += 1;
+    lowPassFilterCount += 1;
 }
 
 

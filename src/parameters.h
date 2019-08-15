@@ -23,6 +23,7 @@
 #define HALF_HOUR       1800
 #define ONE_HOUR        3600
 #define TWO_HOURS       7200
+#define TWELVE_HOURS   43200
 
 
 // class Parameters {
@@ -35,15 +36,15 @@ namespace Parameters {
     //static const Duration TwentyFourHours(86400);  // most vexing parse
     //static const Duration TwentyFourHours= Duration(86400);
     //static constexpr Duration TwentyFourHours {Duration{86400}};
-static constexpr unsigned long int TwentyFourHours = 86400;
 
-// Eight periods same time as checkSun duration
+
+// Eight subperiods each same time as checkSun duration (15 minutes) equals 2 hours total
 static constexpr unsigned int CountMorningBlinkPeriods = 8;
 
 // For DarkBlinker strategy
 static const unsigned int BetweenDarkChecks = 10;
 
-
+static constexpr unsigned long int TwentyFourHours = 86400;
 
 
 #ifdef COMPRESSED_TIME_PARAMETERS
@@ -111,6 +112,8 @@ static const unsigned int BlinksMorningSubperiod = 1;
 // Duration of day (not length of daylight, includes night.)
 // Period of sunrises wobbles a little around 24 hours.
 static constexpr unsigned long int SunrisePeriod = TWO_MINUTES;
+static constexpr unsigned long int HalfDayPeriod = ONE_MINUTE;
+
 // Amount we allow samples to vary from existing model without invalidating model
 static constexpr unsigned long int MaxSunriseDelta = 20;
 

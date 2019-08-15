@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "parameters.h"
+#include "../parameters.h"
 
 
 
@@ -9,13 +9,24 @@
 /*
  * BlinkPeriod is an interval of time during which we blink (not necessarily continuously).
  * Typically at night.
- * BlinkPeriod comprises two subperiods, evening and morning, separated by period of non-blinking.
+ *
+ * Might be many BlinkPeriods: e.g. evening, night, and morning.
+ *
+ * BlinkPeriods can be separated by period of non-blinking.
 
  * Knows count of blinks in blink periods.
  *
- * We schedule the blinking task, not an end of period task.
+ * BlinkPeriod is over when:
+ * - countdown
+ * - OR premature termination
+ * --- detect sun event
+ * --- power exhausted
  *
- * BlinkPeriod comprises two subperiods, evening and morning, separated by time.
+ *
+ * BlinkPeriod is not a task.
+ * We schedule the blinking task, not an end of period task.
+ * The blinking task always checks whether BlinkPeriod is over,
+ * and then schedules appropriate task.
  *
  * Sequence of calls is:
  * initForEveningBlinking,

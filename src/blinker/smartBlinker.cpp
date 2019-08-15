@@ -2,7 +2,7 @@
 #include "smartBlinker.h"
 
 #include "../day/day.h"
-#include "../ledBlinker.h"
+
 
 #include "../../config.h"
 
@@ -118,22 +118,7 @@ bool SmartBlinker::isSomeTaskScheduled() { return TaskScheduler::isTaskScheduled
 
 
 
-void SmartBlinker::blinkDecorative() {
-    LEDBlinker::blinkBright();
-}
 
-void SmartBlinker::indicateSunCheck() {
-#ifdef BLINK_ON_SUN_CHECK
-    LEDBlinker::blinkDim();
-#endif
-}
-
-
-void SmartBlinker::indicateSunEvent() {
-#ifdef BLINK_ON_SUN_EVENT
-    LEDBlinker::blinkDim();
-#endif
-}
 
 
 

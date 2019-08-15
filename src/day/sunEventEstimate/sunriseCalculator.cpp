@@ -5,6 +5,7 @@
 #include <assert/myAssert.h>
 #include <src/day/sunEventEstimate/circularBuffer.h>
 #include <src/day/sunEventEstimate/sunriseCalculator.h>
+#include <alarmClock/timeMath/timeMath.h>
 
 
 
@@ -17,16 +18,16 @@ bool SunriseCalculator::doesSampleFitsSampleSet(EpochTime sample, CircularBuffer
 
    Interval interval;
 
-   EpochTime previousSunset = SunriseCalculator::estimatePreviousSunrise(sampleSequence);
-   myAssert(sample >= previousSunset);
+   EpochTime previousSunEvent = SunriseCalculator::estimatePreviousSunEvent(sampleSequence);
+   // TODO myAssert(sample >= previousSunEvent); greater than previous opposite sun event
 
    /*
     * Not use returned interval, only boolean result
     */
    result = canProjectTimetoReferenceTimeWithinDelta (
-            previousSunset,
+            previousSunEvent,
             sample,
-            Parameters::MaxSunriseDelta,
+            Parameters::MaxSunriseDelta,  // TODO SunEvent
             interval );
    return result;
 }
@@ -85,7 +86,7 @@ bool SunriseCalculator::canProjectTimetoReferenceTimeWithinDelta (
 
     bool result;
 
-    EpochTime workingProjection = projectTimePastReferenceTime(time, referenceTime);
+    EpochTime workingProjection = TimeMath::projectTimePastReferenceTime(time, referenceTime, Parameters::SunrisePeriod);
 
     Interval workingInterval;
     workingInterval = workingProjection - referenceTime;
@@ -122,17 +123,17 @@ bool SunriseCalculator::canProjectTimetoReferenceTimeWithinDelta (
 
 
 
-EpochTime SunriseCalculator::estimatePreviousSunrise(CircularBuffer& sampleSequence) {
+EpochTime SunriseCalculator::estimatePreviousSunEvent(CircularBuffer& sampleSequence) {
     myRequire(not sampleSequence.isEmpty());
 
     sampleSequence.startIter();
-    EpochTime latestSunriseSample = sampleSequence.nextIter();
+    EpochTime latestSunEventSample = sampleSequence.nextIter();
 
     // This also uses iterator
     Interval averageInterval = averageIntervalToLatestSample(sampleSequence);
 
     // EpochTime +/- Interval
-    return latestSunriseSample + averageInterval;
+    return latestSunEventSample + averageInterval;
     /*
      * Estimate is in the past, not projected to current time.
      * May be many days in the past.
@@ -159,25 +160,3 @@ bool SunriseCalculator::isGoodSample(EpochTime sample, CircularBuffer& sampleSeq
 
 
 
-EpochTime SunriseCalculator::projectTimePastReferenceTime(EpochTime time,
-                                                  EpochTime referenceTime) {
-    /*
-     * One design is to not require referenceTime > time.
-     * (That design uses while() do {} )
-     * The external design does ensure referenceTime > time,
-     * so we check that here, and use do {} while(), which otherwise might project too much.
-     *
-     * Strictly > (in the past)
-     */
-    myRequire( referenceTime > time);
-
-    EpochTime workingProjection = time;
-
-    // Project forward by the period (say 24 hours)
-    do {
-        workingProjection += Parameters::SunrisePeriod;
-    }
-    while (workingProjection < referenceTime);
-    // assert workingProjection >= referenceTime and workingProjection < referenceTime + Parameters::SunrisePeriod
-    return workingProjection;
-}

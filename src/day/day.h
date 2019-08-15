@@ -31,6 +31,13 @@ enum class SunEventKind {
     Sunset
 };
 
+enum class SunEventSanity {
+    Early,
+    Sane,
+    Late,
+    ModelInvalid
+};
+
 
 
 class Day {
@@ -91,10 +98,11 @@ public:
      *
      * A crude model does not account for seasonal changes.
      * A more elaborate model does.
+     *
+     *
      */
     static bool isSunEventSane(SunEventKind);
-private:
-    // overloaded but private
-    static bool isSunEventSane(SunEventEstimate&);
 
+private:
+    static SunEventSanity isSunEventSane(SunEventEstimate&);
 };

@@ -37,13 +37,24 @@ public:
     void captureSunEventTime();
 
     /*
-     * Is the model of sunrise valid (enough samples, consistent)
+     * Is the model of sun event valid (enough samples, consistent)
      */
     bool isSunEventTimeValid();
 
     /*
-     * Duration til next estimated sunrise.
-     * Zero if next sunrise is closer than lessDuration from now.
+     * Duration til next estimated sun event, minus lessDuration.
+     *
+     * Zero if next sun event is closer than lessDuration from now.
+     *
+     * Max result can be 24 hours.
+     * That is, if called just after sun event, result will be almost 24 hours.
      */
     Duration durationUntilNextSunEventLessSeconds(Duration lessDuration);
+
+    /*
+     * Interval (signed time difference) to nearest sun event.
+     *
+     * Result in [-12 hours, +12 hours]
+     */
+    Interval intervalFromNearestSunEvent();
 };

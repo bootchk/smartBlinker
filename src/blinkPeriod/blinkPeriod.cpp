@@ -1,5 +1,5 @@
 
-#include <src/blinkPeriod.h>
+#include "blinkPeriod.h"
 #include "morningBlinkPeriod.h"
 
 

@@ -5,6 +5,8 @@
 #include "circularBuffer.h"
 #include "sunriseCalculator.h"
 
+// msp430Drivers
+//#include <alarmClock/timeMath/timeMath.h>
 
 // TODO invariant
 
@@ -108,17 +110,21 @@ void PeriodicTimeSeries::recordBadSample() {
 
 
 
-/*
- * Delegate to calculator
- * Pass this->sampleSequence
- */
+
+// Delegate to calculator.  Pass this->sampleSequence
 bool PeriodicTimeSeries::isGoodSample(EpochTime sample) {
     return SunriseCalculator::isGoodSample(sample, sampleSequence); }
 
+
+EpochTime PeriodicTimeSeries::estimatePreviousSunEvent() {
+    return SunriseCalculator::estimatePreviousSunEvent(sampleSequence);
+}
+
+
+#ifdef OLD
+// Delegate to TimeMath
 EpochTime PeriodicTimeSeries::projectTimePastReferenceTime(EpochTime time,  EpochTime referenceTime) {
-    return SunriseCalculator::projectTimePastReferenceTime(time, referenceTime);
+    return TimeMath::projectTimePastReferenceTime(time, referenceTime, Parameters::SunrisePeriod);
 }
-EpochTime PeriodicTimeSeries::estimatePreviousSunrise() {
-    return SunriseCalculator::estimatePreviousSunrise(sampleSequence);
-}
+#endif
 

@@ -30,6 +30,9 @@ enum class DSPState {
 
 class PeriodicTimeSeries {
 private:
+    /*
+     * Instance data members persistent if class instance is.
+     */
     // state encodes a count of bad samples
     DSPState DSPstate;
 
@@ -56,6 +59,8 @@ public:
 
     // Methods delegated to SunriseCalculator
     bool isGoodSample(EpochTime);
+    EpochTime estimatePreviousSunEvent();    // CircularBuffer& sampleSequence);
+
+    // Methods using TimeMath
     EpochTime projectTimePastReferenceTime(EpochTime time,  EpochTime referenceTime);
-    EpochTime estimatePreviousSunrise();    // CircularBuffer& sampleSequence);
 };
