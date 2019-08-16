@@ -161,7 +161,7 @@ void PeriodedBlinker::onNightBlinkPeriodOver() {
  * But we check sunrise immediately.
  * If morning blink period overruns, it pushes sunrise out, falsely.
  * Morning blink would continue to overrun, worsening in a feedback loop.
- * Morning blink should check sunrise no less frequently than the usual checkSunrise interval.
+ * Morning blink should check sunrise no less frequently than the usual checkSunrise period.
  */
 void PeriodedBlinker::onMorningBlinkPeriodOver() {
 

@@ -112,7 +112,9 @@ static const unsigned int BlinksMorningSubperiod = 1;
 // Duration of day (not length of daylight, includes night.)
 // Period of sunrises wobbles a little around 24 hours.
 static constexpr unsigned long int SunrisePeriod = TWO_MINUTES;
-static constexpr unsigned long int HalfDayPeriod = ONE_MINUTE;
+
+static constexpr signed long int HalfDayInterval = ONE_MINUTE;
+static constexpr signed long int NegativeHalfDayInterval = -ONE_MINUTE;
 
 // Amount we allow samples to vary from existing model without invalidating model
 static constexpr unsigned long int MaxSunriseDelta = 20;

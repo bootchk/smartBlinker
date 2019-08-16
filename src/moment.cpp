@@ -46,6 +46,6 @@ Duration Moment::untilMorningBlinkPeriodStart() {
 
 
 Duration Moment::untilSubsequentMorningBlinkPeriodStart(void) {
-    // Keep blinking at same interval as prior morning blink period.
+    // Keep blinking at same period as prior morning blink period.
     return Parameters::BetweenBlinks;
 }

@@ -163,14 +163,19 @@ SunEventSanity Day::isSunEventSane(SunEventEstimate& estimate) {
          */
         Interval intervalFromNearestSunEvent = estimate.intervalFromNearestSunEvent();
 
-        if ( intervalFromNearestSunEvent > Parameters::SaneSunEventLead)  {
+        RangeResult isInRange = intervalFromNearestSunEvent.inRange(Parameters::SaneSunEventLead);
+
+        // Convert rangeResult to SanityResult
+        switch(isInRange) {
+        case RangeResult::Lesser:
+            result = SunEventSanity::Early;
+            break;
+        case RangeResult::Greater:
             result = SunEventSanity::Late;
-        }
-        else if (intervalFromNearestSunEvent <= -Parameters::SaneSunEventLead) {
-             result = SunEventSanity::Early;
-        }
-        else {
+            break;
+        case RangeResult::InRange:
             result = SunEventSanity::Sane;
+            break;
         }
 
 #ifdef FLAWED

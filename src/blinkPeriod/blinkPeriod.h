@@ -7,7 +7,7 @@
 
 
 /*
- * BlinkPeriod is an interval of time during which we blink (not necessarily continuously).
+ * BlinkPeriod is a period during which we blink (not necessarily continuously).
  * Typically at night.
  *
  * Might be many BlinkPeriods: e.g. evening, night, and morning.

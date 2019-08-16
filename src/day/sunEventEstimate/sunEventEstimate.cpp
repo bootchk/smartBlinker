@@ -115,23 +115,32 @@ Duration SunEventEstimate::durationUntilNextSunEventLessSeconds(Duration lessDur
 
 
 
+#pragma PERSISTENT
+Interval intervalFromSunEvent = 0;
+
+#pragma PERSISTENT
+EpochTime now = 0;;
+
+
 /*
  * Returns Interval in range [-12 hours, +12]
  */
 Interval SunEventEstimate::intervalFromNearestSunEvent() {
     myRequire(isSunEventTimeValid());
 
-    EpochTime now = EpochClock::timeNowOrReset();
+    now = EpochClock::timeNowOrReset();
 
     EpochTime estimatedNearestSunEvent = TimeMath::projectTimePastReferenceTime(
                 timeSeries.estimatePreviousSunEvent(),
                 now,
-                Parameters::HalfDayPeriod);
+                Parameters::HalfDayInterval);
 
-    Interval intervalFromSunEvent = estimatedNearestSunEvent - now;
+    // Subtraction of two unsigned longs, coerce to signed long
+    intervalFromSunEvent = estimatedNearestSunEvent - now;
+
     // assert -12 hours < intervalFromSunEvent <= 12
-    myAssert( intervalFromSunEvent >= -Parameters::HalfDayPeriod);
-    myAssert( intervalFromSunEvent <= Parameters::HalfDayPeriod);
+    // !!! Use signed arithmetic.  C will gladly coerce to unsigned, with wrong result.
+    myAssert( intervalFromSunEvent.inRange(Parameters::HalfDayInterval) == RangeResult::InRange );
 
     return intervalFromSunEvent;
 }

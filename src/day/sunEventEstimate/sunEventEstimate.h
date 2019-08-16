@@ -2,6 +2,7 @@
 
 // msp430Drivers
 #include <alarmClock/time/timeTypes.h>
+#include <alarmClock/time/interval.h>
 #include <src/day/sunEventEstimate/periodicTimeSeries.h>
 
 #include "circularBuffer.h"

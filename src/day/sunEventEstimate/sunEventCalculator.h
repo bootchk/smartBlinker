@@ -1,5 +1,11 @@
+
+#pragma once
+
+#include "circularBuffer.h"
+
 // msp430Drivers
 #include <alarmClock/time/timeTypes.h>
+#include <alarmClock/time/interval.h>
 
 
 
@@ -16,7 +22,7 @@
  * ???
  */
 
-class SunriseCalculator {
+class SunEventCalculator {
 private:
     /*
      * Try project time to within delta of referenceTime (

@@ -1,24 +1,25 @@
-#include "circularBuffer.h"
+
+#include "sunEventCalculator.h"
+
 #include "../../parameters.h"
 
 // msp430Drivers
 #include <assert/myAssert.h>
-#include <src/day/sunEventEstimate/circularBuffer.h>
-#include <src/day/sunEventEstimate/sunriseCalculator.h>
 #include <alarmClock/timeMath/timeMath.h>
 
 
 
 
 
-bool SunriseCalculator::doesSampleFitsSampleSet(EpochTime sample, CircularBuffer& sampleSequence) {
+
+bool SunEventCalculator::doesSampleFitsSampleSet(EpochTime sample, CircularBuffer& sampleSequence) {
    myRequire(not sampleSequence.isEmpty());
 
    bool result;
 
    Interval interval;
 
-   EpochTime previousSunEvent = SunriseCalculator::estimatePreviousSunEvent(sampleSequence);
+   EpochTime previousSunEvent = SunEventCalculator::estimatePreviousSunEvent(sampleSequence);
    // TODO myAssert(sample >= previousSunEvent); greater than previous opposite sun event
 
    /*
@@ -36,7 +37,7 @@ bool SunriseCalculator::doesSampleFitsSampleSet(EpochTime sample, CircularBuffer
 
 
 
-Interval SunriseCalculator::averageIntervalToLatestSample(CircularBuffer& sampleSequence) {
+Interval SunEventCalculator::averageIntervalToLatestSample(CircularBuffer& sampleSequence) {
     myRequire(not sampleSequence.isEmpty());
 
     sampleSequence.startIter();
@@ -62,21 +63,23 @@ Interval SunriseCalculator::averageIntervalToLatestSample(CircularBuffer& sample
          * or that all samples project to with 2*delta of head
          */
         myAssert (didProject);
-        intervalSum += interval;
+        intervalSum = intervalSum + interval;
     }
 
     unsigned int countSamples = sampleSequence.getCount();
-    // Signed integer division
+
     Interval averageInterval = intervalSum/countSamples;
+
     // long absolute value
-    myAssert( labs(averageInterval) <= 2*Parameters::MaxSunriseDelta );
+    // TODO myAssert( labs(averageInterval) <= 2*Parameters::MaxSunriseDelta );
+
     return averageInterval ;
 }
 
 
 
 
-bool SunriseCalculator::canProjectTimetoReferenceTimeWithinDelta (
+bool SunEventCalculator::canProjectTimetoReferenceTimeWithinDelta (
                 EpochTime time,
                 EpochTime referenceTime,
                 Duration delta,
@@ -90,7 +93,7 @@ bool SunriseCalculator::canProjectTimetoReferenceTimeWithinDelta (
 
     Interval workingInterval;
     workingInterval = workingProjection - referenceTime;
-    myAssert(workingInterval >=0 );
+    myAssert(workingInterval >= 0 );
     if ( workingInterval < delta.seconds) {
        resultInterval = workingInterval;
        result = true;
@@ -99,7 +102,7 @@ bool SunriseCalculator::canProjectTimetoReferenceTimeWithinDelta (
         // Projection is more than delta beyond reference time.  Back up and test again.
         workingProjection -= Parameters::SunrisePeriod;
         workingInterval = referenceTime - workingProjection;
-        myAssert(workingInterval >=0);
+        myAssert(workingInterval >= 0);
         if ( workingInterval < delta.seconds) {
             // workingInterval is unsigned positive i.e. magnitude.
             // Return signed negative since within delta is before referenceTime
@@ -123,17 +126,18 @@ bool SunriseCalculator::canProjectTimetoReferenceTimeWithinDelta (
 
 
 
-EpochTime SunriseCalculator::estimatePreviousSunEvent(CircularBuffer& sampleSequence) {
+EpochTime SunEventCalculator::estimatePreviousSunEvent(CircularBuffer& sampleSequence) {
     myRequire(not sampleSequence.isEmpty());
 
     sampleSequence.startIter();
     EpochTime latestSunEventSample = sampleSequence.nextIter();
 
-    // This also uses iterator
+    // This also uses iterator.
+    // Sum the differences of projected other samples to the latest event
     Interval averageInterval = averageIntervalToLatestSample(sampleSequence);
 
-    // EpochTime +/- Interval
-    return latestSunEventSample + averageInterval;
+    // unsigned EpochTime + signed Interval
+    return latestSunEventSample + averageInterval.plusOrMinusSeconds;
     /*
      * Estimate is in the past, not projected to current time.
      * May be many days in the past.
@@ -145,7 +149,7 @@ EpochTime SunriseCalculator::estimatePreviousSunEvent(CircularBuffer& sampleSequ
 
 
 
-bool SunriseCalculator::isGoodSample(EpochTime sample, CircularBuffer& sampleSequence) {
+bool SunEventCalculator::isGoodSample(EpochTime sample, CircularBuffer& sampleSequence) {
     bool result = false;
 
     if (sampleSequence.isEmpty()) {
