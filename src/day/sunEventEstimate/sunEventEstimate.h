@@ -53,9 +53,11 @@ public:
     Duration durationUntilNextSunEventLessSeconds(Duration lessDuration);
 
     /*
-     * Interval (signed time difference) to nearest sun event.
+     * Interval (signed time difference) to predicted nearest sun event.
+     *
+     * Requires estimated previous sun event > 12 hours ago.
      *
      * Result in [-12 hours, +12 hours]
      */
-    Interval intervalFromNearestSunEvent();
+    Interval intervalFromPredictedNearestSunEvent();
 };

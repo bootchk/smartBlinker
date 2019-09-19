@@ -10,7 +10,7 @@
 #include "periodicTimeSeries.h"
 
 // msp430Drivers
-#include <alarmClock/timeMath/timeMath.h>
+#include <alarmClock/time/timeMath.h>
 
 
 
@@ -103,7 +103,7 @@ Duration SunEventEstimate::durationUntilNextSunEventLessSeconds(Duration lessDur
     EpochTime estimatedNextSunEvent = TimeMath::projectTimePastReferenceTime(
             timeSeries.estimatePreviousSunEvent(),
             now,
-            Parameters::SunrisePeriod);
+            Parameters::DayPeriod);
     // assert estimatedNextSunEvent >= now
 
     Duration tilSunEvent = estimatedNextSunEvent - now;
@@ -114,33 +114,47 @@ Duration SunEventEstimate::durationUntilNextSunEventLessSeconds(Duration lessDur
 }
 
 
+//namespace debugSunEventEstimate {
 
+// Persistent for ease of debugging (instead of looking at registers.)
 #pragma PERSISTENT
 Interval intervalFromSunEvent = 0;
 
 #pragma PERSISTENT
-EpochTime now = 0;;
+EpochTime now = 0;
+
+#pragma PERSISTENT
+EpochTime estimatedPreviousSunrise = 0;
+
 
 
 /*
  * Returns Interval in range [-12 hours, +12]
  */
-Interval SunEventEstimate::intervalFromNearestSunEvent() {
+Interval SunEventEstimate::intervalFromPredictedNearestSunEvent() {
     myRequire(isSunEventTimeValid());
 
     now = EpochClock::timeNowOrReset();
+    estimatedPreviousSunrise = timeSeries.estimatePreviousSunEvent();
 
-    EpochTime estimatedNearestSunEvent = TimeMath::projectTimePastReferenceTime(
-                timeSeries.estimatePreviousSunEvent(),
-                now,
-                Parameters::HalfDayInterval);
+    EpochTime estimatedNearestSunEvent = TimeMath::projectTimeByPeriodToNearReferenceTime(
+            estimatedPreviousSunrise,
+            now,
+            Parameters::DayPeriod,
+            Parameters::HalfDayPeriod,
+            intervalFromSunEvent
+            );
 
+    // projectTimeByPeriodToNearReferenceTime guarantees interval is in range [-12 hours, 12]
+
+#ifdef NOTUSED
     // Subtraction of two unsigned longs, coerce to signed long
     intervalFromSunEvent = estimatedNearestSunEvent - now;
 
-    // assert -12 hours < intervalFromSunEvent <= 12
+    // assert -12 hours <= intervalFromSunEvent <= 12
     // !!! Use signed arithmetic.  C will gladly coerce to unsigned, with wrong result.
-    myAssert( intervalFromSunEvent.inRange(Parameters::HalfDayInterval) == RangeResult::InRange );
+    myAssert( intervalFromSunEvent.inRange(Parameters::HalfDayPeriod) == RangeResult::InRange );
+#endif
 
     return intervalFromSunEvent;
 }

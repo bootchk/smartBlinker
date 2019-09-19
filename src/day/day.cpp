@@ -161,7 +161,7 @@ SunEventSanity Day::isSunEventSane(SunEventEstimate& estimate) {
          * Sane:
          * -not too distant from estimate from valid model of nearest sun event.
          */
-        Interval intervalFromNearestSunEvent = estimate.intervalFromNearestSunEvent();
+        Interval intervalFromNearestSunEvent = estimate.intervalFromPredictedNearestSunEvent();
 
         RangeResult isInRange = intervalFromNearestSunEvent.inRange(Parameters::SaneSunEventLead);
 

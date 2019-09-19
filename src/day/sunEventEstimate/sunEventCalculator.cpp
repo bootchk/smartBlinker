@@ -5,7 +5,7 @@
 
 // msp430Drivers
 #include <assert/myAssert.h>
-#include <alarmClock/timeMath/timeMath.h>
+#include <alarmClock/time/timeMath.h>
 
 
 
@@ -89,7 +89,7 @@ bool SunEventCalculator::canProjectTimetoReferenceTimeWithinDelta (
 
     bool result;
 
-    EpochTime workingProjection = TimeMath::projectTimePastReferenceTime(time, referenceTime, Parameters::SunrisePeriod);
+    EpochTime workingProjection = TimeMath::projectTimePastReferenceTime(time, referenceTime, Parameters::DayPeriod);
 
     Interval workingInterval;
     workingInterval = workingProjection - referenceTime;
@@ -100,7 +100,7 @@ bool SunEventCalculator::canProjectTimetoReferenceTimeWithinDelta (
     }
     else {
         // Projection is more than delta beyond reference time.  Back up and test again.
-        workingProjection -= Parameters::SunrisePeriod;
+        workingProjection -= Parameters::DayPeriod;
         workingInterval = referenceTime - workingProjection;
         myAssert(workingInterval >= 0);
         if ( workingInterval < delta.seconds) {
