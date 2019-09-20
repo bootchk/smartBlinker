@@ -222,50 +222,6 @@ static constexpr unsigned int BlinksMorningSubperiod = 6 * 15;
 
 
 
-/*
- * Voltages.
- * Depends on:
- * - power supply Vccmax (3.3V on Launchpad, 3.6V on PCB)
- * - sunlight detector
- *
- * All units centivolts.
- */
 
-
-#if defined( ACCELERATED_TIME_PARAMETERS)
-
-// Accelerated blinks until power is just above brownout.
-// Brownout detected by SW
-// Vmon causes actual brownout at 1.7 plus BAT43 diode drop of 0.1 volt
-
-// Vcc which indicates enough charge on storage for LED blinking function.
-static const unsigned int MinVccForBlinking = 200; //185; // 1.85V
-
-// Vcc at which brownout might be imminent.
-static const unsigned int MinVccForBrownout = 190; // 180 // 1.8V
-
-#elif defined(PRODUCTION_PARAMETERS) or defined(COMPRESSED_TIME_PARAMETERS)
-
-// Vcc which indicates enough charge on storage for LED blinking function.
-static const unsigned int MinVccForBlinking = 220; // 2.2V
-
-/*
- * Vcc at which brownout might be imminent.
- * The SVS shuts down system without an NMI warning, so we check it ourselves.
- * See Table 5-2 SVS voltage levels.
- * MSP430FR2433 SVS shutsdown at a max of 1.86V.
- */
-static const unsigned int MinVccForBrownout = 190; // 1.9V
-
-
-#endif
-
-
-/*
- * Vcc voltage indicates a reserve of power above mcu Vmin (1.8V)
- * Required to finish booting and start app.
- * Defined in board.h, affects embeddedDutyCycle/powerMgr.cpp
- */
-//static const unsigned int MinVccForStarting = 190; // centiVolts 1.9V
 };
 
