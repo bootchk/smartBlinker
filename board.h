@@ -9,6 +9,9 @@
 #include "config.h"
 
 
+#include "ledAndLightSensorConfig.h"
+
+
 
 
 /*
@@ -81,20 +84,11 @@
 #define RTCSelectPort GPIO_PORT_P3
 #define RTCSelectPin  GPIO_PIN2
 
-
-#define NSideLEDPort GPIO_PORT_P1
-#define NSideLEDPin  GPIO_PIN0
-
-// P1.1 is green led on launchpad
-
-// P side high to light LED
-#define PSideLEDPort GPIO_PORT_P1
-#define PSideLEDPin  GPIO_PIN1
 #endif
 
 
 
-#ifdef MYPCB_BOARD_R3
+#if defined(MYPCB_BOARD_R3) || defined(BLINKERBQ_BOARD)
 
 // Configuration of PCB
 // And also configuration of one prototype on launchpad
@@ -140,21 +134,6 @@
 #define AlarmSignalPort GPIO_PORT_P1
 #define AlarmSignalPin  GPIO_PIN1
 
-
-
-
-
-
-
-
-#define NSideLEDPort GPIO_PORT_P1
-#define NSideLEDPin  GPIO_PIN7
-
-// P1.1 is green led on launchpad
-
-// P side high to light LED
-#define PSideLEDPort GPIO_PORT_P1
-#define PSideLEDPin  GPIO_PIN5
 #endif
 
 
@@ -180,15 +159,6 @@
 
 #define AlarmSignalPort GPIO_PORT_P1
 #define AlarmSignalPin  GPIO_PIN1
-
-
-
-// P side high to light LED
-#define NSideLEDPort GPIO_PORT_P1
-#define NSideLEDPin  GPIO_PIN7
-
-#define PSideLEDPort GPIO_PORT_P1
-#define PSideLEDPin  GPIO_PIN5
 
 #endif
 
@@ -222,14 +192,7 @@
 
 
 
-#define NSideLEDPort GPIO_PORT_P1
-#define NSideLEDPin  GPIO_PIN7
 
-// P1.1 is green led on launchpad
-
-// P side high to light LED
-#define PSideLEDPort GPIO_PORT_P1
-#define PSideLEDPin  GPIO_PIN5
 
 #endif
 

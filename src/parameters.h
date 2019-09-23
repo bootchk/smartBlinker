@@ -24,6 +24,26 @@
 #define ONE_HOUR        3600
 #define TWO_HOURS       7200
 #define TWELVE_HOURS   43200
+#define TWENTYFOUR_HOURS 86400
+
+
+
+
+/*
+ * SunriseEstimator
+ *
+ * DayPeriod:  Duration of day (not length of daylight, includes night.)  Real life: 24 hours.
+ * Period of sunrise wobbles a little around 24 hours.
+ *
+ * HalfDayPeriod: half a day.  Real life: 12 hours.
+ *
+ * MaxSunriseDelta: Amount we allow sun event samples to vary from existing model without invalidating model.
+ *
+ * SaneSunEventLead: Sun event samples earlier than this amount from model are rejected as not sane (spurious),
+ * without invalidating a valid model?
+ */
+
+
 
 
 // class Parameters {
@@ -45,6 +65,9 @@ static constexpr unsigned int CountMorningBlinkPeriods = 8;
 static const unsigned int BetweenDarkChecks = 10;
 
 static constexpr unsigned long int TwentyFourHours = 86400;
+
+
+
 
 
 #ifdef COMPRESSED_TIME_PARAMETERS
@@ -79,6 +102,9 @@ static constexpr unsigned long int TwentyFourHours = 86400;
     static const unsigned int BlinksMorning = 3;
 
 
+
+
+
 #elif defined( ACCELERATED_TIME_PARAMETERS)
 
 #define REALLY_ACCELERATED
@@ -109,18 +135,14 @@ static const unsigned int BlinksNight = 1;
 static const unsigned int BlinksMorningSubperiod = 1;
 
 // SunriseEstimator
-// Duration of day (not length of daylight, includes night.)
-// Period of sunrises wobbles a little around 24 hours.
 static constexpr unsigned long int DayPeriod = TWO_MINUTES;
 static constexpr unsigned long int HalfDayPeriod = ONE_MINUTE;
-
-// Amount we allow samples to vary from existing model without invalidating model
 static constexpr unsigned long int MaxSunriseDelta = 20;
+static constexpr unsigned long int SaneSunEventLead = 30;
+
 
 // TODO why are some durations long and others just ints?
 
-// Samples earlier than this amount from model are rejected as not sane (spurious)
-static constexpr unsigned long int SaneSunEventLead = 30;
 
 
 
@@ -145,11 +167,15 @@ static constexpr unsigned long int SaneSunEventLead = 30;
     static const unsigned int BlinksNight = 5;
     static const unsigned int BlinksMorning = 3;
 
-    // SunriseEstimator
     // Average over seasons of length of day (not length of daylight, includes night.)
     static constexpr unsigned long int SunrisePeriod = 300;    // 5 minutes
     static constexpr unsigned long int SunriseDelta = 30; // 30 seconds
 #endif // REALLY_ACCELERATED
+
+
+
+
+
 
 #elif defined( PRODUCTION_PARAMETERS)
     // Normal, production parameters
@@ -198,9 +224,11 @@ static constexpr unsigned int BetweenSunChecks = FIFTEEN_MINUTES;
 static constexpr unsigned int BetweenMorningBlinkStartAndSunrise = TWO_HOURS + FIFTEEN_MINUTES;
 
 // SunriseEstimator
-// Average over seasons of length of day (not length of daylight, includes night.)
-static constexpr unsigned long int SunrisePeriod = TwentyFourHours;
-static constexpr unsigned long int SunriseDelta = HALF_HOUR;
+// OLD static constexpr unsigned long int SunrisePeriod = TwentyFourHours;
+static constexpr unsigned long int DayPeriod = TWENTYFOUR_HOURS;
+static constexpr unsigned long int HalfDayPeriod = TWELVE_HOURS;
+static constexpr unsigned long int MaxSunriseDelta = HALF_HOUR;
+static constexpr unsigned long int SaneSunEventLead = ONE_HOUR;
 
 
 // Evening and night blink for 2 hours every 10 seconds

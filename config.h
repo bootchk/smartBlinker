@@ -11,18 +11,18 @@
 
 // For testing
 /*
- * Normal, real time parameters
- */
-//#define PRODUCTION_PARAMETERS
-/*
- * Normal operation, but compressed time.  For bench testing using hand and Launchpad power.
- */
-//#define COMPRESSED_TIME_PARAMETERS
-/*
- * Quasi normal operation, also compressed. For stand-alone testing solar powered PCB.
+ * PRODUCTION: Normal, real time parameters
+ * COMPRESSED: Normal operation, but compressed time.  For bench testing using hand and Launchpad power.
+ * ACCELERATED: Quasi normal operation, also compressed. For stand-alone testing solar powered PCB.
  * Capacitor might be smaller to accelerate events.
+ *
+ * Uncomment exactly one
  */
-#define ACCELERATED_TIME_PARAMETERS
+#define PRODUCTION_PARAMETERS
+//#define COMPRESSED_TIME_PARAMETERS
+//#define ACCELERATED_TIME_PARAMETERS
+
+
 
 
 
@@ -30,28 +30,27 @@
  *
  * - PROTO_BOARD: prototype on launchpad  with GPIO configured different from MYPCB (obsolete
  *
- * - MYPCB_BOARD: custom PCB
+ * - MYPCB_BOARD: custom PCB !!! There are multiple revisions of the PCB
  *
  * - FULL_PROTO_LAUNCHPAD  launchpad connected with proto boards full emulation of MYPCB (RTC breakout and LED breakout)
- * !!! but with slightly different connections since Launchpad does not bring out P3.0
- *
- * !!! There are multiple revisions of the PCB
+ * !!! but with possibly different connections since Launchpad does not bring out P3.0
  *
  * This affects:
  * - board.h
  * - appConfigure.cpp
+ *
+ * Uncomment exactly one.
  */
-
-/// Choose one
-///#define PROTO_BOARD
+//#define PROTO_BOARD
 //#define FULL_PROTO_LAUNCHPAD
+//#define MYPCB_BOARD_R3  // Obsolete PCB
+//#define MYPCB_BOARD_R5  // Obsolete, solar cell obsolete
+#define BLINKERBQ_BOARD
 
-// An obsolete PCB
-//#define MYPCB_BOARD_R3
 
-// My own PCB
-// OR launchpad configured same way as my own PCB, with RTC and LED daughter boards jumpered to LaunchPad
-#define MYPCB_BOARD_R5
+
+
+
 
 
 
