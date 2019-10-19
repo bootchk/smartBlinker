@@ -3,9 +3,9 @@
 // msp430Drivers
 #include <alarmClock/time/timeTypes.h>
 #include <alarmClock/time/interval.h>
-#include <src/day/sunEventEstimate/periodicTimeSeries.h>
-
 #include "circularBuffer.h"
+#include <src/day/sunEventModel/circularBuffer.h>
+#include <src/day/sunEventModel/periodicTimeSeries.h>
 
 /*
  * SunEvent: sunrise or sunset, detected by light level sample.
@@ -15,7 +15,7 @@
  * I.E. a model of the sinusoidal sunlight signal over many days.
  */
 
-class SunEventEstimate {
+class SunEventModel {
 
 private:
     // !!! Not static

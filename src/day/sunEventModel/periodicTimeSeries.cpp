@@ -1,7 +1,6 @@
 
-#include "periodicTimeSeries.h"
-
-#include "sunEventCalculator.h"
+#include <src/day/sunEventModel/periodicTimeSeries.h>
+#include <src/day/sunEventModel/sunEventCalculator.h>
 
 // TODO invariant
 

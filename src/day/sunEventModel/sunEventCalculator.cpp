@@ -1,11 +1,10 @@
 
-#include "sunEventCalculator.h"
-
 #include "../../parameters.h"
 
 // msp430Drivers
 #include <assert/myAssert.h>
 #include <alarmClock/time/timeMath.h>
+#include <src/day/sunEventModel/sunEventCalculator.h>
 
 
 

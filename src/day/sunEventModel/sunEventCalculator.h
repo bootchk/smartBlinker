@@ -1,11 +1,9 @@
 
 #pragma once
 
-#include "circularBuffer.h"
-
-// msp430Drivers
 #include <alarmClock/time/timeTypes.h>
 #include <alarmClock/time/interval.h>
+#include <src/day/sunEventModel/circularBuffer.h>
 
 
 

@@ -1,16 +1,13 @@
 
-#include "sunEventEstimate.h"
-
 #include "../../parameters.h"
 
 #include <alarmClock/epochClock/epochClock.h>
 #include <assert/myAssert.h>
 
 // periodicTimeSeries has same API as sunriseCalculator, delegates to sunriseCalculator
-#include "periodicTimeSeries.h"
-
-// msp430Drivers
 #include <alarmClock/time/timeMath.h>
+#include <src/day/sunEventModel/periodicTimeSeries.h>
+#include <src/day/sunEventModel/sunEventModel.h>
 
 
 
@@ -21,7 +18,7 @@
 
 
 #ifdef NOTUSED
-SunEventEstimate::SunEventEstimate() {
+SunEventModel::SunEventEstimate() {
     timeSeries = PeriodicTimeSeries();
 }
 #endif
@@ -38,7 +35,7 @@ SunEventEstimate::SunEventEstimate() {
  * - we don't check often enough, so shift by half the detect period
  * - if we were late to try detect (morning blink period overrun) ????
  */
-EpochTime SunEventEstimate::getTimeForConfirmedSunEvent() {
+EpochTime SunEventModel::getTimeForConfirmedSunEvent() {
     EpochTime now = EpochClock::timeNowOrReset();
 
     /*
@@ -53,7 +50,7 @@ EpochTime SunEventEstimate::getTimeForConfirmedSunEvent() {
 
 
 
-void SunEventEstimate::init() {
+void SunEventModel::init() {
     timeSeries.init();
 }
 
@@ -69,8 +66,8 @@ void SunEventEstimate::init() {
  * If it is periodic with samples from prior days, it is "good", else "bad".
  * The filter is a state machine.
  */
-void SunEventEstimate::captureSunEventTime() {
-    EpochTime possibleSunEventTime = SunEventEstimate::getTimeForConfirmedSunEvent();
+void SunEventModel::captureSunEventTime() {
+    EpochTime possibleSunEventTime = SunEventModel::getTimeForConfirmedSunEvent();
     // assert possibleSunEventTime (sunrise) > previous opposite sun event (Sunset)
 
     if (timeSeries.isGoodSample(possibleSunEventTime)) {
@@ -85,7 +82,7 @@ void SunEventEstimate::captureSunEventTime() {
 /*
  * Valid if enough good samples and not too many bad samples.
  */
-bool SunEventEstimate::isSunEventTimeValid() { return timeSeries.isValid(); }
+bool SunEventModel::isSunEventTimeValid() { return timeSeries.isValid(); }
 
 
 /*
@@ -95,7 +92,7 @@ bool SunEventEstimate::isSunEventTimeValid() { return timeSeries.isValid(); }
  *
  * But this returns a Duration in range [0, 24 hours]
  */
-Duration SunEventEstimate::durationUntilNextSunEventLessSeconds(Duration lessDuration){
+Duration SunEventModel::durationUntilNextSunEventLessSeconds(Duration lessDuration){
     myRequire(isSunEventTimeValid());
 
     EpochTime now = EpochClock::timeNowOrReset();
@@ -114,7 +111,7 @@ Duration SunEventEstimate::durationUntilNextSunEventLessSeconds(Duration lessDur
 }
 
 
-//namespace debugSunEventEstimate {
+//namespace debugSunEventModel {
 
 // Persistent for ease of debugging (instead of looking at registers.)
 #pragma PERSISTENT
@@ -131,7 +128,7 @@ EpochTime estimatedPreviousSunrise = 0;
 /*
  * Returns Interval in range [-12 hours, +12]
  */
-Interval SunEventEstimate::intervalFromPredictedNearestSunEvent() {
+Interval SunEventModel::intervalFromPredictedNearestSunEvent() {
     myRequire(isSunEventTimeValid());
 
     now = EpochClock::timeNowOrReset();

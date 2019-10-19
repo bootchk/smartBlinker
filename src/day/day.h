@@ -1,10 +1,8 @@
 #pragma once
 
 
-#include "sunEventEstimate/sunEventEstimate.h"
-
-// mwp430Drivers
 #include <alarmClock/time/timeTypes.h>   // EpochTime
+#include <src/day/sunEventModel/sunEventModel.h>
 
 
 
@@ -42,8 +40,8 @@ enum class SunEventFit {
 
 class Day {
 private:
-    static SunEventEstimate sunriseEstimate;
-    static SunEventEstimate sunsetEstimate;
+    static SunEventModel sunriseEstimate;
+    static SunEventModel sunsetEstimate;
 
 
 public:
@@ -104,5 +102,5 @@ public:
     static bool doesSunEventFit(SunEventKind);
 
 private:
-    static SunEventFit doesSunEventFitModel(SunEventEstimate&);
+    static SunEventFit doesSunEventFitModel(SunEventModel&);
 };

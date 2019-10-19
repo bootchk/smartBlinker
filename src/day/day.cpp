@@ -14,7 +14,7 @@
 #include "sunEvent/ConfirmedSunEvent.h"
 
 #ifdef USE_SUNRISE_ESTIMATOR
-#include <src/day/sunEventEstimate/sunEventEstimate.h>
+#include "sunEventModel/sunEventModel.h"
 #define SunriseEstimator EstimatedSunrise
 #else
 #include "simpleSunrise.h"
@@ -58,9 +58,9 @@ unsigned int lateSunset = 0;
 
 // Persistent
 #pragma NOINIT
-SunEventEstimate Day::sunriseEstimate;
+SunEventModel Day::sunriseEstimate;
 #pragma NOINIT
-SunEventEstimate Day::sunsetEstimate;
+SunEventModel Day::sunsetEstimate;
 
 
 
@@ -94,7 +94,7 @@ bool Day::wasSunriseDetected() { return  _wasSunriseDetected; }
 
 
 
-// OLD EpochTime Day::timeOfNextSunriseAfterTime(EpochTime& now) { return SunEventEstimate::timeOfNextSunriseAfterTime(now); }
+// OLD EpochTime Day::timeOfNextSunriseAfterTime(EpochTime& now) { return SunEventModel::timeOfNextSunriseAfterTime(now); }
 Duration Day::durationUntilNextSunriseLessSeconds(Duration lessDuration){ return sunriseEstimate.durationUntilNextSunEventLessSeconds(lessDuration) ; }
 
 
@@ -149,13 +149,13 @@ bool Day::doesSunEventFit(SunEventKind kind) {
 
 
 // The event is invisible parameter.  Event has occurred and we can get its attributes (time)
-SunEventFit Day::doesSunEventFitModel(SunEventEstimate& estimate) {
+SunEventFit Day::doesSunEventFitModel(SunEventModel& estimate) {
     SunEventFit result;
 
     if (estimate.isSunEventTimeValid()) {
         // Now time is not correct, event time is shifted due to low pass filter.
         // Call class method, not depend on kind
-        EpochTime timeOfSunEvent = SunEventEstimate::getTimeForConfirmedSunEvent();
+        EpochTime timeOfSunEvent = SunEventModel::getTimeForConfirmedSunEvent();
 
         /*
          * Sane:

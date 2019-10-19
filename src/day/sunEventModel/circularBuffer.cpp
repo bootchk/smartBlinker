@@ -3,7 +3,7 @@
 
 // msp430Drivers
 #include <assert/myAssert.h>
-#include <src/day/sunEventEstimate/circularBuffer.h>
+#include <src/day/sunEventModel/circularBuffer.h>
 
 
 
