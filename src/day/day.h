@@ -31,9 +31,9 @@ enum class SunEventKind {
     Sunset
 };
 
-enum class SunEventSanity {
+enum class SunEventFit {
     Early,
-    Sane,
+    DoesFit,
     Late,
     ModelInvalid
 };
@@ -101,8 +101,8 @@ public:
      *
      *
      */
-    static bool isSunEventSane(SunEventKind);
+    static bool doesSunEventFit(SunEventKind);
 
 private:
-    static SunEventSanity isSunEventSane(SunEventEstimate&);
+    static SunEventFit doesSunEventFitModel(SunEventEstimate&);
 };

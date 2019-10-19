@@ -101,24 +101,24 @@ Duration Day::durationUntilNextSunriseLessSeconds(Duration lessDuration){ return
 
 
 
-bool Day::isSunEventSane(SunEventKind kind) {
+bool Day::doesSunEventFit(SunEventKind kind) {
     bool result;
-    SunEventSanity sanity;
+    SunEventFit sanity;
 
     switch(kind) {
     case SunEventKind::Sunrise:
-        sanity = isSunEventSane(sunriseEstimate);
+        sanity = doesSunEventFitModel(sunriseEstimate);
         switch(sanity) {
-        case SunEventSanity::Early:
+        case SunEventFit::Early:
             debugStats::earlySunrise++;
             result = false;
             break;
-        case SunEventSanity::Late:
+        case SunEventFit::Late:
             debugStats::lateSunrise++;
             result = false;
             break;
-        case SunEventSanity::Sane:
-        case SunEventSanity::ModelInvalid:
+        case SunEventFit::DoesFit:
+        case SunEventFit::ModelInvalid:
             // Keep event if sane or building model.
             result = true;
             break;
@@ -126,18 +126,18 @@ bool Day::isSunEventSane(SunEventKind kind) {
         break;
 
     case SunEventKind::Sunset:
-        sanity = isSunEventSane(sunsetEstimate);
+        sanity = doesSunEventFitModel(sunsetEstimate);
         switch(sanity) {
-                case SunEventSanity::Early:
+                case SunEventFit::Early:
                     debugStats::earlySunset++;
                     result = false;
                     break;
-                case SunEventSanity::Late:
+                case SunEventFit::Late:
                     debugStats::lateSunset++;
                     result = false;
                     break;
-                case SunEventSanity::Sane:
-                case SunEventSanity::ModelInvalid:
+                case SunEventFit::DoesFit:
+                case SunEventFit::ModelInvalid:
                     // Keep event if sane or building model.
                     result = true;
                     break;
@@ -149,8 +149,8 @@ bool Day::isSunEventSane(SunEventKind kind) {
 
 
 // The event is invisible parameter.  Event has occurred and we can get its attributes (time)
-SunEventSanity Day::isSunEventSane(SunEventEstimate& estimate) {
-    SunEventSanity result;
+SunEventFit Day::doesSunEventFitModel(SunEventEstimate& estimate) {
+    SunEventFit result;
 
     if (estimate.isSunEventTimeValid()) {
         // Now time is not correct, event time is shifted due to low pass filter.
@@ -168,13 +168,13 @@ SunEventSanity Day::isSunEventSane(SunEventEstimate& estimate) {
         // Convert rangeResult to SanityResult
         switch(isInRange) {
         case RangeResult::Lesser:
-            result = SunEventSanity::Early;
+            result = SunEventFit::Early;
             break;
         case RangeResult::Greater:
-            result = SunEventSanity::Late;
+            result = SunEventFit::Late;
             break;
         case RangeResult::InRange:
-            result = SunEventSanity::Sane;
+            result = SunEventFit::DoesFit;
             break;
         }
 
@@ -198,7 +198,7 @@ SunEventSanity Day::isSunEventSane(SunEventEstimate& estimate) {
          * Sample could be first sample.
          * Or it could vastly revise earlier samples.
          */
-        result = SunEventSanity::ModelInvalid;
+        result = SunEventFit::ModelInvalid;
     }
 
     return result;
