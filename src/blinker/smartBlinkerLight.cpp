@@ -21,7 +21,7 @@ void SmartBlinker::calibrateLightSensor() {
 /*
  * Pair of similar functions
  */
-bool SmartBlinker::checkIsDaylight() {
+bool SmartBlinker::checkIsSunrise() {
     bool result;
 
     bool isLight =  LightSensor::isLight();
@@ -47,7 +47,7 @@ bool SmartBlinker::checkIsDaylight() {
 }
 
 
-bool SmartBlinker::checkIsNight() {
+bool SmartBlinker::checkIsSunset() {
     bool result;
 
     bool isDark =  LightSensor::isDark();
@@ -65,7 +65,7 @@ bool SmartBlinker::checkIsNight() {
 }
 
 
-void SmartBlinker::feedDaylightEvent() {
+void SmartBlinker::feedDaylightEventToFilter() {
     ConfirmedSunEvent::feedDaylightEvent();
 }
 
@@ -76,13 +76,13 @@ void SmartBlinker::feedDaylightEvent() {
  * Is subject to ephemeral weather events.
  */
 
-bool SmartBlinker::isDaylight() {
-    return not isNight();
+bool SmartBlinker::isDayLight() {
+    return not isNightDark();
 }
 
 
 
-bool SmartBlinker::isNight() {
+bool SmartBlinker::isNightDark() {
 #ifdef OMIT_LIGHT_SENSOR
     return false;
 #else

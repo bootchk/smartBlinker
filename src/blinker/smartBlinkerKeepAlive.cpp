@@ -35,9 +35,9 @@
 void SmartBlinker::keepAliveTask() {
     if (not PowerMgr::isNearBrownOut()) {
         /*
-         * There is enough power to check sun.
+         * There is enough power to check sunlight.
          */
-        if (checkIsNight()) {
+        if (isNightDark()) {
             BlinkStrategy::onPowerGoodAtNight();
         }
         else {

@@ -45,7 +45,8 @@ public:
 
     /*
      * Called when daylight detected raw w/o calling doesThisEventConfirm.
-     * For testing purposes?
+     * I.E. when morning blink overruns
+     * TODO also when light is detected after supposed sunset?
      */
     static void feedDaylightEvent();
 

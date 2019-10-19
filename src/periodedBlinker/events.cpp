@@ -165,13 +165,13 @@ void PeriodedBlinker::onNightBlinkPeriodOver() {
  */
 void PeriodedBlinker::onMorningBlinkPeriodOver() {
 
-    if (SmartBlinker::isDaylight()) {
+    if (SmartBlinker::isDayLight()) {
         /*
-         * Morning blinking has overrun sunrise
-         * Count daylight detection.
+         * Morning blinking has overrun sunrise.
+         * Begin filtered sunrise detect.
          * Not schedule another morning blink, schedule check sunrise again.
          */
-        SmartBlinker::feedDaylightEvent();
+        SmartBlinker::feedDaylightEventToFilter();
         scheduleCheckSunriseTask();
     }
     else {
