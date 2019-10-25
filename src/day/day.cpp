@@ -58,22 +58,22 @@ unsigned int lateSunset = 0;
 
 // Persistent
 #pragma NOINIT
-SunEventModel Day::sunriseEstimate;
+SunEventModel Day::sunriseModel;
 #pragma NOINIT
-SunEventModel Day::sunsetEstimate;
+SunEventModel Day::sunsetModel;
 
 
 
 
 void Day::init() {
-    sunriseEstimate.init();
-    sunsetEstimate.init();
+    sunriseModel.init();
+    sunsetModel.init();
 
     ConfirmedSunEvent::reset();
 }
 
-void Day::captureSunriseTime() { sunriseEstimate.captureSunEventTime(); }
-bool Day::isSunriseTimeValid() { return sunriseEstimate.isSunEventTimeValid(); }
+void Day::captureSunriseTime() { sunriseModel.captureSunEventTime(); }
+bool Day::isSunriseTimeValid() { return sunriseModel.isSunEventTimeValid(); }
 
 
 
@@ -86,16 +86,16 @@ void Day::onSunriseDetected() {
 }
 
 void Day::onSunsetDetected() {
-    sunsetEstimate.captureSunEventTime();
+    sunsetModel.captureSunEventTime();
 }
 
-bool Day::wasSunriseDetected() { return  _wasSunriseDetected; }
+//bool Day::wasSunriseDetected() { return  _wasSunriseDetected; }
 
 
 
 
 // OLD EpochTime Day::timeOfNextSunriseAfterTime(EpochTime& now) { return SunEventModel::timeOfNextSunriseAfterTime(now); }
-Duration Day::durationUntilNextSunriseLessSeconds(Duration lessDuration){ return sunriseEstimate.durationUntilNextSunEventLessSeconds(lessDuration) ; }
+Duration Day::durationUntilNextSunriseLessSeconds(Duration lessDuration){ return sunriseModel.durationUntilNextSunEventLessSeconds(lessDuration) ; }
 
 
 
@@ -107,7 +107,7 @@ bool Day::doesSunEventFit(SunEventKind kind) {
 
     switch(kind) {
     case SunEventKind::Sunrise:
-        sanity = doesSunEventFitModel(sunriseEstimate);
+        sanity = doesSunEventFitModel(sunriseModel);
         switch(sanity) {
         case SunEventFit::Early:
             debugStats::earlySunrise++;
@@ -126,7 +126,7 @@ bool Day::doesSunEventFit(SunEventKind kind) {
         break;
 
     case SunEventKind::Sunset:
-        sanity = doesSunEventFitModel(sunsetEstimate);
+        sanity = doesSunEventFitModel(sunsetModel);
         switch(sanity) {
                 case SunEventFit::Early:
                     debugStats::earlySunset++;

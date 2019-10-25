@@ -40,8 +40,8 @@ enum class SunEventFit {
 
 class Day {
 private:
-    static SunEventModel sunriseEstimate;
-    static SunEventModel sunsetEstimate;
+    static SunEventModel sunriseModel;
+    static SunEventModel sunsetModel;
 
 
 public:
