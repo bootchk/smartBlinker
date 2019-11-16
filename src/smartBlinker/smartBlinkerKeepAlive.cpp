@@ -1,16 +1,14 @@
 
-#include "smartBlinker.h"
-
+#include <src/smartBlinker/smartBlinker.h>
 #include "config.h"
 
-#ifdef USE_PERIODED_BLINKER
-#include "../periodedBlinker/periodedBlinker.h"
-#else
-
-#include "../darkBlinker/darkBlinker.h"
+#ifdef USE_PERIOD_BLINKER
+#include "../blinkApp/periodBlinker/periodBlinker.h"
+#elif defined(USE_DARK_BLINKER)
+#include "../blinkApp/darkBlinker/darkBlinker.h"
 #endif
 
-#include "../powerMgr.h"
+#include "../powerMgr/powerMgr.h"
 #include "../moment.h"
 
 // embeddedDutyCycle

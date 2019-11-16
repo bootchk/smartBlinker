@@ -1,22 +1,26 @@
 
-#include "src/periodedBlinker/periodedBlinker.h"
+/*
+ * Event methods of PeriodedBlinker
+ */
+#include "periodBlinker.h"
+
+// Superclass
+#include "../../smartBlinker/smartBlinker.h"
 
 
-#include "../blinker/smartBlinker.h"
+#include "blinkPeriod/blinkPeriod.h"
+#include "blinkPeriod/morningBlinkPeriod.h"
 
-#include "../blinkPeriod/blinkPeriod.h"
-#include "../blinkPeriod/morningBlinkPeriod.h"
 
-#include <src/day/day.h>
-#include <src/powerMgr.h>
-
-#include "../moment.h"
-
-#include "../day/sunEvent/ConfirmedSunEvent.h"
+#include "../../day/day.h"
+#include "../../powerMgr/powerMgr.h"
+#include "../../moment.h"
+#include "../../day/sunEvent/ConfirmedSunEvent.h"
 
 
 // msp430Drivers
 #include <softFault/softFault.h>
+
 
 
 

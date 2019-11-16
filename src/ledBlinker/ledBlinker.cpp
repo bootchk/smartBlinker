@@ -6,7 +6,7 @@
 #include <LEDAndLightSensor/ledAndLightSensor.h>
 #include <timer/timer.h>
 
-#include "parameters.h"
+#include "../parameters.h"
 
 
 

@@ -4,24 +4,33 @@
 
 // API defined by framework
 #include <app/app.h>
+#include <src/smartBlinker/smartBlinker.h>
 
-#include <gpio.h>   // depends on msp430.h   // Pins
-
-#include "ledBlinker.h"
+//#include <gpio.h>   // depends on msp430.h   // Pins
 
 #include "config.h"
 
 
 
 
-
+// Configure pins with retained state during sleep
 void App::configureSleepingGPIO() {
     /*
-     * App retains state of an LED during sleep.
-     * The LED is off during sleep, but the SoC chip is retaining its off state.
+     * App retains state of certain pins during sleep.
+     * E.G. LED is off during sleep, but the SoC chip is retaining its off state.
      */
-    LEDBlinker::configureGPIO();
+    SmartBlinker::configureGPIO();
 }
+
+// Configure pins used during wake
+void App::configureUsedPins() {
+    // E.G. App retains LED state during sleep (but usually off.)
+    SmartBlinker::configureGPIO();
+}
+
+
+
+
 
 // prototype on launchpad uses different pins
 #ifdef FULL_PROTO_LAUNCHPAD
@@ -162,8 +171,3 @@ void App::configureUnusedPinsLowPower() {
 #endif
 #endif
 
-
-void App::configureUsedPins() {
-    // App retains LED state during sleep (but usually off.)
-    LEDBlinker::configureGPIO();
-}

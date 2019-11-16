@@ -1,12 +1,10 @@
-/*
- * Scheduling methods
- */
-#include "periodedBlinker.h"
 
-#include "../moment.h"
+#include "../../moment.h"
 
 // embeddedDutyCycle
 #include <OS/taskScheduler.h>
+#include <src/blinkApp/periodBlinker/periodBlinker.h>
+
 
 
 /*

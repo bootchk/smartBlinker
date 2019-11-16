@@ -1,6 +1,4 @@
 
-#include "smartBlinker.h"
-
 #include "../day/sunEvent/ConfirmedSunEvent.h"
 #include "../day/day.h"
 
@@ -8,6 +6,7 @@
 
 // MSP430Drivers
 #include <lightSensor/lightSensor.h>
+#include <src/smartBlinker/smartBlinker.h>
 
 /*
  * The day/night methods.

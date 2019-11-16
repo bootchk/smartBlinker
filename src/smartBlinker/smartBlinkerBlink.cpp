@@ -1,6 +1,5 @@
 #include "smartBlinker.h"
-
-#include "../ledBlinker.h"
+#include "../ledBlinker/ledBlinker.h"
 
 #include "../../config.h"
 

@@ -1,14 +1,23 @@
 
-#include "periodedBlinker.h"
-#include "../blinker/smartBlinker.h"
 
-#include "../blinkPeriod/blinkPeriod.h"
-#include "../blinkPeriod/morningBlinkPeriod.h"
-#include "../powerMgr.h"
+/*
+ * Task methods of PeriodedBlinker
+ */
+#include "periodBlinker.h"
+
+// superclass methods
+#include "../../smartBlinker/smartBlinker.h"
+
+
+#include "blinkPeriod/blinkPeriod.h"
+#include "blinkPeriod/morningBlinkPeriod.h"
+
+#include "../../powerMgr/powerMgr.h"
 
 
 // msp430Drivers
 #include <assert/myAssert.h>
+
 
 
 

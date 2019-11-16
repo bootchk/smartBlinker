@@ -23,7 +23,21 @@
 #define ACCELERATED_TIME_PARAMETERS
 
 
+/*
+ * Choose kind of BlinkerApp
+ */
+#define USE_PERIOD_BLINKER
+//#define USE_DARK_BLINKER
 
+
+// Define macro giving a class name
+#ifdef USE_PERIOD_BLINKER
+#define BlinkStrategy PeriodedBlinker
+#elif defined USE_DARK_BLINKER
+#define BlinkStrategy DarkBlinker
+#else
+#error "Kind of app not chosen"
+#endif
 
 
 /*  Choose board design:
@@ -76,14 +90,7 @@
 
 
 
-/*
- * Whether to use PeriodedBlinker
- */
-#define USE_PERIODED_BLINKER
-#ifdef USE_PERIODED_BLINKER
-#define BlinkStrategy PeriodedBlinker
-#else
-#endif
+
 
 /*
  * Whether isNight() always returns false (forego use of light sensor.)

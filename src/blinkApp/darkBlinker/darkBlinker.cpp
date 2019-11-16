@@ -2,16 +2,15 @@
  * Scheduling methods
  */
 #include "darkBlinker.h"
-#include "../blinker/smartBlinker.h"
-
-#include "../moment.h"
-#include "../powerMgr.h"
+#include "../../moment.h"
+#include "../../powerMgr/powerMgr.h"
 
 // embeddedDutyCycle
 #include <OS/taskScheduler.h>
 
 // msp430Drivers
 #include <assert/myAssert.h>
+#include <src/smartBlinker/smartBlinker.h>
 
 
 

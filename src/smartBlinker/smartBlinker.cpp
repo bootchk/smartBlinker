@@ -3,14 +3,13 @@
 
 #include "../day/day.h"
 
-
 #include "../../config.h"
 
 // Choose a strategy
-#ifdef USE_PERIODED_BLINKER
-#include "../periodedBlinker/periodedBlinker.h"
-#else
-#include "../darkBlinker/darkBlinker.h"
+#ifdef USE_PERIOD_BLINKER
+#include "../blinkApp/periodBlinker/periodBlinker.h"
+#elif defined(USE_DARK_BLINKER)
+#include "../blinkApp/darkBlinker/darkBlinker.h"
 #endif
 
 // embeddedDutyCycle
@@ -109,15 +108,7 @@ EpochTime SmartBlinker::timeToWake() {
 Duration SmartBlinker::durationUntilWake() { return TaskScheduler::durationUntilNextTask(); }
 
 
-
-
 bool SmartBlinker::isSomeTaskScheduled() { return TaskScheduler::isTaskScheduled(); }
-
-
-
-
-
-
 
 
 
