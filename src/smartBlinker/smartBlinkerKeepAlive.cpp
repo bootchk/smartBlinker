@@ -9,7 +9,7 @@
 #endif
 
 #include "../powerMgr/powerMgr.h"
-#include "../moment.h"
+#include "../moment/moment.h"
 
 // embeddedDutyCycle
 #include <OS/taskScheduler.h>

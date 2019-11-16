@@ -62,7 +62,8 @@ namespace Parameters {
 static constexpr unsigned int CountMorningBlinkPeriods = 8;
 
 // For DarkBlinker strategy
-static const unsigned int BetweenDarkChecks = 10;
+static const unsigned int BetweenDarkBlinkerDarkChecks = 10;
+// The similar method for PeriodBlinker strategy is BetweenSunChecks
 
 static constexpr unsigned long int TwentyFourHours = 86400;
 

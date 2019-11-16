@@ -10,8 +10,12 @@
  */
 
 
-void SmartBlinker::blinkDecorative() {
+void SmartBlinker::blinkDecorativeBright() {
     LEDBlinker::blinkBright();
+}
+
+void SmartBlinker::blinkDecorativeDim() {
+    LEDBlinker::blinkDim();
 }
 
 void SmartBlinker::indicateSunCheck() {

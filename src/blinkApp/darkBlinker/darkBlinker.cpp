@@ -1,8 +1,14 @@
 /*
- * Scheduling methods
+ * All (scheduling, tasks, etc.)  methods
  */
+
 #include "darkBlinker.h"
-#include "../../moment.h"
+
+// Superclass
+#include <src/smartBlinker/smartBlinker.h>
+
+
+#include "../../moment/moment.h"
 #include "../../powerMgr/powerMgr.h"
 
 // embeddedDutyCycle
@@ -10,7 +16,7 @@
 
 // msp430Drivers
 #include <assert/myAssert.h>
-#include <src/smartBlinker/smartBlinker.h>
+
 
 
 
@@ -28,7 +34,7 @@ void DarkBlinker::scheduleInitialTask() {
 void DarkBlinker::scheduleCheckDarkTask() {
     TaskScheduler::scheduleTask(
                 checkDarkTask,
-                Moment::betweenDarkChecks);
+                Moment::betweenDarkBlinkerDarkChecks);
 }
 
 void DarkBlinker::scheduleBlinkTask() {
@@ -48,7 +54,7 @@ void DarkBlinker::checkDarkTask() {
                    onDarkDetected();
         }
         else {
-            // still day, schedule self again short time later
+            // still light, schedule self again short time later
             scheduleCheckDarkTask();
         }
 
@@ -72,10 +78,9 @@ void DarkBlinker::blinkTask() {
     }
     else {
         // Still dark, and plenty of power
-        SmartBlinker::blinkDecorative();
+        SmartBlinker::blinkDecorativeDim();
         scheduleBlinkTask();
     }
-
 }
 
 
@@ -86,6 +91,7 @@ void DarkBlinker::blinkTask() {
  * When dark, don't immediately blink, but schedule.
  */
 void DarkBlinker::onDarkDetected() {
+    // FUTURE scheduleInitialBlinkTask()  that filters out very brief dark detect
     scheduleBlinkTask();
 }
 

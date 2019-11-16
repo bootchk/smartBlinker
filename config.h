@@ -26,8 +26,8 @@
 /*
  * Choose kind of BlinkerApp
  */
-#define USE_PERIOD_BLINKER
-//#define USE_DARK_BLINKER
+//#define USE_PERIOD_BLINKER
+#define USE_DARK_BLINKER
 
 
 // Define macro giving a class name

@@ -69,7 +69,8 @@ public:
 
 
     // ultimate goal: blink for entertainment
-    static void blinkDecorative();
+    static void blinkDecorativeBright();
+    static void blinkDecorativeDim();
 
     // Other indicateions (may be blinks): optional, dim
     static void indicateSunCheck();

@@ -1,6 +1,6 @@
 #include "moment.h"
 
-#include "parameters.h"
+#include "../parameters.h"
 
 
 
@@ -9,6 +9,8 @@
  *
  * Note C++ invokes default constructor to Duration
  */
+
+
 // Common to all strategies
 Duration Moment::betweenBlinks(void) { return Parameters::BetweenBlinks; }
 
@@ -18,10 +20,14 @@ Duration Moment::betweenKeepAlive(void) { return Parameters::BetweenKeepAlive; }
 Duration Moment::betweenSunsetAndBlinking(void) { return Parameters::BetweenSunsetAndBlinking; }
 Duration Moment::betweenEveningAndNightBlinking(void) { return Parameters::BetweenEveningAndNightBlinking; }
 
-// Strategy DarkBlinker
-Duration Moment::betweenDarkChecks(void) { return Parameters::BetweenDarkChecks; }
 
-#include "day/day.h"
+
+
+
+// Strategy DarkBlinker
+Duration Moment::betweenDarkBlinkerDarkChecks(void) { return Parameters::BetweenDarkBlinkerDarkChecks; }
+
+#include "../day/day.h"
 
 
 /*

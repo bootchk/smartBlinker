@@ -119,7 +119,7 @@ void PeriodedBlinker::checkSunsetTask() {
 
 void PeriodedBlinker::blinkTask() {
 
-    SmartBlinker::blinkDecorative();
+    SmartBlinker::blinkDecorativeBright();
 
     ///TestMain::blinkForcedGreenLED(5);
 

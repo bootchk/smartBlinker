@@ -22,10 +22,18 @@ public:
     /*
      * These return constants, but to satisfy MomentMethodPtr, they are not declared such.
      */
+
+    /*
+     * Universal to all blinking apps
+     */
     static Duration betweenBlinks(void);
-    static Duration betweenDarkChecks(void);
-    static Duration betweenSunChecks(void);
     static Duration betweenKeepAlive(void);
+
+    // Specific to DarkBlinker
+    static Duration betweenDarkBlinkerDarkChecks(void);
+
+    // Specific to PeriodBlinker
+    static Duration betweenSunChecks(void);
     static Duration betweenSunsetAndBlinking(void);
     static Duration betweenEveningAndNightBlinking(void);
 
@@ -33,7 +41,6 @@ public:
      * This returns a varying Duration.
      */
     static Duration untilMorningBlinkPeriodStart(void);
-
     static Duration untilSubsequentMorningBlinkPeriodStart(void);
 };
 

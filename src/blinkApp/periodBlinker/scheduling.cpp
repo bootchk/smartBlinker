@@ -1,9 +1,11 @@
 
-#include "../../moment.h"
+#include "periodBlinker.h"
+
+#include "../../moment/moment.h"
 
 // embeddedDutyCycle
 #include <OS/taskScheduler.h>
-#include <src/blinkApp/periodBlinker/periodBlinker.h>
+
 
 
 
