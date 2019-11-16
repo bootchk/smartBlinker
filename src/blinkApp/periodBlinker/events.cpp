@@ -23,6 +23,13 @@
 
 
 
+void
+PeriodedBlinker::init() {
+    // Show ignorance of day attributes (sunrise time).
+    // Show ignorance of any sunrise/sunset events
+    Day::init();
+}
+
 
 
 /*

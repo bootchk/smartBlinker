@@ -14,6 +14,10 @@
 
 
 
+void
+DarkBlinker::init() {
+    // Nothing to init
+}
 
 
 void DarkBlinker::scheduleInitialTask() {

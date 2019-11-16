@@ -8,11 +8,17 @@
 
 
 /*
- * App: blink decoratively when dark and power permits
- * or blink keep alive
+ * Capability (essential behaviour) is: blink decoratively when dark and power permits or blink keep alive.
+ * Framework for managing power, detecting light, and blinking.
  *
- * Framework for essential behaviour (detecting light and blinking.)
- * Uses a set of tasks and events that further defines behaviour.
+ * Thus every SmartBlinker uses:
+ * - LEDBlinker
+ * - LightSensor
+ * - PowerMgr
+ *
+ * Not every SmartBlinker understands Day, which is more specialized than "light conditions."
+ *
+ * Uses a BlinkStrategy (set of tasks and events) that further defines behaviour.
  */
 
 class SmartBlinker {

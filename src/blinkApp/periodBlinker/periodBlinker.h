@@ -14,6 +14,8 @@
 
 class PeriodedBlinker {
 public:
+    static void init();
+
     static void scheduleInitialTask();
 
 

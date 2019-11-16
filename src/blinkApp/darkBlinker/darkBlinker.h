@@ -9,6 +9,8 @@
 
 class DarkBlinker {
 public:
+    static void init();
+
     static void scheduleInitialTask();
 
     /*

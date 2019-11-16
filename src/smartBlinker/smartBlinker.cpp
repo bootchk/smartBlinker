@@ -1,8 +1,6 @@
 
 #include "smartBlinker.h"
 
-#include "../day/day.h"
-
 #include "../../config.h"
 
 // Choose a strategy
@@ -79,9 +77,7 @@ void SmartBlinker::init() {
     // This power spike obscures EnergyTrace low power, so remove it.
     // indicateEvent();
 
-    // Show ignorance of day attributes (sunrise time).
-    // Show ignorance of any sunrise/sunset events
-    Day::init();
+    BlinkStrategy::init();
 
     TaskScheduler::init();
     // Assert no tasks schedule, ready to schedule
