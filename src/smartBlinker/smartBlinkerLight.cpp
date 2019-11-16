@@ -1,6 +1,5 @@
 
-#include "../day/sunEvent/ConfirmedSunEvent.h"
-#include "../day/day.h"
+
 
 
 
@@ -15,59 +14,6 @@
 void SmartBlinker::calibrateLightSensor() {
     LightSensor::calibrateInLightOrReset();
 }
-
-
-/*
- * Pair of similar functions
- */
-bool SmartBlinker::checkIsSunrise() {
-    bool result;
-
-    bool isLight =  LightSensor::isLight();
-
-    // Feed event to low-pass filter.
-    bool isConfirmed = ConfirmedSunEvent::doesThisEventConfirm( isLight );
-
-    // If not low-pass filtered
-    if (isConfirmed) {
-        // Is sane with respect to model of sunrise
-        result = Day::doesSunEventFit(SunEventKind::Sunrise);
-        /*
-         * When result false, Seems like daylight, but too early.  Keep checking for daylight.
-         * We should eventually find seeming daylight closer to modeled sunrise.
-         */
-    }
-    else {
-        // Not confirmed, wait for confirmation (two signals in a row.)
-        result = false;
-    }
-
-    return result;
-}
-
-
-bool SmartBlinker::checkIsSunset() {
-    bool result;
-
-    bool isDark =  LightSensor::isDark();
-    bool isConfirmed = ConfirmedSunEvent::doesThisEventConfirm( isDark );
-
-    if (isConfirmed) {
-            // Is sane with respect to model of sunset
-            result = Day::doesSunEventFit(SunEventKind::Sunset);
-    }
-    else {
-            result = false;
-    }
-
-    return result;
-}
-
-
-void SmartBlinker::feedDaylightEventToFilter() {
-    ConfirmedSunEvent::feedDaylightEvent();
-}
-
 
 
 /*

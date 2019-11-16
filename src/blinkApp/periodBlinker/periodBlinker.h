@@ -23,6 +23,21 @@ public:
 
     static void checkBlinkingPowerExhaustedAndTerminateBlinkPeriod();
 
+        /*
+         * Check if sun event occurred.
+         * Side effects to ConfirmedSunEvent.
+         *
+         * Returns true if:
+         * - event occurred and is confirmed by low pass filter
+         * - is sane with model (fits valid model or model is invalid)
+         */
+        static bool checkIsSunset();
+        static bool checkIsSunrise();
+
+        // Called when we detect sun event abnormally, i.e. during moring blink that overruns
+        // TODO Or when detect light after sunset.
+        static void feedDaylightEventToFilter();
+
     /*
      * Scheduled tasks
      */

@@ -82,7 +82,7 @@ void PeriodedBlinker::checkSunriseTask() {
     if ( not SmartBlinker::transitionToKeepAlive() ) {
         // See blinker/smartBlinkerLight.cpp
         // Filter low-pass
-        if (SmartBlinker::checkIsSunrise()) {
+        if (checkIsSunrise()) {
             onSunriseDetected();
         }
         else {
@@ -101,7 +101,7 @@ void PeriodedBlinker::checkSunriseTask() {
 
 void PeriodedBlinker::checkSunsetTask() {
     if ( not SmartBlinker::transitionToKeepAlive() ) {
-        if (SmartBlinker::checkIsSunset()) {
+        if (checkIsSunset()) {
             onSunsetDetected();
         }
         else {

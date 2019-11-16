@@ -182,7 +182,7 @@ void PeriodedBlinker::onMorningBlinkPeriodOver() {
          * Begin filtered sunrise detect.
          * Not schedule another morning blink, schedule check sunrise again.
          */
-        SmartBlinker::feedDaylightEventToFilter();
+        feedDaylightEventToFilter();
         scheduleCheckSunriseTask();
     }
     else {
