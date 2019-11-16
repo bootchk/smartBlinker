@@ -60,7 +60,10 @@ Duration App::durationOfSleep() { return SmartBlinker::durationUntilWake(); }
 
 
 
-void App::takeTimeNow() {
+void App::hookBeforeSleep() {
+#ifdef OLD
+    Vestigial from bug stopping SMCLK, affecting I2C
+
     /*
      * If sunrise was detected earlier in this waking period,
      * capture time of sunrise.
@@ -77,5 +80,5 @@ void App::takeTimeNow() {
      *
      * PartialSchedule::complete();
      */
-
+#endif
 }
