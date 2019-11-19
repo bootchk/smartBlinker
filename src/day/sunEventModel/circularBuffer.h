@@ -1,8 +1,5 @@
 #pragma once
 
-#include "../../parameters.h"   // SampleSetSize
-
-
 // msp430Drivers
 #include <alarmClock/time/timeTypes.h>
 
@@ -24,6 +21,27 @@
  *    Emptying:  init(): add(x); isEmpty()=>false; getCount()=>1; empty(); isEmpty()=>true(); getCount()=>0
  */
 
+
+#include "../../../config.h"
+
+#ifdef ACCELERATED_TIME_PARAMETERS
+// Parameter at compile time
+static constexpr unsigned int SampleSetSize = 2;
+static constexpr unsigned int MaxSampleSetIndex = (SampleSetSize-1);
+
+#elif defined(PRODUCTION_PARAMETERS)
+// Accelerated
+
+// Require 3 consecutive sunrises to confirm
+static constexpr unsigned int SampleSetSize = 3;
+static constexpr unsigned int MaxSampleSetIndex = (SampleSetSize-1);
+#else
+#error "Production versus accelerated not defined"
+#endif
+
+
+
+
 class CircularBuffer {
 private:
 
@@ -39,7 +57,7 @@ unsigned int head;
 // count in range [0, SampleSetSize]
 unsigned int count;
 
-EpochTime sampleSet[Parameters::SampleSetSize]; // = {0,0};
+EpochTime sampleSet[SampleSetSize]; // = {0,0};
 
 
 

@@ -1,11 +1,16 @@
 #pragma once
 
+#include "circularBuffer.h"
+#include "periodicTimeSeries.h"
+
+
 // msp430Drivers
 #include <alarmClock/time/timeTypes.h>
 #include <alarmClock/time/interval.h>
-#include "circularBuffer.h"
-#include <src/day/sunEventModel/circularBuffer.h>
-#include <src/day/sunEventModel/periodicTimeSeries.h>
+
+
+
+
 
 /*
  * SunEvent: sunrise or sunset, detected by light level sample.

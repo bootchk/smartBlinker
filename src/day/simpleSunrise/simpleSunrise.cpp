@@ -1,9 +1,9 @@
 #include "simpleSunrise.h"
 
-#include "../../parameters.h"
-
+// msp430Drivers
 #include <alarmClock/epochClock/epochClock.h>
 
+#include "../day.h"   // DayPeriod
 
 
 
@@ -48,7 +48,8 @@ EpochTime SimpleSunrise::timeOfNextSunriseAfterTime(EpochTime& now) {
     EpochTime nextSunrise = now;
     while (nextSunrise < now) {
         // FUTURE Implement operator + for EpochTime   nextSunrise += Duration(Parameters::TwentyFourHours);
-        nextSunrise += Parameters::TwentyFourHours;
+        // DayPeriod is not necessarily 24 hours if time is compressed
+        nextSunrise += DayPeriod;
     }
     // assert nextSunrise > now ( is after the present moment )
     // assert nextSunrise < (now + 24hours)

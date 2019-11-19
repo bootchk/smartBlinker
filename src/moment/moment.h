@@ -29,8 +29,12 @@ public:
     static Duration betweenBlinks(void);
     static Duration betweenKeepAlive(void);
 
+
+
     // Specific to DarkBlinker
     static Duration betweenDarkBlinkerDarkChecks(void);
+
+
 
     // Specific to PeriodBlinker
     static Duration betweenSunChecks(void);

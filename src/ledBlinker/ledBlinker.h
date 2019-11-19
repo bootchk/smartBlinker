@@ -12,7 +12,13 @@ public:
      * which typically in oval of about 60/30 degrees
      */
     /*
-     * Only visible from close range, while staring.
+     * Visible from close range.
+     */
+    static void blinkVisibleCloserRange();
+
+
+    /*
+     * Easily visible within say 100 feet.
      */
     static void blinkDim();
 

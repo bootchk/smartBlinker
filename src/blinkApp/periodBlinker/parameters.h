@@ -13,41 +13,27 @@
  *
  * Note a schedule of one second really takes two seconds (Lamport's rule adds an average of half second.)
  */
-#include "config.h"   // chooses
+#include "config.h"   // chooses time acceleration
 
-
-
-#define ONE_MINUTE        60
-#define TWO_MINUTES      120
-#define FIFTEEN_MINUTES  900
-#define HALF_HOUR       1800
-#define ONE_HOUR        3600
-#define TWO_HOURS       7200
-#define TWELVE_HOURS   43200
-#define TWENTYFOUR_HOURS 86400
+#include "../../timeConstants.h"
 
 
 
 
 /*
- * SunriseEstimator
+ * !!! This is now parameters only for PeriodBlinker
  *
- * DayPeriod:  Duration of day (not length of daylight, includes night.)  Real life: 24 hours.
- * Period of sunrise wobbles a little around 24 hours.
- *
- * HalfDayPeriod: half a day.  Real life: 12 hours.
- *
- * MaxSunriseDelta: Amount we allow sun event samples to vary from existing model without invalidating model.
- *
- * SaneSunEventLead: Sun event samples earlier than this amount from model are rejected as not sane (spurious),
- * without invalidating a valid model?
+ * See also day.h for parameters about Day
+ * See also circularBuffer.h for parameters about SunEventModel (size of sample)
  */
 
+// TODO lots of cruft here
 
 
 
 // class Parameters {
 // public:
+
 namespace Parameters {
 
 
@@ -61,11 +47,8 @@ namespace Parameters {
 // Eight subperiods each same time as checkSun duration (15 minutes) equals 2 hours total
 static constexpr unsigned int CountMorningBlinkPeriods = 8;
 
-// For DarkBlinker strategy
-static const unsigned int BetweenDarkBlinkerDarkChecks = 10;
-// The similar method for PeriodBlinker strategy is BetweenSunChecks
 
-static constexpr unsigned long int TwentyFourHours = 86400;
+
 
 
 
@@ -75,6 +58,8 @@ static constexpr unsigned long int TwentyFourHours = 86400;
     // Most durations very short so time compressed
 
     static constexpr Duration BetweenBlinks = 1;
+    static const unsigned int BetweenKeepAlive = 3;
+
 
     static constexpr Duration BetweenSunsetAndBlinking = 5;
     static constexpr Duration BetweenEveningAndNightBlinking = 5;
@@ -113,14 +98,14 @@ static constexpr unsigned long int TwentyFourHours = 86400;
 
 // Testing w unlimited power on Launchpad, but full integration test with sunrises and morning blinking using SunriseEstimator
 
-static constexpr unsigned int SampleSetSize = 2;
-static constexpr unsigned int MaxSampleSetIndex = (SampleSetSize-1);
+    static const unsigned int BetweenBlinks = 1;
+    static const unsigned int BetweenKeepAlive = 3;
+
 
 static const unsigned int BetweenSunChecks = 3;
-static const unsigned int BetweenKeepAlive = 3;
 
 // Blink Period parameters
-static const unsigned int BetweenBlinks = 1;
+
 static const unsigned int BetweenSunsetAndBlinking = 3;
 // Not expected to reach night blinking, should exhaust power first
 static const unsigned int BetweenEveningAndNightBlinking = 1;
@@ -135,11 +120,6 @@ static const unsigned int BlinksNight = 1;
 // 1 blink per subperiod times 8 subperiods
 static const unsigned int BlinksMorningSubperiod = 1;
 
-// SunriseEstimator
-static constexpr unsigned long int DayPeriod = TWO_MINUTES;
-static constexpr unsigned long int HalfDayPeriod = ONE_MINUTE;
-static constexpr unsigned long int MaxSunriseDelta = 20;
-static constexpr unsigned long int SaneSunEventLead = 30;
 
 
 // TODO why are some durations long and others just ints?
@@ -207,13 +187,15 @@ static constexpr unsigned long int SaneSunEventLead = 30;
     static const unsigned int BlinksMorning = 6 * 60 * 2;
 #endif
 
-// Require 3 consecutive sunrises to confirm
-static constexpr unsigned int SampleSetSize = 3;
-static constexpr unsigned int MaxSampleSetIndex = (SampleSetSize-1);
+
+    static constexpr unsigned int BetweenBlinks = 10;
+    static constexpr unsigned int BetweenKeepAlive = ONE_HOUR;
 
 
-static constexpr unsigned int BetweenBlinks = 10;
-static constexpr unsigned int BetweenKeepAlive = ONE_HOUR;
+
+
+
+
 
 // Since detection takes two sun checks, will be fifteen minutes after sunset
 static constexpr unsigned int BetweenSunsetAndBlinking = ONE_MINUTE;
@@ -224,12 +206,9 @@ static constexpr unsigned int BetweenSunChecks = FIFTEEN_MINUTES;
 // Allow fifteen extra minutes beyond expected blink time of two hours
 static constexpr unsigned int BetweenMorningBlinkStartAndSunrise = TWO_HOURS + FIFTEEN_MINUTES;
 
-// SunriseEstimator
-// OLD static constexpr unsigned long int SunrisePeriod = TwentyFourHours;
-static constexpr unsigned long int DayPeriod = TWENTYFOUR_HOURS;
-static constexpr unsigned long int HalfDayPeriod = TWELVE_HOURS;
-static constexpr unsigned long int MaxSunriseDelta = HALF_HOUR;
-static constexpr unsigned long int SaneSunEventLead = ONE_HOUR;
+
+
+
 
 
 // Evening and night blink for 2 hours every 10 seconds

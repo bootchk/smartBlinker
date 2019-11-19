@@ -1,9 +1,9 @@
 
-#include "../../parameters.h"   // SampleSetSize
+#include "circularBuffer.h"
 
 // msp430Drivers
 #include <assert/myAssert.h>
-#include <src/day/sunEventModel/circularBuffer.h>
+
 
 
 
@@ -17,10 +17,10 @@
 // Before adding at head.
 void CircularBuffer::adjustHeadAndCount() {
     this->head++;
-    if (head > Parameters::MaxSampleSetIndex )  head = 0;
+    if (head > MaxSampleSetIndex )  head = 0;
 
     // Max count is SampleSetSize
-    if (count < Parameters::SampleSetSize) count++;
+    if (count < SampleSetSize) count++;
 
     // head points to most recent sample
 }
@@ -44,7 +44,7 @@ void adjustIterIndexandCountAfterNextIter() {
 
     // Iter in reverse.  Modulo.
     if (iter::index == 0)
-        iter::index = Parameters::MaxSampleSetIndex;
+        iter::index = MaxSampleSetIndex;
     else
         iter::index--;
 }
@@ -61,7 +61,7 @@ void adjustIterIndexandCountAfterNextIter() {
 //unsigned int CircularBuffer::count; // = 0;  // Always points to most recent sample
 
 //#pragma PERSISTENT
-//EpochTime CircularBuffersampleSet[Parameters::SampleSetSize] = {0,0};
+//EpochTime CircularBuffersampleSet[SampleSetSize] = {0,0};
 
 
 
@@ -79,7 +79,7 @@ void CircularBuffer::addSample(EpochTime sample){
 
 
 
-bool CircularBuffer::isFull(){ return count == Parameters::SampleSetSize; }
+bool CircularBuffer::isFull(){ return count == SampleSetSize; }
 bool CircularBuffer::isEmpty(){ return count == 0; }
 unsigned int CircularBuffer::getCount(){ return count; }
 

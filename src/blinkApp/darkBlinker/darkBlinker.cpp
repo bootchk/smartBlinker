@@ -78,7 +78,7 @@ void DarkBlinker::blinkTask() {
     }
     else {
         // Still dark, and plenty of power
-        SmartBlinker::blinkDecorativeDim();
+        SmartBlinker::blinkDecorativeDimmest();
         scheduleBlinkTask();
     }
 }

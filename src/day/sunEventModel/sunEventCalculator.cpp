@@ -1,10 +1,12 @@
 
-#include "../../parameters.h"
+#include "sunEventCalculator.h"
+
+#include "../day.h"  // filtering parameters
 
 // msp430Drivers
 #include <assert/myAssert.h>
 #include <alarmClock/time/timeMath.h>
-#include <src/day/sunEventModel/sunEventCalculator.h>
+
 
 
 
@@ -27,7 +29,7 @@ bool SunEventCalculator::doesSampleFitsSampleSet(EpochTime sample, CircularBuffe
    result = canProjectTimetoReferenceTimeWithinDelta (
             previousSunEvent,
             sample,
-            Parameters::MaxSunriseDelta,  // TODO SunEvent
+            MaxSunEventDelta,
             interval );
    return result;
 }
@@ -54,7 +56,7 @@ Interval SunEventCalculator::averageIntervalToLatestSample(CircularBuffer& sampl
         Interval interval;  // no init, function will write it
         bool didProject = canProjectTimetoReferenceTimeWithinDelta(toProjectTime,
                                               latestSunriseSample,
-                                              2*Parameters::MaxSunriseDelta,
+                                              2 * MaxSunEventDelta,
                                               interval);
         /*
          * Not invariant: all samples project to within delta of head: myAssert (didProject);
@@ -88,7 +90,7 @@ bool SunEventCalculator::canProjectTimetoReferenceTimeWithinDelta (
 
     bool result;
 
-    EpochTime workingProjection = TimeMath::projectTimePastReferenceTime(time, referenceTime, Parameters::DayPeriod);
+    EpochTime workingProjection = TimeMath::projectTimePastReferenceTime(time, referenceTime, DayPeriod);
 
     Interval workingInterval;
     workingInterval = workingProjection - referenceTime;
@@ -99,7 +101,7 @@ bool SunEventCalculator::canProjectTimetoReferenceTimeWithinDelta (
     }
     else {
         // Projection is more than delta beyond reference time.  Back up and test again.
-        workingProjection -= Parameters::DayPeriod;
+        workingProjection -= DayPeriod;
         workingInterval = referenceTime - workingProjection;
         myAssert(workingInterval >= 0);
         if ( workingInterval < delta.seconds) {

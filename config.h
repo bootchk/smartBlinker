@@ -9,7 +9,7 @@
 
 
 
-// For testing
+// For testing PeriodBlinker
 /*
  * PRODUCTION: Normal, real time parameters
  * COMPRESSED: Normal operation, but compressed time.  For bench testing using hand and Launchpad power.

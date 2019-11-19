@@ -13,6 +13,8 @@
 
 #include "sunEvent/ConfirmedSunEvent.h"
 
+
+
 #ifdef USE_SUNRISE_ESTIMATOR
 #include "sunEventModel/sunEventModel.h"
 #define SunriseEstimator EstimatedSunrise
@@ -23,7 +25,7 @@
 
 
 
-#include "../parameters.h"
+
 
 
 
@@ -38,6 +40,7 @@ namespace {
 bool _wasSunriseDetected = false;
 
 }
+
 
 
 namespace debugStats {
@@ -163,7 +166,7 @@ SunEventFit Day::doesSunEventFitModel(SunEventModel& estimate) {
          */
         Interval intervalFromNearestSunEvent = estimate.intervalFromPredictedNearestSunEvent();
 
-        RangeResult isInRange = intervalFromNearestSunEvent.inRange(Parameters::SaneSunEventLead);
+        RangeResult isInRange = intervalFromNearestSunEvent.inRange(SaneSunEventLead);
 
         // Convert rangeResult to SanityResult
         switch(isInRange) {

@@ -1,8 +1,16 @@
 #include "moment.h"
 
-#include "../parameters.h"
+#include "../../config.h"
 
 
+
+#ifdef USE_DARK_BLINKER
+#include "../blinkApp/darkBlinker/parameters.h"
+#elif defined(USE_PERIOD_BLINKER)
+#include "../blinkApp/periodBlinker/parameters.h"
+#else
+#errror "Kind of blinker app not defined"
+#endif
 
 /*
  * These return constants.
@@ -11,21 +19,31 @@
  */
 
 
+
+
+
 // Common to all strategies
 Duration Moment::betweenBlinks(void) { return Parameters::BetweenBlinks; }
+Duration Moment::betweenKeepAlive(void) { return Parameters::BetweenKeepAlive; }
+
+
+#ifdef USE_DARK_BLINKER
+// Strategy DarkBlinker
+Duration Moment::betweenDarkBlinkerDarkChecks(void) { return Parameters::BetweenDarkBlinkerDarkChecks; }
+#endif
+
+
+
+#ifdef USE_PERIOD_BLINKER
 
 // Strategy PeriodedBlinker
 Duration Moment::betweenSunChecks(void) { return Parameters::BetweenSunChecks; }
-Duration Moment::betweenKeepAlive(void) { return Parameters::BetweenKeepAlive; }
 Duration Moment::betweenSunsetAndBlinking(void) { return Parameters::BetweenSunsetAndBlinking; }
 Duration Moment::betweenEveningAndNightBlinking(void) { return Parameters::BetweenEveningAndNightBlinking; }
 
 
 
 
-
-// Strategy DarkBlinker
-Duration Moment::betweenDarkBlinkerDarkChecks(void) { return Parameters::BetweenDarkBlinkerDarkChecks; }
 
 #include "../day/day.h"
 
@@ -55,3 +73,5 @@ Duration Moment::untilSubsequentMorningBlinkPeriodStart(void) {
     // Keep blinking at same period as prior morning blink period.
     return Parameters::BetweenBlinks;
 }
+
+#endif

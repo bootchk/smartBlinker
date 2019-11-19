@@ -1,13 +1,21 @@
 
-#include "../../parameters.h"
+// periodicTimeSeries has same API as sunriseCalculator, delegates to sunriseCalculator
+#include <src/day/sunEventModel/periodicTimeSeries.h>
+#include <src/day/sunEventModel/sunEventModel.h>
 
+#include "../day.h"
+
+
+// Parameters from the user of Day
+#include "../../blinkApp/periodBlinker/parameters.h"
+
+
+// msp430Drivers
+#include <alarmClock/time/timeMath.h>
 #include <alarmClock/epochClock/epochClock.h>
 #include <assert/myAssert.h>
 
-// periodicTimeSeries has same API as sunriseCalculator, delegates to sunriseCalculator
-#include <alarmClock/time/timeMath.h>
-#include <src/day/sunEventModel/periodicTimeSeries.h>
-#include <src/day/sunEventModel/sunEventModel.h>
+
 
 
 
@@ -100,7 +108,7 @@ Duration SunEventModel::durationUntilNextSunEventLessSeconds(Duration lessDurati
     EpochTime estimatedNextSunEvent = TimeMath::projectTimePastReferenceTime(
             timeSeries.estimatePreviousSunEvent(),
             now,
-            Parameters::DayPeriod);
+            DayPeriod);
     // assert estimatedNextSunEvent >= now
 
     Duration tilSunEvent = estimatedNextSunEvent - now;
@@ -137,8 +145,8 @@ Interval SunEventModel::intervalFromPredictedNearestSunEvent() {
     EpochTime estimatedNearestSunEvent = TimeMath::projectTimeByPeriodToNearReferenceTime(
             estimatedPreviousSunrise,
             now,
-            Parameters::DayPeriod,
-            Parameters::HalfDayPeriod,
+            DayPeriod,
+            HalfDayPeriod,
             intervalFromSunEvent
             );
 

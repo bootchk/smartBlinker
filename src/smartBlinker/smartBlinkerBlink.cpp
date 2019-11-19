@@ -18,6 +18,11 @@ void SmartBlinker::blinkDecorativeDim() {
     LEDBlinker::blinkDim();
 }
 
+void
+SmartBlinker::blinkDecorativeDimmest() {\
+    LEDBlinker::blinkVisibleCloserRange();
+}
+
 void SmartBlinker::indicateSunCheck() {
 #ifdef BLINK_ON_SUN_CHECK
     LEDBlinker::blinkDim();
